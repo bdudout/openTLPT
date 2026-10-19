@@ -36,6 +36,55 @@ jobs:
       - run: npm test
       - run: npm run typecheck
 
+  app:
+    name: Application file:// — ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            targets: chromium,firefox,webkit
+          - os: windows-latest
+            targets: chromium,firefox,msedge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm ci
+        working-directory: engine
+      - run: npm ci
+        working-directory: app
+      - run: npm run check
+        working-directory: app
+      - run: npm run build
+        working-directory: app
+      - name: Empreinte du build
+        shell: bash
+        working-directory: app
+        run: sha256sum dist/index.html
+      - run: npx playwright install --with-deps chromium firefox webkit
+        if: runner.os == 'Linux'
+        working-directory: app
+      - run: npx playwright install chromium firefox
+        if: runner.os == 'Windows'
+        working-directory: app
+      - run: npm run test:e2e
+        working-directory: app
+        env:
+          TARGETS: ${{ matrix.targets }}
+      - name: Publier openTLPT.html (artefact)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: cp app/dist/index.html openTLPT.html
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'Linux'
+        with:
+          name: openTLPT-html
+          path: openTLPT.html
+          retention-days: 30
+
   spike:
     name: Spike file:// — ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

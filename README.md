@@ -5,7 +5,8 @@
 
 *Open-source, local and portable tool to track compliance of a DORA Threat-Led Penetration Test (TLPT), from notification to attestation.*
 
-> ⚠️ **Statut : conception et spike technique.** L'application n'est pas encore utilisable.
+> ⚠️ **Statut : préversion 0.1.** Il est possible de créer et d'ouvrir un exercice chiffré et de suivre ses échéances réglementaires. Les checklists, les livrables et les registres restent à faire.
+> Le fichier `openTLPT.html` de chaque build est téléchargeable dans les artefacts de la [CI](../../actions).
 
 ## Principes
 
@@ -27,6 +28,8 @@
 | [`referentiel/`](referentiel/) | Le même référentiel en packs JSON, avec leur JSON Schema |
 | [`schema/`](schema/) | Schéma SQLite de la base d'exercice |
 | [`tools/`](tools/) | Validateur du référentiel |
+| [`engine/`](engine/) | Moteur métier en TypeScript : échéances, journal chaîné, enveloppe chiffrée `.tlpt` |
+| [`app/`](app/) | Application Svelte construite en un fichier HTML unique |
 | [`spike/`](spike/) | Spike technique : fichier HTML unique avec Svelte, SQLite WASM et Argon2id, testé en `file://` |
 
 ## Vérifier le référentiel
