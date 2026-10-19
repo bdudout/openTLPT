@@ -43,6 +43,17 @@ vite-plugin-singlefile 2.3.3, @sqlite.org/sqlite-wasm 3.53.4-build2 (SQLite 3.53
 - **Reproductibilité** : deux builds propres donnent le même SHA-256 (`27aac5fb8bdc0c561892d78f8270b907fa87ae501d414eaf08306ef3c3fbd747`).
 - **Erreurs console** : uniquement celles qui sont attendues, c'est-à-dire le `fetch` vers example.com bloqué par la CSP. Aucune autre.
 
+### CI Windows (GitHub Actions `windows-latest`, run 39262248159)
+
+| Test | Chromium 153 | Firefox 155 | Edge 154 | Edge 154 **StrictMode** |
+|---|---|---|---|---|
+| 10 tests du banc d'essai | ✅ 10/10 | ✅ 10/10 | ✅ 10/10 | ✅ 10/10 |
+| Argon2id 64 Mio / t=3 | 267 ms | 344 ms | 269 ms | **4 113 ms** |
+| Enveloppe (3 dérivations + AES) | 1,0 s | 1,1 s | 1,1 s | **16,5 s** |
+| Enregistrement | FSA présente | téléchargement ✅ | FSA présente | FSA présente |
+
+La politique `EnhanceSecurityMode = 2` est posée dans `HKLM\SOFTWARE\Policies\Microsoft\Edge`, et le ralentissement d'un facteur 15 environ confirme que le JIT est désactivé. **WebAssembly reste disponible (interprété) : l'application fonctionne**, mais l'ouverture d'un fichier coûte environ 4 s de dérivation de clé sur ce type de poste.
+
 ## Écarts trouvés et traités
 
 1. **Vite 8 ne sait pas inliner un `.wasm` via `?inline`.** J'ai ajouté le plugin `opentlpt-inline-sqlite-wasm`, qui expose le binaire en base64 comme module virtuel.
@@ -64,14 +75,14 @@ Simulations sur ce Mac (Chromium 155, Playwright) :
 | `--jitless --wasm-jitless` (tentative d'interpréteur WASM) | identique : ce build Chromium n'embarque pas l'interpréteur d'Edge, donc non concluant |
 | Optimiseurs JS désactivés (`--no-opt --no-sparkplug --no-maglev`) | 10/10 ✅ (AES + Argon2 : 1,6 s) |
 
-Conclusion : **impossible de valider le comportement réel d'Edge en mode renforcé depuis macOS.** Parades retenues :
+Conclusion sur macOS : simulation non concluante. **Le test réel a été fait dans la CI Windows (ci-dessous) : Edge StrictMode fonctionne.** Parades retenues :
 1. **Détection** au démarrage : si `WebAssembly` est absent, afficher un message clair (pas de page blanche) qui explique la cause et liste les solutions sans droits admin.
 2. **Test réel** dans la CI Windows (GitHub Actions `windows-latest` : Edge préinstallé, politique `EnhanceSecurityMode=StrictMode` posée dans le registre du runner).
 3. Décision à prendre si l'interpréteur est trop lent ou absent : un repli PBKDF2 natif (WebCrypto, non concerné par le JIT) en écriture, et/ou une exception à demander à la DSI (liste de contournement Edge).
 
 ## Reste à vérifier (hors de portée de ce poste)
 
-- [ ] **Windows, Microsoft Edge, compte utilisateur standard sans droits admin** : pas de poste Windows disponible. Le test se fera dans la CI Windows (voir ci-dessus), puis auprès d'un bêta-testeur sur un vrai poste bancaire avec ses GPO.
-- [ ] **Edge en mode de sécurité renforcée (StrictMode)** : WebAssembly interprété ; mesurer les temps d'ouverture et d'enregistrement.
+- [x] **Windows + Edge** : validé dans la CI Windows, en mode standard et en StrictMode.
+- [ ] **Compte utilisateur standard et GPO réelles** : le runner CI tourne en administrateur. Il faut un bêta-testeur sur un vrai poste bancaire.
 - [ ] **Sélecteur natif de la File System Access API** (Chrome / Edge) : enregistrer puis rouvrir un `.tlpt` à la main. Cette étape n'est pas automatisable en headless.
 - [ ] **Calibrage d'Argon2id** sur un portable Windows de bureau. Sur ce Mac, il prend 0,2 à 0,6 s, ce qui laisse de la marge pour durcir les paramètres (t=4 ou m=128 Mio) si le poste de référence le permet.

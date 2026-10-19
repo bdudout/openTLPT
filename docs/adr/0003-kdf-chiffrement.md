@@ -88,3 +88,10 @@ est hors d'atteinte pour un fichier enregistré quelques milliers de fois. En pl
 ## Résultats du spike (2026-10-19)
 
 hash-wasm 4.12.0 Argon2id (64 Mio, t=3, p=1) donne **exactement** le vecteur de l'implémentation de référence (argon2-cffi), en 215 à 588 ms selon le navigateur sur Mac. L'enveloppe AES-256-GCM avec l'en-tête en AAD rejette un en-tête altéré et une mauvaise passphrase. Reste à faire : le calibrage sur un poste Windows de référence, et peut-être un durcissement des paramètres. Détails : [spike/README.md](../../spike/README.md).
+
+**CI Windows** : Argon2id prend 0,27 s sous Edge standard, mais **4,1 s sous Edge StrictMode** (JIT désactivé, WASM interprété).
+Conséquences retenues :
+- dériver la clé **une seule fois par session**, à l'ouverture. Les enregistrements suivants ne refont que l'AES, avec un IV neuf. Un nouveau sel n'est tiré qu'au changement de passphrase ;
+- afficher un **indicateur de progression** pendant la dérivation ;
+- ne **pas** réduire les paramètres pour ce cas, car c'est la sécurité du fichier qui prime ;
+- revoir ce choix si les retours terrain jugent 4 à 5 s inacceptables.

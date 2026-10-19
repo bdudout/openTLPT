@@ -9,7 +9,7 @@
 
 Contrainte transverse à tous les ADR : **application autoporteuse, aucun droit admin** (ENF-11). Toute option qui demande une installation, une extension, un serveur local ou un réglage système est écartée d'office.
 
-Le **spike commun** du 2026-10-19 est concluant sur Chromium, Chrome, Firefox et WebKit ([spike/README.md](../../spike/README.md)). Il reste à tester Windows / Edge sur un compte standard avant de passer les ADR en **Accepté**.
+Le **spike commun** du 2026-10-19 est concluant sur Chromium, Chrome, Firefox et WebKit ([spike/README.md](../../spike/README.md)). La **CI Windows** valide Chromium, Firefox, Edge et **Edge StrictMode** (10/10, Argon2 ≈ 4 s en StrictMode). Il reste à faire tester un compte standard sur un vrai poste d'entreprise.
 
 Format : contexte, décision, options étudiées, compromis, conséquences, actions. Un ADR accepté ne se modifie pas : on le
 **remplace** par un nouvel ADR (statut *Superseded*).

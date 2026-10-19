@@ -88,6 +88,7 @@ les navigateurs et les politiques d'entreprise (GPO).
 
 Fichier unique de 2,73 Mo sans fichier annexe, **build reproductible** (SHA-256 identique sur deux builds). La CSP bloque tout réseau et aucune requête n'est observée. Le mode dégradé par téléchargement fonctionne sous Firefox et WebKit. Reste à faire : le test Windows / Edge sur un compte standard, et le test manuel du sélecteur natif de la FSA API. Détails : [spike/README.md](../../spike/README.md).
 
-**Risque ouvert R-JIT** : la politique Edge `EnhanceSecurityMode` désactive le JIT. WebAssembly passe alors par un interpréteur plus lent, et n'est pas supporté en 32 bits.
+**Risque R-JIT, levé en grande partie par la CI Windows** : Edge 154 en StrictMode passe 10/10, avec un WASM interprété environ 15 fois plus lent. Constat initial : la politique Edge `EnhanceSecurityMode` désactive le JIT. WebAssembly passe alors par un interpréteur plus lent, et n'est pas supporté en 32 bits.
 Une simulation `--jitless` (sans WebAssembly) fait échouer SQLite et Argon2. Parades : détecter l'absence de WASM et afficher un message explicite ;
 tester dans la CI Windows avec Edge en StrictMode ; décider si besoin d'un repli PBKDF2 natif (amendement de l'ADR-0003).
+Il reste à faire tester un compte standard sur un vrai poste avec ses GPO, par un bêta-testeur.
