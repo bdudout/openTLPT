@@ -1,0 +1,21 @@
+{
+  "name": "@opentlpt/engine",
+  "private": true,
+  "version": "0.1.0",
+  "description": "openTLPT business engine (pure TypeScript, no runtime dependency): dates, applicability, deadlines.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "6.0.3"
+  }
+}

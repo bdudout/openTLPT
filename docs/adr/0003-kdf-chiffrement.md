@@ -1,6 +1,6 @@
 # ADR-0003 : Dérivation de clé et chiffrement du fichier `.tlpt`
 
-**Statut :** Proposé — spike du 2026-10-19 concluant, en attente d'acceptation
+**Statut :** Accepté (2026-10-19), après le spike et la CI Windows. Action ouverte : test sur un compte standard, sur un vrai poste d'entreprise.
 **Date :** 2026-10-19
 **Décideurs :** porteur du projet openTLPT (avec revue sécurité recommandée avant la v1)
 

@@ -106,9 +106,11 @@ Toute bonne pratique déclare son **lien** avec les obligations (`relation`) :
 - `working_days` : du lundi au vendredi. Les jours fériés ne sont pas gérés en v1, ce qu'on signale.
 - `kind: max` : échéance = ancre + délai ; en retard si non fait à J+1.
 - `kind: min` : durée minimale ; alerte si l'événement de fin est saisi avant ancre + délai (ex. 12 semaines entre R0 et R1).
-- `kind: before` : à faire avant l'ancre (ex. achats terminés avant `TESTING_START`) ; échéance = date de l'ancre.
+- `kind: before` : à faire avant l'ancre (ex. achats terminés avant `TESTING_START`) ; échéance = date de l'ancre, même planifiée. Tant que l'ancre n'est pas datée, l'action reste « à venir », sans date (jamais en retard).
 - `kind: recurring` : fréquence (`every`) entre `anchor` et `until` (ex. rapport hebdomadaire entre R0 et R1).
 - Une ancre non saisie rend l'échéance **« en attente de la date X »**, sans calcul ni alerte.
+- Une surcharge n'est appliquée que si le délai est `overridable` et la justification non vide. Sinon, elle est ignorée et signalée (`overrideIgnored`) : un délai du RTS ne peut pas être modifié depuis l'interface.
+- Implémentation : [`engine/src/deadlines.ts`](../engine/src/deadlines.ts), testée sur le pack core réel.
 - L'utilisateur peut **surcharger** une échéance (ex. fréquence de TLPT modulée par l'autorité), avec une justification qui est journalisée.
 
 ### 1.6 Textes officiels multilingues

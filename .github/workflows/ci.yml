@@ -21,6 +21,21 @@ jobs:
       - run: pip install jsonschema==4.23.0
       - run: python tools/validate_ref.py
 
+  engine:
+    name: Moteur (tests + typage)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+
   spike:
     name: Spike file:// — ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
