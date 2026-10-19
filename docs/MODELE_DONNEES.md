@@ -146,6 +146,7 @@ Le fichier est une enveloppe JSON en UTF-8 : un en-tête en clair **authentifié
 - L'en-tête, sans le champ `payload`, est passé en **AAD** à AES-GCM. Toute modification de `file_version` ou des paramètres casse le déchiffrement.
 - Un nouvel IV est tiré à chaque enregistrement, et un nouveau sel à chaque changement de passphrase.
 - **Rien d'identifiant en clair** : ni nom de code, ni entité. Le nom du fichier est le seul indice, et c'est le nom de code (DEC-5).
+- Implémentation : [`engine/src/envelope.ts`](../engine/src/envelope.ts). Les paramètres KDF sont **bornés** à la lecture (plancher OWASP, plafonds anti-DoS). Les champs inconnus sont refusés. Mauvaise passphrase et fichier altéré renvoient la **même** erreur (`decrypt_failed`). Un fichier PBKDF2 est réécrit en Argon2id à l'enregistrement suivant.
 - Contrôle d'écriture concurrente (DEC-1) : avant d'écrire, on relit le `file_version` sur disque. S'il diffère de celui
   qu'on a chargé, l'écriture est refusée.
 
@@ -174,6 +175,10 @@ journal ──────────── journal chaîné append-only (cf. 2
 écrit la ligne **et** l'entrée de journal correspondante dans **la même transaction**. Des déclencheurs SQLite interdisent
 `UPDATE` et `DELETE` sur `journal`.
 
+Implémentation : [`engine/src/exercise.ts`](../engine/src/exercise.ts). Les écritures sont **sérialisées** : le hash est calculé
+de manière asynchrone, puis la ligne métier et l'entrée de journal sont écrites dans une transaction synchrone. Une écriture
+sans changement réel n'est pas journalisée.
+
 ### 2.3 Journal chaîné
 
 | Champ | Contenu |
@@ -191,6 +196,7 @@ journal ──────────── journal chaîné append-only (cf. 2
 - **Vérification** : on recalcule toute la chaîne à l'ouverture. La première rupture est signalée par son `seq`.
 - **Ancrage** : l'action `anchor` exporte `{codename, seq, hash, ts}` en texte et en QR, pour l'inscrire dans un PV ou un mail.
   Pour vérifier un ancrage, on contrôle que l'entrée `seq` a toujours ce `hash`.
+- Implémentation : [`engine/src/journal.ts`](../engine/src/journal.ts). Une base altérée reste ouvrable, mais la rupture est inscrite dans l'entrée `session_open` (`integrity.ok = false`, `broken_at`).
 - Les **pièces jointes ne sont pas stockées** : seule leur empreinte SHA-256, calculée localement, entre dans `after`.
 
 ### 2.4 Calculs à la volée (jamais stockés)

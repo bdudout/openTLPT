@@ -1,14 +1,22 @@
 # @opentlpt/engine
 
-Moteur métier d'openTLPT en **TypeScript pur** : aucune dépendance d'exécution, aucune horloge, aucune E/S (ADR-0001).
-L'interface l'importe, et lui n'importe jamais l'interface.
+Moteur métier d'openTLPT en TypeScript. L'interface l'importe, et lui n'importe jamais l'interface (ADR-0001).
+Il n'appelle jamais l'horloge système et ne fait aucune E/S : la date du jour, l'horodatage et les octets de la base lui sont passés.
 
-- `dates.ts` : arithmétique de dates calendaires en UTC (mois ramenés en fin de mois, 29 février, jours ouvrés du lundi au vendredi).
-- `applicability.ts` : évaluation des conditions `applies_when` sur les faits de l'exercice.
-- `deadlines.ts` : calcul des échéances `max`, `min`, `before` et `recurring` du pack core, surcharges justifiées, cohérence de la chronologie.
+| Module | Rôle | Dépendance d'exécution |
+|---|---|---|
+| `dates.ts` | Dates calendaires en UTC : fin de mois, 29 février, jours ouvrés | aucune |
+| `applicability.ts` | Conditions `applies_when` sur les faits de l'exercice | aucune |
+| `deadlines.ts` | Échéances `max` / `min` / `before` / `recurring`, surcharges justifiées, cohérence de la chronologie | aucune |
+| `jcs.ts`, `bytes.ts` | JSON canonique (RFC 8785), base64, SHA-256 (WebCrypto) | aucune |
+| `db.ts` | **Contrat** d'accès SQLite (`SqlDb`, `SqlDbFactory`) | aucune |
+| `sqlite-wasm.ts` | Adaptateur SQLite WASM officiel, base mémoire uniquement (ADR-0002) | `@sqlite.org/sqlite-wasm` |
+| `journal.ts` | Journal chaîné SHA-256 : préparation, insertion, vérification, ancrage | aucune |
+| `kdf.ts` | Argon2id (écriture), PBKDF2 (lecture), bornes des paramètres, politique de passphrase (ADR-0003) | `hash-wasm` |
+| `envelope.ts` | Enveloppe `.tlpt` : en-tête en AAD, AES-256-GCM, session (une dérivation par ouverture), contrôle DEC-1 | aucune (WebCrypto) |
+| `exercise.ts` | Exercice : création, ouverture, mutations journalisées en transaction, `loadState()` pour le calcul des échéances | aucune |
 
-Règles : [MODELE_DONNEES §1.5](../docs/MODELE_DONNEES.md). Les tests chargent le **vrai** `referentiel/packs/core.json` :
-si un délai change dans le référentiel, les tests le signalent.
+Les tests utilisent les **vrais** moteurs (SQLite WASM, Argon2id) et le **vrai** référentiel (`core.json`, `schema/tlpt.sql`).
 
 ```bash
 npm ci
