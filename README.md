@@ -5,7 +5,7 @@
 
 *Open-source, local and portable tool to track compliance of a DORA Threat-Led Penetration Test (TLPT), from notification to attestation.*
 
-> ⚠️ **Statut : préversion 0.1.** Il est possible de créer et d'ouvrir un exercice chiffré, de suivre ses échéances réglementaires et de renseigner les checklists par phase (obligations et bonnes pratiques séparées). Les livrables et les registres restent à faire.
+> ⚠️ **Statut : préversion 0.1.** Il est possible de créer et d'ouvrir un exercice chiffré, de suivre ses échéances réglementaires de renseigner les checklists par phase (obligations et bonnes pratiques séparées), et de suivre les livrables (empreinte SHA-256 locale) ainsi que les registres (rapports hebdomadaires, leg-ups, détections). L'annuaire des parties prenantes et l'évaluation des prestataires restent à faire.
 > Le fichier `openTLPT.html` de chaque build est téléchargeable dans les artefacts de la [CI](../../actions).
 
 ## Principes

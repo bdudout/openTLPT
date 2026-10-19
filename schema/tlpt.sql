@@ -1,6 +1,7 @@
 -- openTLPT — schéma de la base d'exercice (contenu chiffré d'un fichier .tlpt)
 -- Voir docs/MODELE_DONNEES.md §2. Les identifiants *_ref désignent des éléments du référentiel (packs JSON) ;
 -- leur existence est vérifiée par le moteur, pas par SQLite (le référentiel n'est pas dans la base).
+-- Version de schéma : 2 (meta.schema_version). Migrations : engine/src/migrations.ts.
 -- Dates : TEXT ISO 8601 (YYYY-MM-DD pour les dates, YYYY-MM-DDTHH:MM:SSZ pour les horodatages UTC).
 
 PRAGMA foreign_keys = ON;
@@ -77,6 +78,8 @@ CREATE TABLE deliverables (
   version         TEXT,
   location        TEXT,                    -- emplacement externe (GED, data room…)
   sha256          TEXT CHECK (sha256 IS NULL OR (length(sha256) = 64 AND sha256 NOT GLOB '*[^0-9a-f]*')),
+  file_name       TEXT,                    -- nom du fichier haché localement (le fichier n'est jamais stocké)
+  file_size       INTEGER CHECK (file_size IS NULL OR file_size >= 0),
   submitted_at    TEXT CHECK (submitted_at IS NULL OR date(submitted_at) IS NOT NULL),
   approved_at     TEXT CHECK (approved_at  IS NULL OR date(approved_at)  IS NOT NULL),
   note            TEXT
@@ -136,6 +139,15 @@ CREATE TABLE plan_changes (
   description    TEXT NOT NULL,
   approved_ctl_at TEXT,
   approved_tm_at  TEXT
+) STRICT;
+
+-- Rapports hebdomadaires des testeurs pendant la phase active (RTS 11(7)) : alimentent l'échéance D-07
+CREATE TABLE weekly_reports (
+  id          INTEGER PRIMARY KEY,
+  report_date TEXT NOT NULL CHECK (date(report_date) IS NOT NULL),
+  summary     TEXT,                        -- libellé neutre, sans détail sensible
+  sha256      TEXT CHECK (sha256 IS NULL OR (length(sha256) = 64 AND sha256 NOT GLOB '*[^0-9a-f]*')),
+  file_name   TEXT
 ) STRICT;
 
 -- Sessions (DEC-3)

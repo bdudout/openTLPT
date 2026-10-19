@@ -3,13 +3,13 @@
 import sqliteWasmBase64 from 'virtual:sqlite-wasm-base64';
 import schemaSql from '../../../schema/tlpt.sql?raw';
 import {
-  Exercise, TlptError, assertNoConflict, createSession, fromBase64, openEnvelope, seal,
+  Exercise, TlptError, assertNoConflict, createSession, fromBase64, openEnvelope, seal, withDeliverableDates,
   type ExerciseState, type Profile, type Session, type SqlDbFactory,
 } from '../../../engine/src/index.ts';
 import { createSqliteWasm } from '../../../engine/src/sqlite-wasm.ts';
 import { chooseSaveTarget, downloadText, hasFsa, readHandle, writeHandle, type FsHandle, type PickedFile } from './files.ts';
 import { t, type MsgKey } from './i18n.svelte.ts';
-import { REF_VERSION, TOOL_VERSION } from './ref.ts';
+import { REF_VERSION, TOOL_VERSION, core } from './ref.ts';
 
 export type Screen = 'home' | 'new' | 'open' | 'exercise';
 
@@ -50,7 +50,8 @@ export function todayISO(): string {
 
 export function loadState(): ExerciseState {
   void ui.rev; // dépendance réactive explicite
-  return currentExercise().loadState(todayISO());
+  const ex = currentExercise();
+  return withDeliverableDates(core.deadlines, ex.loadState(todayISO()), ex.listDeliverables());
 }
 
 function errorMessage(e: unknown): string {
@@ -156,6 +157,12 @@ export async function mutate(fn: (ex: Exercise) => Promise<boolean>): Promise<vo
     const changed = await fn(currentExercise());
     if (changed) { ui.dirty = true; ui.rev++; }
   });
+}
+
+/** Action métier quelconque (création de registre…) : marque l'exercice comme modifié. */
+export async function act(fn: (ex: Exercise) => Promise<unknown>): Promise<boolean> {
+  const r = await guarded('', async () => { await fn(currentExercise()); ui.dirty = true; ui.rev++; return true; });
+  return r === true;
 }
 
 export function lock(force = false): boolean {

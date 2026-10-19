@@ -5,10 +5,12 @@ import { canonicalize, type JsonValue } from './jcs.ts';
 import { insertEntry, journalHead, prepareEntry, verifyChain, type Anchor, type ChainCheck, type JournalAction } from './journal.ts';
 import { isValidISODate } from './dates.ts';
 import type { ChecklistStatus, Response } from './checklist.ts';
+import { CURRENT_SCHEMA_VERSION, MIGRATIONS, isSupportedSchema } from './migrations.ts';
+import type { DeliverableRecord, DetectionRecord, LegUpRecord, WeeklyReportRecord } from './registers.ts';
 import type { Row, SqlDb, SqlDbFactory, SqlValue } from './db.ts';
 import type { DeadlineOverride, ExerciseState, FactValue, ISODate, OffsetUnit } from './types.ts';
 
-export const SCHEMA_VERSION = '1';
+export const SCHEMA_VERSION = CURRENT_SCHEMA_VERSION;
 export const PROFILES = ['entity', 'ti', 'rt', 'ti_rt'] as const;
 export type Profile = (typeof PROFILES)[number];
 
@@ -22,6 +24,12 @@ const KEYED_TABLES = {
   checklist: 'item_ref',
 } as const;
 type KeyedTable = keyof typeof KEYED_TABLES;
+
+/** Tables à identifiant entier (registres, livrables) : `id` attribué par le moteur, de façon séquentielle. */
+const ROW_TABLES = ['deliverables', 'leg_ups', 'detections', 'weekly_reports'] as const;
+type RowTable = (typeof ROW_TABLES)[number];
+
+const SHA256_RE = /^[0-9a-f]{64}$/;
 
 export interface SessionInfo {
   author: string;
@@ -95,14 +103,37 @@ export class Exercise {
   static async open(factory: SqlDbFactory, dbBytes: Uint8Array, info: SessionInfo): Promise<Exercise> {
     const db = factory.open(dbBytes);
     const version = db.get<{ value: string }>("SELECT value FROM meta WHERE key = 'schema_version'")?.value;
-    if (version !== SCHEMA_VERSION) {
+    if (!isSupportedSchema(version)) {
       db.close();
       throw new ExerciseError(`Version de schéma ${String(version)} non supportée (attendue : ${SCHEMA_VERSION}).`);
     }
     const integrity = await verifyChain(db);
     const ex = new Exercise(db, info, integrity);
     await ex.#openSession(factory.sqliteVersion);
+    await ex.#migrate(version);
     return ex;
+  }
+
+  /** Applique les migrations de schéma, chacune dans une transaction avec son entrée de journal. */
+  async #migrate(from: string): Promise<void> {
+    let cur = from;
+    while (cur !== SCHEMA_VERSION) {
+      const m = MIGRATIONS[cur];
+      if (!m) throw new ExerciseError(`Migration manquante depuis la version ${cur}.`);
+      const fromV = cur;
+      await this.#serial(async () => {
+        const entry = await prepareEntry(this.db, {
+          ts: this.#clock(), session_id: this.sessionId, author: this.author, action: 'update',
+          entity: 'meta', entity_id: 'schema_version', before: { value: fromV }, after: { value: m.to },
+        });
+        this.db.transaction(() => {
+          for (const sql of m.sql) this.db.exec(sql);
+          this.db.exec("UPDATE meta SET value = ? WHERE key = 'schema_version'", [m.to]);
+          insertEntry(this.db, entry);
+        });
+      });
+      cur = m.to;
+    }
   }
 
   async #openSession(sqliteVersion: string): Promise<void> {
@@ -159,6 +190,35 @@ export class Exercise {
     });
   }
 
+  /** Écriture journalisée sur une table à identifiant entier. `id = null` crée (renvoie l'id) ; `after = null` supprime. */
+  #writeRow(table: RowTable, id: number | null, after: Record<string, SqlValue> | null): Promise<number> {
+    return this.#serial(async () => {
+      const before = id === null ? undefined : this.db.get(`SELECT * FROM ${table} WHERE id = ?`, [id]);
+      if (id !== null && !before) throw new ExerciseError(`${table} #${id} introuvable.`);
+      const rowId = id ?? ((this.db.get<{ m: number | null }>(`SELECT max(id) AS m FROM ${table}`)?.m ?? 0) + 1);
+      const beforeVal = before ? stripKey(before, 'id') : null;
+      const merged = after && beforeVal ? { ...beforeVal, ...after } : after;
+      if (canonicalize(beforeVal as JsonValue) === canonicalize(merged as JsonValue)) return rowId;
+      const action: JournalAction = !before ? 'create' : merged ? 'update' : 'delete';
+      const entry = await prepareEntry(this.db, {
+        ts: this.#clock(), session_id: this.sessionId, author: this.author, action,
+        entity: table, entity_id: String(rowId), before: beforeVal as JsonValue, after: merged as JsonValue,
+      });
+      this.db.transaction(() => {
+        if (merged) {
+          const cols = Object.keys(merged);
+          const updates = cols.map((c) => `${c} = excluded.${c}`).join(', ');
+          this.db.exec(`INSERT INTO ${table} (id, ${cols.join(', ')}) VALUES (?, ${cols.map(() => '?').join(',')}) ON CONFLICT(id) DO UPDATE SET ${updates}`,
+            [rowId, ...cols.map((c) => merged[c] ?? null)]);
+        } else {
+          this.db.exec(`DELETE FROM ${table} WHERE id = ?`, [rowId]);
+        }
+        insertEntry(this.db, entry);
+      });
+      return rowId;
+    });
+  }
+
   // --- API métier -----------------------------------------------------------
 
   async setEventDate(eventRef: string, date: ISODate | null, note: string | null = null): Promise<boolean> {
@@ -190,6 +250,64 @@ export class Exercise {
       due_date: o.due_date ?? null, offset_value: o.offset?.value ?? null, offset_unit: o.offset?.unit ?? null,
       justification: o.justification, decided_by: o.decidedBy,
     });
+  }
+
+  // --- Livrables (métadonnées et empreinte seulement, EF-4) -----------------------
+
+  async saveDeliverable(id: number | null, d: Partial<Omit<DeliverableRecord, 'id'>>): Promise<number> {
+    const after = pick(d, ['deliverable_ref', 'title', 'owner_party_id', 'status', 'version', 'location', 'sha256', 'file_name', 'file_size', 'submitted_at', 'approved_at', 'note']);
+    if (id === null && (!d.title?.trim() || !d.status)) throw new ExerciseError('Titre et statut obligatoires pour un livrable.');
+    checkHash(d.sha256);
+    checkDates(d, ['submitted_at', 'approved_at']);
+    return this.#writeRow('deliverables', id, after);
+  }
+
+  async deleteDeliverable(id: number): Promise<void> { await this.#writeRow('deliverables', id, null); }
+
+  listDeliverables(): DeliverableRecord[] {
+    return this.db.all<DeliverableRecord & Row>('SELECT * FROM deliverables ORDER BY id');
+  }
+
+  // --- Registres ------------------------------------------------------------------
+
+  async saveLegUp(id: number | null, l: Partial<Omit<LegUpRecord, 'id'>>): Promise<number> {
+    if (id === null && !l.description?.trim()) throw new ExerciseError('Description obligatoire pour un leg-up.');
+    checkDates(l, ['requested_at', 'approved_ct', 'approved_tm', 'provided_at']);
+    const after = pick(l, ['scenario_id', 'kind', 'planned', 'requested_at', 'approved_ct', 'approved_tm', 'provided_at', 'description']);
+    if ('planned' in after) after.planned = l.planned ? 1 : 0;
+    return this.#writeRow('leg_ups', id, after);
+  }
+
+  async deleteLegUp(id: number): Promise<void> { await this.#writeRow('leg_ups', id, null); }
+
+  listLegUps(): LegUpRecord[] {
+    return this.db.all<Row>('SELECT * FROM leg_ups ORDER BY coalesce(provided_at, requested_at), id')
+      .map((r) => ({ ...(r as unknown as LegUpRecord), planned: r.planned === 1 }));
+  }
+
+  async saveDetection(id: number | null, d: Partial<Omit<DetectionRecord, 'id'>>): Promise<number> {
+    if (id === null && (!d.detected_at || !d.kind || !d.description?.trim())) throw new ExerciseError('Date, type et description obligatoires pour une détection.');
+    checkDates(d, ['detected_at', 'validated_by_tm_at']);
+    return this.#writeRow('detections', id, pick(d, ['detected_at', 'kind', 'description', 'measures', 'validated_by_tm_at']));
+  }
+
+  async deleteDetection(id: number): Promise<void> { await this.#writeRow('detections', id, null); }
+
+  listDetections(): DetectionRecord[] {
+    return this.db.all<DetectionRecord & Row>('SELECT * FROM detections ORDER BY detected_at, id');
+  }
+
+  async saveWeeklyReport(id: number | null, w: Partial<Omit<WeeklyReportRecord, 'id'>>): Promise<number> {
+    if (id === null && !w.report_date) throw new ExerciseError('Date obligatoire pour un rapport hebdomadaire.');
+    checkDates(w, ['report_date']);
+    checkHash(w.sha256);
+    return this.#writeRow('weekly_reports', id, pick(w, ['report_date', 'summary', 'sha256', 'file_name']));
+  }
+
+  async deleteWeeklyReport(id: number): Promise<void> { await this.#writeRow('weekly_reports', id, null); }
+
+  listWeeklyReports(): WeeklyReportRecord[] {
+    return this.db.all<WeeklyReportRecord & Row>('SELECT * FROM weekly_reports ORDER BY report_date, id');
   }
 
   // --- Lecture ---------------------------------------------------------------
@@ -227,7 +345,8 @@ export class Exercise {
         ...(r.offset_value !== null && r.offset_unit ? { offset: { value: r.offset_value, unit: r.offset_unit as OffsetUnit } } : {}),
       };
     }
-    return { today, events, facts, done, overrides };
+    const occurrences = { 'D-07': this.db.all<{ report_date: string }>('SELECT report_date FROM weekly_reports ORDER BY report_date').map((r) => r.report_date) };
+    return { today, events, facts, done, overrides, occurrences };
   }
 
   // --- Intégrité et export ------------------------------------------------------
@@ -268,4 +387,25 @@ function stripKey(row: Row, pk: string): Record<string, SqlValue> {
   const out: Record<string, SqlValue> = {};
   for (const [k, v] of Object.entries(row)) if (k !== pk) out[k] = v;
   return out;
+}
+
+/** Sous-ensemble des champs fournis (les champs absents ne sont pas modifiés lors d'une mise à jour). */
+function pick(src: object, keys: string[]): Record<string, SqlValue> {
+  const out: Record<string, SqlValue> = {};
+  for (const k of keys) {
+    const v = (src as Record<string, unknown>)[k];
+    if (v !== undefined) out[k] = typeof v === 'boolean' ? (v ? 1 : 0) : (v as SqlValue);
+  }
+  return out;
+}
+
+function checkHash(h: string | null | undefined): void {
+  if (h != null && !SHA256_RE.test(h)) throw new ExerciseError('Empreinte SHA-256 invalide (64 caractères hexadécimaux en minuscules).');
+}
+
+function checkDates(src: object, keys: string[]): void {
+  for (const k of keys) {
+    const v = (src as Record<string, unknown>)[k];
+    if (v != null && (typeof v !== 'string' || !isValidISODate(v))) throw new ExerciseError(`Date invalide (${k}) : ${String(v)}`);
+  }
 }

@@ -4,6 +4,8 @@
   import { actorsById, core, eventsById, phasesOrdered, type UiDeadlineDef } from '../lib/ref.ts';
   import { hasFsa } from '../lib/files.ts';
   import Checklists from './Checklists.svelte';
+  import Deliverables from './Deliverables.svelte';
+  import Registers from './Registers.svelte';
   import {
     checkEventOrder, computeDeadlines, effectiveFacts, type DeadlineResult, type FactValue,
   } from '../../../engine/src/index.ts';
@@ -41,7 +43,7 @@
 
   function onLock() { lock(); }
 
-  let tab = $state<'deadlines' | 'checklists'>('deadlines');
+  let tab = $state<'deadlines' | 'checklists' | 'deliverables' | 'registers'>('deadlines');
 </script>
 
 <section class="bar card">
@@ -69,6 +71,8 @@
 <nav class="tabs" aria-label="openTLPT">
   <button type="button" class="tab" aria-pressed={tab === 'deadlines'} onclick={() => (tab = 'deadlines')}>{t('tab.deadlines')}</button>
   <button type="button" class="tab" aria-pressed={tab === 'checklists'} onclick={() => (tab = 'checklists')}>{t('tab.checklists')}</button>
+  <button type="button" class="tab" aria-pressed={tab === 'deliverables'} onclick={() => (tab = 'deliverables')}>{t('tab.deliverables')}</button>
+  <button type="button" class="tab" aria-pressed={tab === 'registers'} onclick={() => (tab = 'registers')}>{t('tab.registers')}</button>
 </nav>
 
 {#if tab === 'deadlines'}
@@ -172,12 +176,16 @@
     {/each}
   </section>
 </div>
-{:else}
+{:else if tab === 'checklists'}
 <Checklists />
+{:else if tab === 'deliverables'}
+<Deliverables />
+{:else}
+<Registers />
 {/if}
 
 <style>
-  .tabs { display: flex; gap: 4px; margin: 0 0 12px; border-bottom: 1px solid var(--border); }
+  .tabs { display: flex; gap: 4px; overflow-x: auto; margin: 0 0 12px; border-bottom: 1px solid var(--border); }
   .tab { background: transparent; color: var(--muted); border: 0; border-bottom: 3px solid transparent; border-radius: 0; padding: 8px 14px; font-weight: 600; }
   .tab[aria-pressed='true'] { color: var(--accent); border-bottom-color: var(--accent); }
   .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }

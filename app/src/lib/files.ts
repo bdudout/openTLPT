@@ -79,3 +79,23 @@ export function downloadText(name: string, text: string): void {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2_000);
 }
+
+export interface FileFingerprint { sha256: string; name: string; size: number }
+
+/** Empreinte SHA-256 calculée localement : le fichier n'est ni copié ni stocké (EF-4). */
+export async function fingerprint(file: File): Promise<FileFingerprint> {
+  const digest = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+  const sha256 = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  return { sha256, name: file.name, size: file.size };
+}
+
+/** Sélection d'un fichier quelconque (sans lecture du contenu par l'appelant). */
+export function pickAnyFile(): Promise<File | null> {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.addEventListener('change', () => resolve(input.files?.[0] ?? null));
+    input.addEventListener('cancel', () => resolve(null));
+    input.click();
+  });
+}

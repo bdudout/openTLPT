@@ -13,6 +13,16 @@ Fonctions de cette première version :
   - statuts : à traiter, en cours, traité, non applicable (justification), écart accepté (justification + décideur) ;
   - chaque réponse est journalisée ;
   - les divergences TIBER / RTS sont signalées des deux côtés ;
+- **livrables attendus** (onglet dédié) :
+  - filtrés par rôle et par caractéristiques, chacun avec les échéances qui le ciblent ;
+  - suivi : statut, version, emplacement, dates de remise et d'approbation ;
+  - **empreinte SHA-256 calculée sur le poste** : le document n'est jamais copié. On peut ensuite vérifier qu'un fichier est conforme ou différent ;
+  - la date de remise vaut réalisation de l'échéance, sauf si une date est saisie à la main ;
+  - livrables libres possibles ;
+- **registres** (onglet dédié) :
+  - rapports hebdomadaires, qui alimentent D-07, avec l'empreinte du fichier en option ;
+  - leg-ups, avec alerte RTS 11(8) si un leg-up non prévu est fourni sans double approbation ;
+  - détections, suspensions et purple teaming limité, avec alerte RTS 11(9) / 11(10) tant que les test managers n'ont pas validé, et signalement d'un incident réel ;
 - **enregistrement** : écriture directe via la File System Access API (Chrome, Edge), avec contrôle des conflits (DEC-1). Sinon, l'enregistrement produit un téléchargement (Firefox, Safari) ;
 - **verrouillage** : la clé et la base sont retirées de la mémoire ;
 - **FR / EN**.
@@ -36,4 +46,4 @@ npm run test:e2e
 Le test E2E ouvre `dist/index.html` en `file://` dans Chromium, Firefox et WebKit. Il couvre la création, la saisie, l'enregistrement,
 le verrouillage, la réouverture par un autre auteur, la mauvaise passphrase et la bascule FR / EN, et vérifie qu'il n'y a aucune requête réseau ni erreur console.
 
-Pas encore couvert : registres (leg-ups, détections, rapports hebdomadaires), livrables, surcharges dans l'interface, verrouillage automatique après inactivité.
+Pas encore couvert : annuaire des parties prenantes et évaluation des prestataires (art. 27), scénarios, changements du plan de test, surcharges dans l'interface, verrouillage automatique après inactivité.

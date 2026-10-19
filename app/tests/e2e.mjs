@@ -2,7 +2,8 @@
 // La File System Access API est retirée pour tester le chemin universel (téléchargement + <input type=file>) :
 // le sélecteur natif de la FSA n'est pas automatisable.
 import { chromium, firefox, webkit } from 'playwright';
-import { mkdtempSync } from 'node:fs';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -96,6 +97,68 @@ async function runOne(name) {
     await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
   });
 
+  await step('livrables : suivi, empreinte SHA-256 locale, vérification conforme / différente', async () => {
+    const doc = join(dir, 'ssd-v1.txt');
+    const other = join(dir, 'ssd-v2.txt');
+    writeFileSync(doc, 'Scope specification document — version 1');
+    writeFileSync(other, 'Scope specification document — version 2');
+    const expected = createHash('sha256').update('Scope specification document — version 1').digest('hex');
+    await page.getByRole('button', { name: 'Livrables', exact: true }).click();
+    const card = page.locator('article[data-deliverable="DLV-SSD"]');
+    await card.filter({ hasText: 'D-02' }).waitFor();
+    await card.getByLabel('Statut').selectOption('draft');
+    await page.locator('article[data-deliverable="DLV-SSD"][data-status="draft"]').waitFor();
+    const pick = async (label, path) => {
+      const [chooser] = await Promise.all([page.waitForEvent('filechooser'), card.getByRole('button', { name: label }).click()]);
+      await chooser.setFiles(path);
+    };
+    await pick('Calculer l\'empreinte d\'un fichier', doc);
+    await card.getByTestId('DLV-SSD-sha').filter({ hasText: expected }).waitFor();
+    await pick('Vérifier un fichier', doc);
+    await card.getByTestId('DLV-SSD-verify').filter({ hasText: 'Conforme' }).waitFor();
+    await pick('Vérifier un fichier', other);
+    await card.getByTestId('DLV-SSD-verify').filter({ hasText: 'Différent' }).waitFor();
+    assert.equal(await page.locator('article[data-deliverable="DLV-IT-POLICY"]').count(), 0, 'testeurs externes : pas de politique testeurs internes');
+  });
+
+  await step('registres : rapports hebdomadaires → D-07, leg-up et détection contrôlés', async () => {
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.locator('#ev-R0').fill('2026-01-05');
+    await page.locator('#ev-R1').fill('2026-01-26');
+    await page.getByRole('button', { name: 'Registres' }).click();
+    const weekly = page.getByTestId('weekly');
+    for (const d of ['2026-01-07', '2026-01-14']) {
+      await weekly.getByLabel('Date').fill(d);
+      await weekly.getByRole('button', { name: 'Ajouter' }).click();
+      await weekly.locator(`time[datetime="${d}"]`).waitFor();
+    }
+    await page.getByTestId('d07-status').filter({ hasText: '2 semaine(s) couverte(s) sur 3' }).waitFor();
+    await weekly.getByLabel('Date').fill('2026-01-21');
+    await weekly.getByRole('button', { name: 'Ajouter' }).click();
+    await page.getByTestId('d07-status').filter({ hasText: '3 semaine(s) couverte(s) sur 3' }).waitFor();
+
+    const legups = page.getByTestId('legups');
+    await legups.getByLabel('Description').fill('Explication du blocage du payload');
+    await legups.getByRole('button', { name: 'Ajouter' }).click();
+    const lu = legups.locator('article[data-legup="1"]');
+    await lu.getByLabel('Fourni le').fill('2026-01-15');
+    await lu.getByRole('alert').filter({ hasText: 'sans double approbation' }).waitFor();
+    await lu.getByLabel('Approuvé CT le').fill('2026-01-14');
+    await lu.getByLabel('Approuvé TM le').fill('2026-01-14');
+    await lu.getByRole('alert').waitFor({ state: 'detached' });
+
+    const det = page.getByTestId('detections');
+    await det.getByLabel('Date').fill('2026-01-16');
+    await det.getByLabel('Description', { exact: true }).fill('Alerte EDR sur le poste pivot');
+    await det.getByRole('button', { name: 'Ajouter' }).click();
+    const d1 = det.locator('article[data-detection="1"]');
+    await d1.getByRole('alert').filter({ hasText: 'non validées par les test managers' }).waitFor();
+    await d1.getByLabel('Validé TM le').fill('2026-01-16');
+    await d1.getByRole('alert').waitFor({ state: 'detached' });
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.locator('tr[data-deadline="D-07"][data-state="recurring_ok"]').waitFor();
+  });
+
   let saved;
   await step('enregistrement (téléchargement, mode sans FSA)', async () => {
     const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Enregistrer', exact: true }).click()]);
@@ -123,6 +186,13 @@ async function runOne(name) {
     await page.locator('article[data-item="RTS-9.2"][data-status="done"]').waitFor();
     await page.locator('article[data-item="RTS-9.7"]').filter({ hasText: 'Une seule FCI concernée' }).waitFor();
     await page.getByTestId('practices').locator('article[data-item="FR-01"]').waitFor();
+    await page.getByRole('button', { name: 'Livrables', exact: true }).click();
+    await page.locator('article[data-deliverable="DLV-SSD"][data-status="draft"]').waitFor();
+    await page.getByTestId('DLV-SSD-sha').waitFor();
+    await page.getByRole('button', { name: 'Registres' }).click();
+    await page.getByTestId('d07-status').filter({ hasText: '3 semaine(s) couverte(s) sur 3' }).waitFor();
+    assert.equal(await page.locator('article[data-legup]').count(), 1);
+    assert.equal(await page.locator('article[data-detection]').count(), 1);
   });
 
   await step('mauvaise passphrase : message générique', async () => {

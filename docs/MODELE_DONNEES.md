@@ -167,9 +167,12 @@ scenarios ────────── scénarios proposés / retenus (threat-
 leg_ups ──────────── registre des leg-ups (type, scénario, approbations CT/TM, date)
 detections ───────── registre des détections et des mesures validées
 plan_changes ─────── changements au plan de test RT (approbations CTL + TM)
+weekly_reports ───── rapports hebdomadaires des testeurs (RTS 11(7)) : alimentent D-07 (schéma v2)
 sessions ─────────── ouvertures de session (auteur déclaratif, version de l'outil et du référentiel)
 journal ──────────── journal chaîné append-only (cf. 2.3)
 ```
+
+**Version de schéma** : 2 (`meta.schema_version`). Les fichiers v1 sont migrés à l'ouverture ([`engine/src/migrations.ts`](../engine/src/migrations.ts)). La migration est faite dans une transaction et journalisée (`meta.schema_version` 1 → 2). Une version inconnue est refusée.
 
 **Règle d'écriture** : toute écriture dans une table métier passe par une **fonction unique** du moteur. Elle
 écrit la ligne **et** l'entrée de journal correspondante dans **la même transaction**. Des déclencheurs SQLite interdisent
