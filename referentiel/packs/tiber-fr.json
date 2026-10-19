@@ -1,0 +1,898 @@
+{
+  "$schema": "../schema/pack.schema.json",
+  "pack_id": "tiber-fr",
+  "framework": "TIBER-FR",
+  "version": "0.2.0",
+  "title": {
+    "fr": "Bonnes pratiques TIBER-FR (guide v2, mars 2025)",
+    "en": "TIBER-FR good practices (guide v2, March 2025)"
+  },
+  "license_note": {
+    "fr": "© Banque de France. Synthèses et références uniquement. Le guide ne s'applique pas aux établissements « significant » du MSU.",
+    "en": "© Banque de France. Summaries and references only. Not applicable to SSM significant institutions."
+  },
+  "sources": [
+    {
+      "id": "SRC-TIBER-FR-V2",
+      "title": "TIBER-FR National Implementation Guide",
+      "version": "2",
+      "date": "2025-03-01",
+      "url": "https://banque-france.fr/system/files/2025-03/Guide_TIBER_2025_V5.pdf",
+      "checked_at": "2026-10-19"
+    }
+  ],
+  "items": [
+    {
+      "id": "FR-T1",
+      "nature": "good_practice",
+      "matrix_ref": "FR-T1",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6",
+        "section": "TIBER-FR process"
+      },
+      "phase": "cycle",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "restates",
+        "targets": [
+          "DORA-26.1"
+        ]
+      },
+      "title": {
+        "fr": "Cycle de 3 ans modulable",
+        "en": "Adjustable 3-year cycle"
+      },
+      "summary": {
+        "fr": "Un test TIBER-FR a lieu généralement dans un cycle de 3 ans, que l'autorité peut raccourcir ou allonger.",
+        "en": "A TIBER-FR test is generally performed within a 3-year cycle, which the authority may shorten or extend."
+      },
+      "question": {
+        "fr": "La date du prochain TLPT est-elle connue ?",
+        "en": "Is the next TLPT date known?"
+      }
+    },
+    {
+      "id": "FR-T2",
+      "nature": "good_practice",
+      "matrix_ref": "FR-T2",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.1",
+        "section": "The preparation phase"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TM"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Points de suivi réguliers avec le TCT-FR",
+        "en": "Regular status meetings with TCT-FR"
+      },
+      "summary": {
+        "fr": "Après la réunion de notification, des points réguliers entre le TCT-FR et le CT suivent l'avancement de la préparation.",
+        "en": "After the notification meeting, regular status updates between TCT-FR and CT track preparation."
+      },
+      "question": {
+        "fr": "Une fréquence de point avec le TCT-FR est-elle convenue ?",
+        "en": "Is a meeting cadence with TCT-FR agreed?"
+      }
+    },
+    {
+      "id": "FR-01",
+      "nature": "good_practice",
+      "matrix_ref": "FR-01",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.1",
+        "section": "The preparation phase"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "MB",
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.6"
+        ]
+      },
+      "title": {
+        "fr": "Sponsor exécutif et attestation de périmètre",
+        "en": "Executive sponsor and scope attestation"
+      },
+      "summary": {
+        "fr": "Le périmètre, avec ses flags, est approuvé par un dirigeant ou un membre du conseil qui signe une attestation de périmètre. Ce sponsor porte la remédiation.",
+        "en": "Scope and flags are approved by a senior executive or board member signing a scope attestation; this sponsor owns remediation."
+      },
+      "question": {
+        "fr": "Qui est le sponsor exécutif, et a-t-il signé l'attestation de périmètre ?",
+        "en": "Who is the executive sponsor, and has the scope attestation been signed?"
+      }
+    },
+    {
+      "id": "FR-02",
+      "nature": "good_practice",
+      "matrix_ref": "FR-02",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "4",
+        "section": "Risk management for TIBER-FR test and confidentiality"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-5.2"
+        ]
+      },
+      "title": {
+        "fr": "Évaluation juridique indépendante",
+        "en": "Independent legal assessment"
+      },
+      "summary": {
+        "fr": "L'entité reste responsable de l'évaluation juridique et experte indépendante du test prévu. TIBER-FR interdit aussi l'extorsion, les menaces et la corruption d'employés.",
+        "en": "The entity remains responsible for independent legal and expert assessment; TIBER-FR also prohibits extortion, threats and bribery."
+      },
+      "question": {
+        "fr": "Le juridique a-t-il validé le test (droit du travail, données personnelles, intrusion physique) ?",
+        "en": "Has legal validated the test (labour law, personal data, physical intrusion)?"
+      }
+    },
+    {
+      "id": "FR-03",
+      "nature": "good_practice",
+      "matrix_ref": "FR-03",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.1.1",
+        "section": "Procurement of TI and RT services"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CTL",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "restates",
+        "targets": [
+          "RTS-7.1.e.v",
+          "RTS-7.1.f.v"
+        ]
+      },
+      "title": {
+        "fr": "Prestataire unique TI + RT : ressources et indépendance",
+        "en": "Single TI + RT provider: resources and independence"
+      },
+      "summary": {
+        "fr": "Un même prestataire peut assurer TI et RT s'il garantit des ressources qualifiées suffisantes et l'indépendance des équipes (la RT n'influence pas le rapport TI).",
+        "en": "One provider may do TI and RT if it guarantees sufficient qualified resources and team independence (RT does not influence TI reporting)."
+      },
+      "question": {
+        "fr": "Comment le prestataire prouve-t-il la séparation des équipes TI et RT ?",
+        "en": "How does the provider evidence TI/RT team separation?"
+      }
+    },
+    {
+      "id": "FR-04",
+      "nature": "national_obligation",
+      "matrix_ref": "FR-04",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.1.2",
+        "section": "Regulatory security requirements"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          },
+          {
+            "fact": "oiv_siiv_flags",
+            "eq": true
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "note": {
+          "fr": "Relève du droit national (LPM, règles ANSSI) relayé par le guide. Qualification juridique en attente.",
+          "en": "National law (LPM, ANSSI rules) relayed by the guide; legal qualification pending."
+        }
+      },
+      "title": {
+        "fr": "Flags sur SIIV : prestataires PASSI LPM",
+        "en": "Flags on SIIV: PASSI LPM providers"
+      },
+      "summary": {
+        "fr": "Si des flags portent sur des SIIV d'un OIV, recourir à des prestataires PASSI LPM basés dans l'UE, sans sous-traitance hors PASSI LPM. Le rapport doit pouvoir être produit à l'ANSSI sur demande.",
+        "en": "If flags target an OIV's SIIV systems, use EU-based PASSI LPM providers with no non-PASSI LPM subcontracting; report available to ANSSI on request."
+      },
+      "question": {
+        "fr": "Un flag porte-t-il sur un SIIV ? Si oui, le prestataire est-il PASSI LPM ?",
+        "en": "Does any flag target a SIIV? If so, is the provider PASSI LPM certified?"
+      }
+    },
+    {
+      "id": "FR-05",
+      "nature": "good_practice",
+      "matrix_ref": "FR-05",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.1",
+        "section": "The Threat Intelligence sub-phase"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-10.1"
+        ]
+      },
+      "title": {
+        "fr": "TI en 4 étapes, reconnaissance passive",
+        "en": "4-step TI, passive reconnaissance"
+      },
+      "summary": {
+        "fr": "Collecte ciblée, puis cartographie des acteurs, puis scénarios, puis passation. Pendant la TI, la reconnaissance reste passive pour ne pas être détecté.",
+        "en": "Targeted collection, threat actor mapping, scenarios, handover; passive reconnaissance only during TI to avoid detection."
+      },
+      "question": {
+        "fr": "La collecte TI est-elle restée passive ?",
+        "en": "Has TI collection remained passive?"
+      }
+    },
+    {
+      "id": "FR-06",
+      "nature": "good_practice",
+      "matrix_ref": "FR-06",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.1.3",
+        "section": "Threat Intelligence-based scenarios / Handover"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CTL",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-10.2"
+        ]
+      },
+      "title": {
+        "fr": "Atelier TI à mi-parcours et passation",
+        "en": "TI midpoint workshop and handover"
+      },
+      "summary": {
+        "fr": "Un atelier à mi-parcours présente les premiers scénarios. Une réunion de passation en fin de TI réunit le CT, le TCT-FR et la RT.",
+        "en": "A midpoint workshop presents draft scenarios; a handover meeting at the end of TI involves CT, TCT-FR and RT."
+      },
+      "question": {
+        "fr": "L'atelier à mi-parcours est-il planifié ?",
+        "en": "Is the midpoint workshop scheduled?"
+      }
+    },
+    {
+      "id": "FR-07",
+      "nature": "good_practice",
+      "matrix_ref": "FR-07",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.1.3",
+        "section": "Threat Intelligence-based scenarios"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Scénario d'intrusion physique facultatif",
+        "en": "Optional physical breach scenario"
+      },
+      "summary": {
+        "fr": "Le TIP peut proposer un scénario d'intrusion physique. Il est facultatif, et le CT peut l'exclure avec l'accord du TCT-FR.",
+        "en": "The TIP may propose a physical breach scenario; it is optional and the CT may exclude it with TCT-FR agreement."
+      },
+      "question": {
+        "fr": "Veut-on un scénario physique, avec les autorisations et protections juridiques nécessaires ?",
+        "en": "Do we want a physical scenario, with the required authorisations and legal cover?"
+      }
+    },
+    {
+      "id": "FR-08",
+      "nature": "good_practice",
+      "matrix_ref": "FR-08",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.2.1",
+        "section": "Red Team Test Plan"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "diverges",
+        "targets": [
+          "RTS-11.1"
+        ],
+        "note": {
+          "fr": "Le RTS (annexe IV) demande un découpage in / through / out. TIBER-FR demande RECON / IN / THROUGH / OUT, avec un mapping MITRE ATT&CK.",
+          "en": "RTS Annex IV requires in/through/out; TIBER-FR requires RECON/IN/THROUGH/OUT plus MITRE ATT&CK mapping."
+        }
+      },
+      "title": {
+        "fr": "Plan RT en RECON/IN/THROUGH/OUT et MITRE ATT&CK",
+        "en": "RT plan in RECON/IN/THROUGH/OUT with MITRE ATT&CK"
+      },
+      "summary": {
+        "fr": "Chaque scénario est découpé en quatre sous-phases, et toutes les TTP sont mappées sur MITRE ATT&CK. Le plan prévoit des alternatives et des leg-ups.",
+        "en": "Each scenario is split into four sub-phases and all TTPs are mapped to MITRE ATT&CK; alternatives and leg-ups are anticipated."
+      },
+      "question": {
+        "fr": "Les TTP sont-elles mappées sur ATT&CK ?",
+        "en": "Are TTPs mapped to ATT&CK?"
+      }
+    },
+    {
+      "id": "FR-09",
+      "nature": "good_practice",
+      "matrix_ref": "FR-09",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.2.2",
+        "section": "Test execution — Leg ups"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-11.8"
+        ]
+      },
+      "title": {
+        "fr": "Typologie et réalisme des leg-ups",
+        "en": "Leg-up typology and realism"
+      },
+      "summary": {
+        "fr": "Trois types de leg-ups : gain de temps, information, accès. Ils sont obtenus par les processus normaux de l'entité, de façon réaliste, et activés avec le CT sauf objection du TCT-FR.",
+        "en": "Leg-ups are time-saving, information or access; obtained through normal processes, realistic, activated with the CT pending TCT-FR non-objection."
+      },
+      "question": {
+        "fr": "Chaque leg-up est-il typé et justifié ?",
+        "en": "Is each leg-up typed and justified?"
+      }
+    },
+    {
+      "id": "FR-10",
+      "nature": "good_practice",
+      "matrix_ref": "FR-10",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.2.2",
+        "section": "Red Team status updates"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "RTT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-11.7"
+        ]
+      },
+      "title": {
+        "fr": "Points quotidiens CT/RT, hebdomadaires avec le TCT-FR",
+        "en": "Daily CT/RT calls, weekly with TCT-FR"
+      },
+      "summary": {
+        "fr": "Point quotidien entre le CT et la RT ; point hebdomadaire avec le TCT-FR, sur le modèle fourni ; réunion ad hoc en cas de problème critique. La participation du TIP est encouragée.",
+        "en": "Daily CT/RT call; weekly update with TCT-FR using its template; ad-hoc meeting for critical issues; TIP participation encouraged."
+      },
+      "question": {
+        "fr": "Le modèle de point hebdomadaire du TCT-FR est-il utilisé ?",
+        "en": "Is the TCT-FR weekly template used?"
+      }
+    },
+    {
+      "id": "FR-11",
+      "nature": "good_practice",
+      "matrix_ref": "FR-11",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.2.2",
+        "section": "Test execution"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-11.6"
+        ]
+      },
+      "title": {
+        "fr": "Petits écarts tolérés",
+        "en": "Minor deviations tolerated"
+      },
+      "summary": {
+        "fr": "De petits écarts au plan sont tolérés s'ils n'ont aucun impact sur le planning ni sur l'analyse de risques. En cas de détection, se référer aux bonnes pratiques de purple teaming.",
+        "en": "Small deviations with no impact on planning or risk assessment are tolerated; on detection refer to purple teaming best practices."
+      },
+      "question": {
+        "fr": "Cet écart modifie-t-il le planning ou les risques ? Si oui, une approbation est nécessaire.",
+        "en": "Does this deviation change planning or risks? If so, approval is required."
+      }
+    },
+    {
+      "id": "FR-12",
+      "nature": "good_practice",
+      "matrix_ref": "FR-12",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.2.2.2",
+        "section": "Red Team Report"
+      },
+      "phase": "closure",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "diverges",
+        "targets": [
+          "RTS-12.2"
+        ],
+        "note": {
+          "fr": "TIBER-FR prévoit un rapport RT provisoire en fin de RT et un rapport final après le replay. Le délai de 4 semaines du RTS s'applique au rapport remis au CT.",
+          "en": "TIBER-FR foresees a draft RT report at RT end and a final one after replay; the RTS 4-week deadline applies to the report submitted to the CT."
+        }
+      },
+      "title": {
+        "fr": "Rapport RT provisoire puis final",
+        "en": "Draft then final RT report"
+      },
+      "summary": {
+        "fr": "Synthèse lisible par la gouvernance ; chronologie détaillée, dont les artefacts restés sur le SI ; constats classés par sévérité ; recommandations.",
+        "en": "Executive summary for governance; detailed timeline incl. artefacts left on the network; findings ranked by severity; recommendations."
+      },
+      "question": {
+        "fr": "Les artefacts restés sur le SI sont-ils listés ?",
+        "en": "Are artefacts left on the network listed?"
+      }
+    },
+    {
+      "id": "FR-13",
+      "nature": "good_practice",
+      "matrix_ref": "FR-13",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.3.2",
+        "section": "Replay workshop and purple teaming exercise"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT",
+        "BT",
+        "RTT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.5"
+        ]
+      },
+      "title": {
+        "fr": "Replay : deux demi-journées au moins",
+        "en": "Replay: at least two half-days"
+      },
+      "summary": {
+        "fr": "Partie 1 : rejeu sur table, en comparant les chronologies RT et BT. Partie 2 : rejeu pratique. Participants requis : RT, BT, CT et TM ; TIP facultatif.",
+        "en": "Part 1 tabletop comparing RT/BT timelines; part 2 hands-on re-enactment; required: RT, BT, CT, TM; TIP optional."
+      },
+      "question": {
+        "fr": "Deux demi-journées sont-elles réservées ?",
+        "en": "Are two half-days booked?"
+      }
+    },
+    {
+      "id": "FR-14",
+      "nature": "good_practice",
+      "matrix_ref": "FR-14",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.3.3",
+        "section": "Test Summary Report"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.7"
+        ]
+      },
+      "title": {
+        "fr": "Rapport de synthèse rédigé au fil de l'eau",
+        "en": "TSR drafted progressively"
+      },
+      "summary": {
+        "fr": "Commencer le rapport de synthèse dès la préparation, n'y décrire les constats qu'en haut niveau, et le présenter au C-level.",
+        "en": "Start the TSR during preparation, keep findings high-level, present to C-level for endorsement."
+      },
+      "question": {
+        "fr": "Le rapport de synthèse est-il pré-rempli au fil de l'eau ?",
+        "en": "Is the TSR being pre-filled as the test progresses?"
+      }
+    },
+    {
+      "id": "FR-15",
+      "nature": "good_practice",
+      "matrix_ref": "FR-15",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.3.3",
+        "section": "Test Summary Report"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "diverges",
+        "targets": [
+          "RTS-12.7",
+          "RTS-13.1"
+        ],
+        "note": {
+          "fr": "TIBER-FR inclut le plan de remédiation dans le rapport de synthèse ; le RTS prévoit deux livrables distincts (D-11, D-12).",
+          "en": "TIBER-FR embeds the remediation plan in the TSR; the RTS requires two separate deliverables (D-11, D-12)."
+        }
+      },
+      "title": {
+        "fr": "Rapport de synthèse rédigé au fil de l'eau, constats en haut niveau",
+        "en": "TSR drafted progressively, high-level findings"
+      },
+      "summary": {
+        "fr": "Commencer le rapport de synthèse dès la préparation, n'y décrire les constats qu'en haut niveau, et le présenter au C-level.",
+        "en": "Start drafting the TSR from preparation, keep findings high-level, present to C-level."
+      },
+      "question": {
+        "fr": "Les deux livrables réglementaires (synthèse et remédiation) restent-ils identifiables séparément ?",
+        "en": "Are the two regulatory deliverables (TSR and remediation) still separately identifiable?"
+      }
+    },
+    {
+      "id": "FR-16",
+      "nature": "good_practice",
+      "matrix_ref": "FR-16",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.3.4",
+        "section": "360° Feedback Workshop"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.6"
+        ]
+      },
+      "title": {
+        "fr": "Questionnaire 360° du TCT-FR",
+        "en": "TCT-FR 360° questionnaire"
+      },
+      "summary": {
+        "fr": "Le TCT-FR envoie un questionnaire 360° avant l'atelier. Les réponses ne sont pas partagées entre participants, et les retours sont anonymisés vers le TKC.",
+        "en": "TCT-FR sends a 360° questionnaire before the workshop; answers are not shared between participants; feedback anonymised to the TKC."
+      },
+      "question": {
+        "fr": "Chaque partie a-t-elle renvoyé son questionnaire ?",
+        "en": "Has each party returned its questionnaire?"
+      }
+    },
+    {
+      "id": "FR-17",
+      "nature": "good_practice",
+      "matrix_ref": "FR-17",
+      "source": {
+        "instrument": "TIBER-FR_V2",
+        "article": "6.3.5",
+        "section": "TIBER-FR/DORA TLPT attestation"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "national_framework",
+            "eq": "TIBER-FR"
+          }
+        ]
+      },
+      "relation": {
+        "type": "diverges",
+        "targets": [
+          "RTS-14.1"
+        ],
+        "note": {
+          "fr": "TIBER-FR : attestation signée par tous les participants. RTS : délivrée par l'autorité TLPT.",
+          "en": "TIBER-FR: attestation signed by all participants. RTS: issued by the TLPT authority."
+        }
+      },
+      "title": {
+        "fr": "Attestation signée par tous ; risque de non-reconnaissance",
+        "en": "Attestation signed by all; risk of non-recognition"
+      },
+      "summary": {
+        "fr": "Le TCT-FR peut refuser la conformité (prestataire défaillant, test compromis). Le test ne compte alors pas dans le cycle de 3 ans.",
+        "en": "TCT-FR may refuse compliance (provider failure, compromised test); the test then does not count towards the 3-year cycle."
+      },
+      "question": {
+        "fr": "Le secret et la qualité ont-ils été tenus jusqu'au bout ?",
+        "en": "Have secrecy and quality been maintained throughout?"
+      }
+    }
+  ]
+}

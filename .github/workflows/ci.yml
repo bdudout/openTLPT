@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  referentiel:
+    name: Référentiel (schéma + règles croisées)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema==4.23.0
+      - run: python tools/validate_ref.py
+
+  spike:
+    name: Spike file:// — ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            targets: chromium,firefox,webkit
+          - os: windows-latest
+            targets: chromium,firefox,msedge
+    defaults:
+      run:
+        working-directory: spike
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm run build
+      - name: Empreinte du build
+        shell: bash
+        run: sha256sum dist/index.html || shasum -a 256 dist/index.html
+      - run: npx playwright install --with-deps chromium firefox webkit
+        if: runner.os == 'Linux'
+      - run: npx playwright install chromium firefox
+        if: runner.os == 'Windows'
+      - name: Tests navigateurs (configuration standard)
+        run: npm run test:browsers
+        env:
+          TARGETS: ${{ matrix.targets }}
+
+  edge-strict:
+    name: Spike file:// — Edge « sécurité renforcée » (StrictMode)
+    runs-on: windows-latest
+    # Informatif : on mesure l'impact de la politique EnhanceSecurityMode (JIT désactivé, WASM interprété).
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: spike
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm run build
+      - name: Poser la politique Edge EnhanceSecurityMode = StrictMode (2)
+        shell: pwsh
+        run: |
+          New-Item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Force | Out-Null
+          New-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name 'EnhanceSecurityMode' -Value 2 -PropertyType DWord -Force | Out-Null
+          Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Edge'
+      - name: Tests Edge en StrictMode
+        run: npm run test:browsers
+        env:
+          TARGETS: msedge
+          LABEL: StrictMode

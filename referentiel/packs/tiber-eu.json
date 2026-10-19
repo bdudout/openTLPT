@@ -1,0 +1,1667 @@
+{
+  "$schema": "../schema/pack.schema.json",
+  "pack_id": "tiber-eu",
+  "framework": "TIBER-EU",
+  "version": "0.2.0",
+  "title": {
+    "fr": "Bonnes pratiques TIBER-EU (version janvier 2025)",
+    "en": "TIBER-EU good practices (January 2025 version)"
+  },
+  "license_note": {
+    "fr": "Synthèses et références uniquement : aucune reproduction du texte de la BCE.",
+    "en": "Summaries and references only; no reproduction of ECB text."
+  },
+  "sources": [
+    {
+      "id": "SRC-TIBER-EU-2025",
+      "title": "TIBER-EU Framework — How to implement the European framework for Threat Intelligence-Based Ethical Red teaming",
+      "version": "January 2025",
+      "date": "2025-02-11",
+      "url": "https://www.ecb.europa.eu/pub/pdf/other/ecb.tiber_eu_framework_2025~b32eff9a10.en.pdf",
+      "checked_at": "2026-10-19"
+    }
+  ],
+  "items": [
+    {
+      "id": "EU-T1",
+      "nature": "good_practice",
+      "matrix_ref": "EU-T1",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Notification"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "restates",
+        "targets": [
+          "RTS-9.6"
+        ]
+      },
+      "title": {
+        "fr": "Préparation : 6 mois au plus",
+        "en": "Preparation: at most 6 months"
+      },
+      "summary": {
+        "fr": "La notification écrite marque le début du test. La préparation dure au plus six mois.",
+        "en": "The written notification marks the start of the test; preparation lasts no longer than six months."
+      },
+      "question": {
+        "fr": "Le planning de préparation tient-il dans les 6 mois ?",
+        "en": "Does the preparation plan fit within 6 months?"
+      }
+    },
+    {
+      "id": "EU-T2",
+      "nature": "good_practice",
+      "matrix_ref": "EU-T2",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Meetings"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TM"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.2",
+          "RTS-9.6"
+        ]
+      },
+      "title": {
+        "fr": "Réunions d'initiation, de cadrage et de lancement",
+        "en": "Initiation, scoping and launch meetings"
+      },
+      "summary": {
+        "fr": "Réunion d'initiation au plus tard à 3 mois ; réunions de cadrage et de lancement au plus tard à 6 mois après la notification.",
+        "en": "Initiation meeting no later than 3 months; scoping and launch meetings no later than 6 months after notification."
+      },
+      "question": {
+        "fr": "Les trois réunions de préparation sont-elles planifiées avec le TM ?",
+        "en": "Are the three preparation meetings scheduled with the TM?"
+      }
+    },
+    {
+      "id": "EU-T3",
+      "nature": "good_practice",
+      "matrix_ref": "EU-T3",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "7.1",
+        "section": "Testing phase: threat intelligence — Overview"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Phase TI : 4 à 6 semaines (indicatif)",
+        "en": "TI phase: 4-6 weeks (indicative)"
+      },
+      "summary": {
+        "fr": "TIBER-EU indique une durée indicative de 4 à 6 semaines pour la collecte TI, les scénarios et le TTIR.",
+        "en": "TIBER-EU indicates 4-6 weeks for TI collection, scenarios and TTIR."
+      },
+      "question": {
+        "fr": "La phase TI est-elle dimensionnée entre 4 et 6 semaines ?",
+        "en": "Is the TI phase sized at 4-6 weeks?"
+      }
+    },
+    {
+      "id": "EU-T4",
+      "nature": "good_practice",
+      "matrix_ref": "EU-T4",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "8.1",
+        "section": "Testing phase: red team — Overview"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Plan de test RT : 2 à 3 semaines (indicatif)",
+        "en": "RT test plan: 2-3 weeks (indicative)"
+      },
+      "summary": {
+        "fr": "TIBER-EU indique 2 à 3 semaines pour rédiger le plan de test red team.",
+        "en": "TIBER-EU indicates 2-3 weeks to draft the red team test plan."
+      },
+      "question": {
+        "fr": "Le temps de rédaction du plan RT est-il prévu dans le planning ?",
+        "en": "Is time to draft the RT plan included in the schedule?"
+      }
+    },
+    {
+      "id": "EU-T5",
+      "nature": "good_practice",
+      "matrix_ref": "EU-T5",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9.1",
+        "section": "Closure phase — Overview"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "restates",
+        "targets": [
+          "RTS-12.2",
+          "RTS-12.4",
+          "RTS-12.5",
+          "RTS-12.7",
+          "RTS-13.1"
+        ]
+      },
+      "title": {
+        "fr": "Clôture : plus de 18 semaines possibles",
+        "en": "Closure: may exceed 18 weeks"
+      },
+      "summary": {
+        "fr": "Rapports et replay/PT en 10 semaines au plus, puis évaluation des TM, puis 360°, rapport de synthèse et remédiation en 8 semaines au plus. Le total peut dépasser 18 semaines.",
+        "en": "Reports and replay/PT within 10 weeks, then TM assessment, then 360°, TSR and remediation within 8 weeks; total may exceed 18 weeks."
+      },
+      "question": {
+        "fr": "Le planning de clôture tient-il compte du délai d'évaluation des TM ?",
+        "en": "Does the closure plan account for the TM assessment time?"
+      }
+    },
+    {
+      "id": "EU-T6",
+      "nature": "good_practice",
+      "matrix_ref": "EU-T6",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9.1",
+        "section": "Figure 6 — Closure phase process overview"
+      },
+      "phase": "closure",
+      "carriers": [
+        "BT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "diverges",
+        "targets": [
+          "RTS-12.4"
+        ],
+        "note": {
+          "fr": "La figure TIBER-EU indique 6 semaines pour le rapport BT ; le texte TIBER-EU et le RTS fixent 10 semaines au plus. Seules les 10 semaines sont exigibles.",
+          "en": "TIBER-EU figure shows 6 weeks for the BT report; TIBER-EU text and RTS set at most 10 weeks. Only 10 weeks is binding."
+        }
+      },
+      "title": {
+        "fr": "Rapport BT : cible indicative de 6 semaines",
+        "en": "BT report: indicative 6-week target"
+      },
+      "summary": {
+        "fr": "Viser un rapport BT tôt laisse du temps au replay et au purple teaming avant le plafond de 10 semaines.",
+        "en": "Aiming for an early BT report leaves time for replay and purple teaming before the 10-week cap."
+      },
+      "question": {
+        "fr": "Le rapport BT sera-t-il assez tôt pour préparer le replay ?",
+        "en": "Will the BT report be early enough to prepare the replay?"
+      }
+    },
+    {
+      "id": "EU-T7",
+      "nature": "good_practice",
+      "matrix_ref": "EU-T7",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Notification"
+      },
+      "phase": "cycle",
+      "carriers": [
+        "FE",
+        "TM"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Contact anticipé avec l'autorité",
+        "en": "Early contact with the authority"
+      },
+      "summary": {
+        "fr": "Le TCT est encouragé à contacter l'entité le plus tôt possible, avant la notification, pour anticiper les achats et le budget.",
+        "en": "The TCT is encouraged to contact the entity as early as possible, before notification, to anticipate procurement and budget."
+      },
+      "question": {
+        "fr": "Le budget et les achats sont-ils anticipés avant la notification ?",
+        "en": "Are budget and procurement anticipated before notification?"
+      }
+    },
+    {
+      "id": "EU-01",
+      "nature": "good_practice",
+      "matrix_ref": "EU-01",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "5.2",
+        "section": "Generic Threat Landscape"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-10.1"
+        ]
+      },
+      "title": {
+        "fr": "S'appuyer sur le Generic Threat Landscape",
+        "en": "Leverage the Generic Threat Landscape"
+      },
+      "summary": {
+        "fr": "Le GTL national, recommandé mais non obligatoire, sert de base au TTIR et guide le cadrage.",
+        "en": "The national GTL, recommended but not mandatory, is the baseline for the TTIR and guides scoping."
+      },
+      "question": {
+        "fr": "Un GTL est-il disponible, et l'a-t-on transmis au TIP ?",
+        "en": "Is a GTL available and shared with the TIP?"
+      }
+    },
+    {
+      "id": "EU-02",
+      "nature": "good_practice",
+      "matrix_ref": "EU-02",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "4.1.5",
+        "section": "Confidentiality and escalation procedures"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CTL"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-4.2.a"
+        ]
+      },
+      "title": {
+        "fr": "Control team restreint et senior, avec NDA",
+        "en": "Small, senior control team with NDAs"
+      },
+      "summary": {
+        "fr": "Le CT reste restreint à des personnes seniors, ayant accès au sommet de la chaîne d'escalade. Ses membres peuvent signer un NDA.",
+        "en": "Keep the CT small, senior, with access to the top of the escalation chain; members may sign NDAs."
+      },
+      "question": {
+        "fr": "Chaque membre du CT est-il indispensable, et a-t-il signé un NDA ?",
+        "en": "Is every CT member essential, and has each signed an NDA?"
+      }
+    },
+    {
+      "id": "EU-03",
+      "nature": "good_practice",
+      "matrix_ref": "EU-03",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "4.1.5",
+        "section": "Confidentiality and escalation procedures"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-4.2.c"
+        ]
+      },
+      "title": {
+        "fr": "Bloquer les escalades externes obligatoires",
+        "en": "Block mandatory external escalations"
+      },
+      "summary": {
+        "fr": "Définir des procédures pour éviter les actions obligatoires en cas d'incident réel (CSIRT, partage d'information, forces de l'ordre) et les contenir.",
+        "en": "Define procedures to avoid actions mandatory for real incidents (CSIRT, information sharing, law enforcement) and contain them."
+      },
+      "question": {
+        "fr": "Qui arrête l'escalade vers le CERT, l'ISAC ou la police si la BT détecte le test ?",
+        "en": "Who stops escalation to CERT, ISAC or police if the BT detects the test?"
+      }
+    },
+    {
+      "id": "EU-04",
+      "nature": "good_practice",
+      "matrix_ref": "EU-04",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "4.1.5",
+        "section": "Confidentiality and escalation procedures"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "restates",
+        "targets": [
+          "RTS-11.10"
+        ]
+      },
+      "title": {
+        "fr": "Arrêt du test à tout moment",
+        "en": "Halt the test at any time"
+      },
+      "summary": {
+        "fr": "Le CT peut ordonner à tout moment un arrêt temporaire ou définitif en cas de risque de dommage.",
+        "en": "The CT may order a temporary or complete halt at any time if damage is a concern."
+      },
+      "question": {
+        "fr": "Le critère d'arrêt est-il écrit et connu des RTT ?",
+        "en": "Is the halt criterion written and known to the RTT?"
+      }
+    },
+    {
+      "id": "EU-05",
+      "nature": "good_practice",
+      "matrix_ref": "EU-05",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "4.1.6",
+        "section": "Use of code names"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "restates",
+        "targets": [
+          "RTS-4.2.f"
+        ]
+      },
+      "title": {
+        "fr": "Nom de code neutre",
+        "en": "Neutral code name"
+      },
+      "summary": {
+        "fr": "L'entité choisit un nom de code qui ne permet pas de l'identifier ; tous les échanges l'utilisent.",
+        "en": "The entity selects a code name that does not identify it; all communications use it."
+      },
+      "question": {
+        "fr": "Le nom de code est-il sans lien avec le nom ou le secteur de l'entité ?",
+        "en": "Is the code name unrelated to the entity's name or sector?"
+      }
+    },
+    {
+      "id": "EU-06",
+      "nature": "good_practice",
+      "matrix_ref": "EU-06",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "4",
+        "section": "Risk management for TIBER-EU tests"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-5.2"
+        ]
+      },
+      "title": {
+        "fr": "Vérifier sauvegardes et restauration avant le test",
+        "en": "Check backup and restoration before testing"
+      },
+      "summary": {
+        "fr": "Mener une due diligence des systèmes du périmètre pour s'assurer que les capacités de sauvegarde et de restauration sont en place.",
+        "en": "Conduct due diligence on in-scope systems to ensure backup and restoration capabilities are in place."
+      },
+      "question": {
+        "fr": "Les sauvegardes et la restauration de chaque système ciblé ont-elles été vérifiées ?",
+        "en": "Have backup and restoration of each targeted system been verified?"
+      }
+    },
+    {
+      "id": "EU-07",
+      "nature": "good_practice",
+      "matrix_ref": "EU-07",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "4.1.4",
+        "section": "Contracts"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "DORA-27.3",
+          "RTS-7.1.i"
+        ]
+      },
+      "title": {
+        "fr": "Clauses contractuelles TIP/RTT",
+        "en": "TIP/RTT contract clauses"
+      },
+      "summary": {
+        "fr": "Exigences de sécurité au moins égales à celles de l'entité ; indemnisation ; destruction des données et notification des violations ; activités interdites, en ajoutant chantage, menaces et corruption d'employés.",
+        "en": "Security standards at least as stringent as the entity's; indemnification; data destruction and breach notification; prohibited activities including blackmail, threats, bribery."
+      },
+      "question": {
+        "fr": "Le contrat interdit-il explicitement le chantage et la corruption de salariés ?",
+        "en": "Does the contract explicitly prohibit blackmail and bribing employees?"
+      }
+    },
+    {
+      "id": "EU-08",
+      "nature": "good_practice",
+      "matrix_ref": "EU-08",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Scoping"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "DORA-26.3"
+        ]
+      },
+      "title": {
+        "fr": "Droit de tester l'infrastructure des fournisseurs",
+        "en": "Right to test supplier infrastructure"
+      },
+      "summary": {
+        "fr": "S'assurer que les contrats de services TIC permettent de tester l'infrastructure du fournisseur, ou ajouter ces clauses aux futurs contrats.",
+        "en": "Ensure ICT service contracts allow testing on supplier infrastructure, or add such clauses to future contracts."
+      },
+      "question": {
+        "fr": "Nos contrats d'externalisation autorisent-ils un red team sur l'infrastructure du fournisseur ?",
+        "en": "Do our outsourcing contracts allow red teaming on supplier infrastructure?"
+      }
+    },
+    {
+      "id": "EU-09",
+      "nature": "good_practice",
+      "matrix_ref": "EU-09",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "3.7",
+        "section": "Multi-party testing"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "pooled",
+            "eq": true
+          },
+          {
+            "fact": "joint",
+            "eq": true
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-8.1"
+        ]
+      },
+      "title": {
+        "fr": "Test multi-parties : peu de parties, mêmes prestataires",
+        "en": "Multi-party test: few parties, same providers"
+      },
+      "summary": {
+        "fr": "Limiter le nombre de parties, désigner un CT chef de file, et utiliser le même TIP et les mêmes RTT pour tous.",
+        "en": "Limit the number of parties, designate a lead CT, and use the same TIP and RTT for all."
+      },
+      "question": {
+        "fr": "Le nombre de parties reste-t-il gérable ?",
+        "en": "Is the number of parties manageable?"
+      }
+    },
+    {
+      "id": "EU-10",
+      "nature": "good_practice",
+      "matrix_ref": "EU-10",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Scoping"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.7"
+        ]
+      },
+      "title": {
+        "fr": "Au plus 10 FCI par entité",
+        "en": "At most 10 CIFs per entity"
+      },
+      "summary": {
+        "fr": "Repère : au plus 10 FCI par entité testée. Une FCI dans le périmètre n'est pas forcément attaquée.",
+        "en": "Rule of thumb: max 10 CIFs per entity; scoped CIFs are not necessarily all attacked."
+      },
+      "question": {
+        "fr": "Le périmètre est-il réaliste pour 12 semaines de test ?",
+        "en": "Is the scope realistic for 12 weeks of testing?"
+      }
+    },
+    {
+      "id": "EU-11",
+      "nature": "good_practice",
+      "matrix_ref": "EU-11",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Scoping"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "DORA-26.2.3"
+        ]
+      },
+      "title": {
+        "fr": "Partir de la BIA",
+        "en": "Start from the BIA"
+      },
+      "summary": {
+        "fr": "Utiliser la BIA ou le référentiel de continuité comme base pour identifier les FCI.",
+        "en": "Use the business impact analysis or continuity framework as input to identify CIFs."
+      },
+      "question": {
+        "fr": "Le SSD est-il cohérent avec la BIA et le registre des FCI DORA ?",
+        "en": "Is the SSD consistent with the BIA and the DORA CIF register?"
+      }
+    },
+    {
+      "id": "EU-12",
+      "nature": "good_practice",
+      "matrix_ref": "EU-12",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Scoping"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.6"
+        ]
+      },
+      "title": {
+        "fr": "Au moins un flag par système",
+        "en": "At least one flag per system"
+      },
+      "summary": {
+        "fr": "Fixer au moins un flag par système du périmètre. Toute l'infrastructure peut servir de point d'entrée ou de rebond.",
+        "en": "Set at least one flag per in-scope system; the whole infrastructure may serve as entry or pivot point."
+      },
+      "question": {
+        "fr": "Chaque système a-t-il un flag avec son critère C/I/A ?",
+        "en": "Does each system have a flag with its C/I/A aspect?"
+      }
+    },
+    {
+      "id": "EU-13",
+      "nature": "good_practice",
+      "matrix_ref": "EU-13",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Scoping"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Composants non critiques en option",
+        "en": "Optional non-critical components"
+      },
+      "summary": {
+        "fr": "Des composants non critiques (préproduction, sauvegardes) peuvent être ajoutés s'ils ne gênent pas le test des FCI.",
+        "en": "Non-critical components (pre-production, backups) may be added if they do not hinder CIF testing."
+      },
+      "question": {
+        "fr": "Faut-il inclure les sauvegardes ou la préproduction ?",
+        "en": "Should backups or pre-production be included?"
+      }
+    },
+    {
+      "id": "EU-14",
+      "nature": "good_practice",
+      "matrix_ref": "EU-14",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Scoping"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.6"
+        ]
+      },
+      "title": {
+        "fr": "Réunion de cadrage, flags revus avec le TM",
+        "en": "Scoping meeting, flags reviewed with TM"
+      },
+      "summary": {
+        "fr": "Organiser une réunion de cadrage avec les TM, ainsi que le TIP et les RTT s'ils sont déjà contractualisés. Les flags doivent au minimum être discutés avec les TM.",
+        "en": "Hold a scoping meeting with TMs (and TIP/RTT if procured); at minimum discuss flags with TMs."
+      },
+      "question": {
+        "fr": "Les flags ont-ils été revus avec le TM ?",
+        "en": "Have flags been reviewed with the TM?"
+      }
+    },
+    {
+      "id": "EU-15",
+      "nature": "good_practice",
+      "matrix_ref": "EU-15",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "4.1.3",
+        "section": "Minimum requirements for providers"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.11"
+        ]
+      },
+      "title": {
+        "fr": "Appliquer les GSPP, préférer des prestataires accrédités",
+        "en": "Apply GSPP, prefer accredited providers"
+      },
+      "summary": {
+        "fr": "Utiliser les exigences minimales des TIBER-EU Services Procurement Guidelines. Si possible, choisir des prestataires accrédités.",
+        "en": "Use the minimum requirements of the TIBER-EU Services Procurement Guidelines; where feasible choose accredited providers."
+      },
+      "question": {
+        "fr": "Les GSPP ont-elles servi de grille d'évaluation ?",
+        "en": "Were the GSPP used as the evaluation grid?"
+      }
+    },
+    {
+      "id": "EU-16",
+      "nature": "good_practice",
+      "matrix_ref": "EU-16",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Procurement"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.9"
+        ]
+      },
+      "title": {
+        "fr": "Lancer l'achat au plus tôt",
+        "en": "Start procurement early"
+      },
+      "summary": {
+        "fr": "Lancer l'achat le plus tôt possible, éventuellement avant la notification, pour éviter les goulets d'étranglement.",
+        "en": "Start procurement as early as possible, possibly before notification, to avoid bottlenecks."
+      },
+      "question": {
+        "fr": "Le délai d'achat interne est-il compatible avec l'échéance des 6 mois ?",
+        "en": "Is the internal procurement lead time compatible with the 6-month deadline?"
+      }
+    },
+    {
+      "id": "EU-17",
+      "nature": "good_practice",
+      "matrix_ref": "EU-17",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "6",
+        "section": "Preparation phase — Procurement"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CTL"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-9.8"
+        ]
+      },
+      "title": {
+        "fr": "Mettre à jour le plan et faire la réunion de lancement",
+        "en": "Update plan and hold launch meeting"
+      },
+      "summary": {
+        "fr": "Une fois les contrats signés, mettre à jour le plan projet avec le TM, puis organiser la réunion de lancement avec le CT, les TM, le TIP et les RTT.",
+        "en": "After contracting, update the project plan with the TM and hold a launch meeting with CT, TM, TIP and RTT."
+      },
+      "question": {
+        "fr": "La réunion de lancement a-t-elle eu lieu, et le planning final est-il partagé ?",
+        "en": "Has the launch meeting taken place and the final schedule been shared?"
+      }
+    },
+    {
+      "id": "EU-18",
+      "nature": "good_practice",
+      "matrix_ref": "EU-18",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "3.6.3",
+        "section": "Working with internal Red Team Testers"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "testers",
+            "in": [
+              "internal",
+              "mixed"
+            ]
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-15.1"
+        ]
+      },
+      "title": {
+        "fr": "Testeurs internes : un manager RT externe",
+        "en": "Internal testers: an external RT manager"
+      },
+      "summary": {
+        "fr": "Recommandation : adjoindre aux testeurs internes au moins un manager RT externe expérimenté, et prévoir des ressources de secours.",
+        "en": "Recommendation: add at least one experienced external RT manager to internal testers and plan back-up resources."
+      },
+      "question": {
+        "fr": "Qui apporte le regard externe à l'équipe interne ?",
+        "en": "Who brings the external perspective to the internal team?"
+      }
+    },
+    {
+      "id": "EU-19",
+      "nature": "good_practice",
+      "matrix_ref": "EU-19",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "7.2.2",
+        "section": "Collected threat intelligence"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-10.1"
+        ]
+      },
+      "title": {
+        "fr": "Informations internes pour le TIP",
+        "en": "Internal information for the TIP"
+      },
+      "summary": {
+        "fr": "Fournir au TIP l'évaluation de la menace, le registre, les attaques récentes et les TTIR antérieurs. Le TIP peut échanger avec la CTI interne en préservant le secret.",
+        "en": "Provide the TIP with threat assessment, register, recent attacks, prior TTIRs; the TIP may liaise with internal CTI while preserving secrecy."
+      },
+      "question": {
+        "fr": "Comment garde-t-on la CTI interne dans l'ignorance du test ?",
+        "en": "How is internal CTI kept unaware of the test?"
+      }
+    },
+    {
+      "id": "EU-20",
+      "nature": "good_practice",
+      "matrix_ref": "EU-20",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "7.3",
+        "section": "Scenario creation and selection"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CTL",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-10.3"
+        ]
+      },
+      "title": {
+        "fr": "Réunion de sélection des scénarios",
+        "en": "Scenario selection meeting"
+      },
+      "summary": {
+        "fr": "Sélectionner les scénarios en réunion à partir d'une liste longue, en ajoutant des critères stratégiques : scénarios des tests précédents, besoin de leg-ups.",
+        "en": "Select scenarios in a meeting from a longlist, adding strategic criteria (previous tests' scenarios, leg-up needs)."
+      },
+      "question": {
+        "fr": "Les scénarios évitent-ils de rejouer ceux du test précédent ?",
+        "en": "Do scenarios avoid repeating those of the previous test?"
+      }
+    },
+    {
+      "id": "EU-21",
+      "nature": "good_practice",
+      "matrix_ref": "EU-21",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "7.3",
+        "section": "Scenario creation and selection"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "TM",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-10.4.1"
+        ]
+      },
+      "title": {
+        "fr": "Transformer un scénario en scénario X",
+        "en": "Turning a scenario into scenario X"
+      },
+      "summary": {
+        "fr": "Si aucun scénario X n'a été défini, un scénario peut être transformé en scénario X pendant la phase active, avec l'accord des TM, du CT et des RTT.",
+        "en": "If no scenario X was defined, one scenario may become scenario X during active testing, with TM, CT and RTT agreement."
+      },
+      "question": {
+        "fr": "Un scénario X serait-il plus utile qu'un scénario fondé sur la menace déjà bloqué ?",
+        "en": "Would a scenario X be more useful than a stalled threat-led scenario?"
+      }
+    },
+    {
+      "id": "EU-22",
+      "nature": "good_practice",
+      "matrix_ref": "EU-22",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "7.3",
+        "section": "Scenario creation and selection"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CT",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Planifier les leg-ups dès la phase TI",
+        "en": "Plan leg-ups from the TI phase"
+      },
+      "summary": {
+        "fr": "Préparer les leg-ups dès la sélection des scénarios. Ne jamais proposer un accès direct aux flags ni la désactivation de contrôles.",
+        "en": "Prepare leg-ups from scenario selection; never propose direct access to flags or disabling security controls."
+      },
+      "question": {
+        "fr": "Les leg-ups envisagés sont-ils réalistes, c'est-à-dire obtenables par un attaquant patient ?",
+        "en": "Are the planned leg-ups realistic, i.e. obtainable by a patient attacker?"
+      }
+    },
+    {
+      "id": "EU-23",
+      "nature": "good_practice",
+      "matrix_ref": "EU-23",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "7.4",
+        "section": "Targeted Threat Intelligence Report creation"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-10.5"
+        ]
+      },
+      "title": {
+        "fr": "Réunion TTIR et mise à jour des risques",
+        "en": "TTIR meeting and risk update"
+      },
+      "summary": {
+        "fr": "Présenter le TTIR en version finale lors d'une réunion, avec retours de toutes les parties et mise à jour possible des flags. Le CT met ensuite à jour sa gestion des risques.",
+        "en": "Present the near-final TTIR in a meeting, collect feedback, possibly update flags; the CT then updates its risk management."
+      },
+      "question": {
+        "fr": "L'analyse de risques a-t-elle été revue après le TTIR ?",
+        "en": "Has the risk assessment been revised after the TTIR?"
+      }
+    },
+    {
+      "id": "EU-24",
+      "nature": "good_practice",
+      "matrix_ref": "EU-24",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "8.3",
+        "section": "Red Team Test Plan creation"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-11.1"
+        ]
+      },
+      "title": {
+        "fr": "Plan RT : reporting et vie privée",
+        "en": "RT plan: reporting and privacy"
+      },
+      "summary": {
+        "fr": "Ajouter au plan RT la fréquence de reporting et la protection de la vie privée des personnes ciblées par l'ingénierie sociale.",
+        "en": "Add reporting frequency and privacy safeguards for people targeted by social engineering to the RT plan."
+      },
+      "question": {
+        "fr": "Comment protège-t-on les données des salariés ciblés ?",
+        "en": "How is targeted employees' data protected?"
+      }
+    },
+    {
+      "id": "EU-25",
+      "nature": "good_practice",
+      "matrix_ref": "EU-25",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "8.3",
+        "section": "Red Team Test Plan creation"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "FE",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "physical_scenario",
+            "eq": true
+          }
+        ]
+      },
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-11.1"
+        ]
+      },
+      "title": {
+        "fr": "Intrusion physique : consentement formel",
+        "en": "Physical intrusion: formal consent"
+      },
+      "summary": {
+        "fr": "Toute TTP physique suppose des garanties (consentement formel de l'entité) et ne franchit aucune limite légale.",
+        "en": "Physical TTPs require safeguards (formal consent of the entity) and must cross no legal boundaries."
+      },
+      "question": {
+        "fr": "Une lettre d'autorisation signée accompagne-t-elle chaque testeur sur site ?",
+        "en": "Does each on-site tester carry a signed authorisation letter?"
+      }
+    },
+    {
+      "id": "EU-26",
+      "nature": "good_practice",
+      "matrix_ref": "EU-26",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "8.4",
+        "section": "Active testing"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "RTT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-11.7"
+        ]
+      },
+      "title": {
+        "fr": "Points quotidiens en plus du point hebdomadaire",
+        "en": "Daily check-ins on top of weekly updates"
+      },
+      "summary": {
+        "fr": "Des points quotidiens et un canal sécurisé ad hoc avec le CT et les TM sont fortement recommandés.",
+        "en": "Daily meetings and an ad-hoc secure channel with CT and TMs are highly recommended."
+      },
+      "question": {
+        "fr": "Un point quotidien est-il en place ?",
+        "en": "Is a daily check-in in place?"
+      }
+    },
+    {
+      "id": "EU-27",
+      "nature": "good_practice",
+      "matrix_ref": "EU-27",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "8.4",
+        "section": "Active testing"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT",
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-11.8"
+        ]
+      },
+      "title": {
+        "fr": "Journaliser toutes les actions RT et les leg-ups",
+        "en": "Log all RT actions and leg-ups"
+      },
+      "summary": {
+        "fr": "Toutes les actions des RTT sont journalisées pour le replay, le rapport et la traçabilité. Les leg-ups sont dûment consignés.",
+        "en": "All RTT actions are logged for replay, reporting and future reference; leg-ups are duly logged."
+      },
+      "question": {
+        "fr": "Le journal RT est-il horodaté et exportable ?",
+        "en": "Is the RT log timestamped and exportable?"
+      }
+    },
+    {
+      "id": "EU-28",
+      "nature": "good_practice",
+      "matrix_ref": "EU-28",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "8.4",
+        "section": "Active testing"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "TM"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds"
+      },
+      "title": {
+        "fr": "Remédiation d'une vulnérabilité critique en cours de test",
+        "en": "Remediating a critical vulnerability during the test"
+      },
+      "summary": {
+        "fr": "Si une vulnérabilité critique est découverte, le CT peut lancer une remédiation en concertation avec le TM, en limitant l'impact sur le test.",
+        "en": "If a critical vulnerability is found, the CT may start remediation in consultation with the TM, minimising test impact."
+      },
+      "question": {
+        "fr": "Qui décide de corriger pendant le test ?",
+        "en": "Who decides to fix during the test?"
+      }
+    },
+    {
+      "id": "EU-29",
+      "nature": "good_practice",
+      "matrix_ref": "EU-29",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "8.4",
+        "section": "Active testing — restoration"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT",
+        "RTT",
+        "TIP",
+        "BT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-7.1.g",
+          "RTS-7.1.h"
+        ]
+      },
+      "title": {
+        "fr": "Restauration planifiée après le replay",
+        "en": "Restoration planned after replay"
+      },
+      "summary": {
+        "fr": "Planifier la restauration avec le CT et la BT, idéalement après le replay et le purple teaming.",
+        "en": "Plan restoration with CT and BT, ideally after replay and purple teaming."
+      },
+      "question": {
+        "fr": "La restauration est-elle planifiée après le replay ?",
+        "en": "Is restoration planned after the replay?"
+      }
+    },
+    {
+      "id": "EU-30",
+      "nature": "good_practice",
+      "matrix_ref": "EU-30",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9.2",
+        "section": "Red Team Test Report and Blue Team Test Report creation"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.3"
+        ]
+      },
+      "title": {
+        "fr": "Rapports RT et BT très sensibles",
+        "en": "Highly sensitive RT and BT reports"
+      },
+      "summary": {
+        "fr": "Maîtriser l'accès, la diffusion, la conservation et la destruction des rapports. Sur demande du TM, fournir une version expurgée (noms de machines, adresses IP).",
+        "en": "Control access, dissemination, retention and destruction; provide a redacted version (machine names, IPs) at TM request."
+      },
+      "question": {
+        "fr": "Qui a accès aux rapports, et quand seront-ils détruits ?",
+        "en": "Who can access the reports and when will they be destroyed?"
+      }
+    },
+    {
+      "id": "EU-31",
+      "nature": "good_practice",
+      "matrix_ref": "EU-31",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9.2",
+        "section": "Red Team Test Report and Blue Team Test Report creation"
+      },
+      "phase": "closure",
+      "carriers": [
+        "RTT",
+        "BT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.2",
+          "RTS-12.4"
+        ]
+      },
+      "title": {
+        "fr": "Chronologies RT et BT alignées",
+        "en": "Aligned RT and BT timelines"
+      },
+      "summary": {
+        "fr": "Les deux rapports contiennent une chronologie des événements et des détections. Le TM donne son retour sur le rapport RT en version finale.",
+        "en": "Both reports contain a timeline of events and detections; the TM gives feedback on the near-final RT report."
+      },
+      "question": {
+        "fr": "Les chronologies RT et BT utilisent-elles la même référence horaire ?",
+        "en": "Do the RT and BT timelines share the same time reference?"
+      }
+    },
+    {
+      "id": "EU-32",
+      "nature": "good_practice",
+      "matrix_ref": "EU-32",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9.3",
+        "section": "Replay exercise"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.5"
+        ]
+      },
+      "title": {
+        "fr": "Replay quand le rapport BT est substantiel",
+        "en": "Replay once the BT report is substantial"
+      },
+      "summary": {
+        "fr": "Tenir le replay et le PT quand le rapport BT a pris une forme substantielle, tout en respectant le plafond de 10 semaines.",
+        "en": "Hold replay and PT once the BT report is substantial, within the 10-week cap."
+      },
+      "question": {
+        "fr": "Le rapport BT est-il assez avancé pour le replay ?",
+        "en": "Is the BT report advanced enough for the replay?"
+      }
+    },
+    {
+      "id": "EU-33",
+      "nature": "good_practice",
+      "matrix_ref": "EU-33",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9.3",
+        "section": "Purple Teaming exercise"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT",
+        "BT",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.5"
+        ]
+      },
+      "title": {
+        "fr": "Sujets de purple teaming",
+        "en": "Purple teaming topics"
+      },
+      "summary": {
+        "fr": "Sujets possibles : points non testés, étapes alternatives, scénarios alternatifs, preuves de concept, remédiation envisagée, exercices de continuité d'activité.",
+        "en": "Possible topics: untested issues, alternative steps and scenarios, proofs of concept, planned remediation, business continuity exercises."
+      },
+      "question": {
+        "fr": "La liste des sujets de PT est-elle établie avec la BT et les RTT ?",
+        "en": "Is the PT topic list agreed with BT and RTT?"
+      }
+    },
+    {
+      "id": "EU-34",
+      "nature": "good_practice",
+      "matrix_ref": "EU-34",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9",
+        "section": "360° feedback"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT",
+        "BT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-FEEDBACK"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.5"
+        ]
+      },
+      "title": {
+        "fr": "Réunion 360° avant l'approbation du rapport de synthèse",
+        "en": "360° meeting before approval of the TSR"
+      },
+      "summary": {
+        "fr": "Réunion organisée par le TM, avec des retours écrits de chaque partie, avant l'approbation du rapport de synthèse et du plan de remédiation.",
+        "en": "Meeting organised by the TM; written feedback from each party before approval of the TSR and remediation plan."
+      },
+      "question": {
+        "fr": "Les retours 360° de toutes les parties sont-ils remis avant l'approbation ?",
+        "en": "Has every party delivered its 360° feedback before approval?"
+      }
+    },
+    {
+      "id": "EU-35",
+      "nature": "good_practice",
+      "matrix_ref": "EU-35",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9",
+        "section": "Test Summary Report"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT",
+        "TM"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-12.7",
+          "RTS-13.1"
+        ]
+      },
+      "title": {
+        "fr": "Revue informelle par le TM avant envoi",
+        "en": "Informal TM review before submission"
+      },
+      "summary": {
+        "fr": "Il est fortement recommandé d'obtenir le retour du TM avant d'envoyer la version finale du rapport de synthèse et du plan de remédiation.",
+        "en": "Highly recommended to obtain TM feedback before sending the final TSR and remediation plan."
+      },
+      "question": {
+        "fr": "Une revue informelle par le TM est-elle prévue ?",
+        "en": "Is an informal TM review planned?"
+      }
+    },
+    {
+      "id": "EU-36",
+      "nature": "good_practice",
+      "matrix_ref": "EU-36",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9",
+        "section": "Test Summary Report / Remediation plan"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "restates",
+        "targets": [
+          "RTS-13.1"
+        ]
+      },
+      "title": {
+        "fr": "Copie à l'autorité compétente",
+        "en": "Copy to the competent authority"
+      },
+      "summary": {
+        "fr": "Pour un TLPT DORA, envoyer aussi le rapport de synthèse et le plan de remédiation à l'autorité compétente, si elle n'est pas l'autorité TIBER.",
+        "en": "For DORA TLPT, also send the TSR and remediation plan to the competent authority if it is not the TIBER authority."
+      },
+      "question": {
+        "fr": "L'autorité compétente est-elle destinataire ?",
+        "en": "Is the competent authority a recipient?"
+      }
+    },
+    {
+      "id": "EU-37",
+      "nature": "good_practice",
+      "matrix_ref": "EU-37",
+      "source": {
+        "instrument": "TIBER-EU_2025",
+        "article": "9.8",
+        "section": "Attestation, result dissemination and follow-up"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "relation": {
+        "type": "adds",
+        "targets": [
+          "RTS-14.1"
+        ]
+      },
+      "title": {
+        "fr": "Attestation : conformité aux GSPP mentionnée",
+        "en": "Attestation: GSPP compliance stated"
+      },
+      "summary": {
+        "fr": "L'attestation TIBER-EU précise si le TIP et les RTT respectaient les exigences des GSPP.",
+        "en": "The TIBER-EU attestation states whether TIP and RTT met the GSPP requirements."
+      },
+      "question": {
+        "fr": "Une éventuelle dérogation prestataire est-elle documentée pour l'attestation ?",
+        "en": "Is any provider derogation documented for the attestation?"
+      }
+    }
+  ],
+  "notes": [
+    {
+      "id": "NOTE-ECB-RESTRICTED",
+      "text": {
+        "fr": "La couverture du PDF porte la mention « ECB-RESTRICTED » alors qu'il est publié. Les conditions de réutilisation sont à vérifier.",
+        "en": "PDF cover marked 'ECB-RESTRICTED' although published; reuse terms to be verified."
+      }
+    }
+  ]
+}

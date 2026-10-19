@@ -1,0 +1,2900 @@
+{
+  "$schema": "../schema/pack.schema.json",
+  "pack_id": "dora-rts",
+  "framework": "DORA+RTS_TLPT",
+  "version": "0.2.0",
+  "title": {
+    "fr": "Obligations DORA art. 26-27 et RTS TLPT (UE) 2025/1190",
+    "en": "Obligations: DORA Art. 26-27 and RTS TLPT (EU) 2025/1190"
+  },
+  "license_note": {
+    "fr": "Synthèses openTLPT. Textes officiels : EUR-Lex, réutilisation autorisée (décision 2011/833/UE).",
+    "en": "openTLPT summaries. Official texts: EUR-Lex, reuse permitted (Decision 2011/833/EU)."
+  },
+  "sources": [
+    {
+      "id": "SRC-DORA",
+      "title": "Regulation (EU) 2022/2554 (DORA)",
+      "celex": "32022R2554",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554",
+      "eli": "http://data.europa.eu/eli/reg/2022/2554/oj",
+      "checked_at": "2026-10-19"
+    },
+    {
+      "id": "SRC-RTS",
+      "title": "Commission Delegated Regulation (EU) 2025/1190",
+      "date": "2025-02-13",
+      "celex": "32025R1190",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R1190",
+      "eli": "http://data.europa.eu/eli/reg_del/2025/1190/oj",
+      "checked_at": "2026-10-19"
+    }
+  ],
+  "items": [
+    {
+      "id": "DORA-26.1",
+      "nature": "obligation",
+      "matrix_ref": "G-01",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "1"
+      },
+      "phase": "cycle",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deadlines": [
+        "D-13"
+      ],
+      "title": {
+        "fr": "TLPT au moins tous les 3 ans",
+        "en": "TLPT at least every 3 years"
+      },
+      "summary": {
+        "fr": "L'entité identifiée réalise un TLPT au moins tous les 3 ans ; l'autorité compétente peut réduire ou augmenter cette fréquence.",
+        "en": "The identified entity carries out TLPT at least every 3 years; the competent authority may reduce or increase the frequency."
+      }
+    },
+    {
+      "id": "DORA-26.2.1",
+      "nature": "obligation",
+      "matrix_ref": "G-02",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "2",
+        "subparagraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-SSD"
+      ],
+      "title": {
+        "fr": "Plusieurs ou toutes les FCI, en production",
+        "en": "Several or all CIFs, on live production"
+      },
+      "summary": {
+        "fr": "Chaque TLPT couvre plusieurs ou toutes les fonctions critiques ou importantes et se déroule sur les systèmes de production qui les supportent.",
+        "en": "Each TLPT covers several or all critical or important functions and is performed on live production systems supporting them."
+      }
+    },
+    {
+      "id": "DORA-26.2.2",
+      "nature": "obligation",
+      "matrix_ref": "G-03",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "2",
+        "subparagraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-SSD"
+      ],
+      "title": {
+        "fr": "Identifier les systèmes TIC qui supportent les FCI",
+        "en": "Identify ICT systems supporting CIFs"
+      },
+      "summary": {
+        "fr": "Identifier tous les systèmes, processus et technologies TIC sous-jacents, y compris ceux externalisés auprès de prestataires TIC tiers.",
+        "en": "Identify all relevant underlying ICT systems, processes and technologies, including those outsourced to ICT third-party providers."
+      }
+    },
+    {
+      "id": "DORA-26.2.3",
+      "nature": "obligation",
+      "matrix_ref": "G-04",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "2",
+        "subparagraph": "3"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE",
+        "CA"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-SSD"
+      ],
+      "title": {
+        "fr": "Évaluer les FCI à couvrir ; périmètre validé par l'autorité",
+        "en": "Assess CIFs to cover; scope validated by authority"
+      },
+      "summary": {
+        "fr": "L'entité évalue quelles FCI couvrir. Le résultat fixe le périmètre précis, validé par les autorités compétentes.",
+        "en": "The entity assesses which CIFs to cover; the result determines the precise scope, validated by the competent authorities."
+      }
+    },
+    {
+      "id": "DORA-26.3",
+      "nature": "obligation",
+      "matrix_ref": "G-05",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "3"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "ict_tpp_in_scope",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Organiser la participation des prestataires TIC tiers",
+        "en": "Ensure participation of ICT third-party providers"
+      },
+      "summary": {
+        "fr": "Si des prestataires TIC tiers sont dans le périmètre, l'entité prend les mesures pour assurer leur participation et reste pleinement responsable de la conformité.",
+        "en": "Where ICT third-party providers are in scope, the entity ensures their participation and retains full responsibility for compliance."
+      },
+      "evidence": {
+        "fr": "Accords ou avenants avec les prestataires.",
+        "en": "Agreements or amendments with providers."
+      }
+    },
+    {
+      "id": "DORA-26.4",
+      "nature": "obligation",
+      "matrix_ref": "G-06",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "4"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE",
+        "ICT_TPP"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "pooled",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Test mutualisé par accord écrit",
+        "en": "Pooled testing by written agreement"
+      },
+      "summary": {
+        "fr": "Si la participation du prestataire TIC tiers nuirait à ses autres clients, l'entité et le prestataire peuvent convenir par écrit d'un test mutualisé, mené sous la direction d'une entité désignée. Ce test vaut TLPT pour chaque participant.",
+        "en": "Where provider participation would harm its other customers, the entity and provider may agree in writing to pooled testing under one designated entity; it counts as TLPT for each participant."
+      },
+      "evidence": {
+        "fr": "Accord écrit de test mutualisé.",
+        "en": "Written pooled-testing agreement."
+      }
+    },
+    {
+      "id": "DORA-26.5",
+      "nature": "obligation",
+      "matrix_ref": "G-07",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "5"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE",
+        "ICT_TPP",
+        "RTT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-RISK"
+      ],
+      "title": {
+        "fr": "Contrôles de gestion des risques du test",
+        "en": "Risk management controls for the test"
+      },
+      "summary": {
+        "fr": "Avec les prestataires TIC tiers et les testeurs, appliquer des contrôles efficaces contre les impacts sur les données, les actifs et la continuité des FCI, de l'entité, de ses contreparties et du secteur.",
+        "en": "With ICT providers and testers, apply effective controls against impact on data, assets and continuity of CIFs, at the entity, its counterparts or the sector."
+      }
+    },
+    {
+      "id": "DORA-26.6",
+      "nature": "obligation",
+      "matrix_ref": "G-08",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "6"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "FE",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-TSR",
+        "DLV-REMEDIATION"
+      ],
+      "title": {
+        "fr": "Remettre synthèse, plans de remédiation et preuves",
+        "en": "Provide summary, remediation plans and evidence"
+      },
+      "summary": {
+        "fr": "En fin de test, une fois les rapports et plans arrêtés, l'entité (et le cas échéant les testeurs externes) fournit à l'autorité la synthèse des constats, les plans de remédiation et la documentation de conformité.",
+        "en": "At the end of testing, once reports and plans are agreed, the entity (and external testers where applicable) provides the authority with the findings summary, remediation plans and compliance documentation."
+      }
+    },
+    {
+      "id": "DORA-26.7.1",
+      "nature": "obligation",
+      "matrix_ref": "G-09 / AT-02",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "7",
+        "subparagraph": "1"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "TLPT_AUTH",
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-ATTESTATION"
+      ],
+      "title": {
+        "fr": "Attestation et notification à l'autorité compétente",
+        "en": "Attestation and notification to competent authority"
+      },
+      "summary": {
+        "fr": "L'autorité délivre une attestation de conformité du test. L'entité notifie à l'autorité compétente l'attestation, la synthèse des constats et les plans de remédiation.",
+        "en": "The authority provides an attestation that the test met the requirements; the entity notifies the competent authority of the attestation, findings summary and remediation plans."
+      }
+    },
+    {
+      "id": "DORA-26.7.2",
+      "nature": "obligation",
+      "matrix_ref": "G-10",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "7",
+        "subparagraph": "2"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "applies_when": {
+        "all": [
+          {
+            "fact": "pooled",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Responsabilité maintenue en test mutualisé",
+        "en": "Responsibility retained in pooled testing"
+      },
+      "summary": {
+        "fr": "Même après l'attestation, l'entité reste pleinement responsable des impacts d'un test mutualisé.",
+        "en": "Notwithstanding the attestation, the entity remains fully responsible for the impact of pooled tests."
+      }
+    },
+    {
+      "id": "DORA-26.8.1",
+      "nature": "obligation",
+      "matrix_ref": "G-11",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "8",
+        "subparagraph": "1"
+      },
+      "phase": "cycle",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "testers",
+            "in": [
+              "internal",
+              "mixed"
+            ]
+          }
+        ]
+      },
+      "title": {
+        "fr": "Testeurs externes au moins tous les trois tests",
+        "en": "External testers every three tests"
+      },
+      "summary": {
+        "fr": "En cas de recours à des testeurs internes, des testeurs externes sont contractés tous les trois tests.",
+        "en": "Where internal testers are used, external testers are contracted every three tests."
+      },
+      "question": {
+        "fr": "Combien des deux derniers TLPT ont été réalisés avec des testeurs internes ?",
+        "en": "How many of the last two TLPTs used internal testers?"
+      }
+    },
+    {
+      "id": "DORA-26.8.2",
+      "nature": "obligation",
+      "matrix_ref": "G-12",
+      "source": {
+        "instrument": "DORA",
+        "article": "26",
+        "paragraph": "8",
+        "subparagraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "ssm_significant",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Établissement « significant » : testeurs externes uniquement",
+        "en": "Significant institution: external testers only"
+      },
+      "summary": {
+        "fr": "Les établissements de crédit importants au sens du MSU n'utilisent que des testeurs externes.",
+        "en": "SSM significant credit institutions only use external testers."
+      }
+    },
+    {
+      "id": "DORA-27.1.a",
+      "nature": "obligation",
+      "matrix_ref": "P-01",
+      "source": {
+        "instrument": "DORA",
+        "article": "27",
+        "paragraph": "1",
+        "point": "a"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Testeurs de la plus haute aptitude et honorabilité",
+        "en": "Testers of highest suitability and reputability"
+      },
+      "summary": {
+        "fr": "N'utiliser que des testeurs de la plus haute aptitude et honorabilité.",
+        "en": "Only use testers of the highest suitability and reputability."
+      }
+    },
+    {
+      "id": "DORA-27.1.b",
+      "nature": "obligation",
+      "matrix_ref": "P-02",
+      "source": {
+        "instrument": "DORA",
+        "article": "27",
+        "paragraph": "1",
+        "point": "b"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Capacités et expertise démontrées",
+        "en": "Demonstrated capabilities and expertise"
+      },
+      "summary": {
+        "fr": "Capacités techniques et organisationnelles, expertise spécifique en threat intelligence, tests d'intrusion et red team.",
+        "en": "Technical and organisational capabilities and specific expertise in threat intelligence, penetration testing and red teaming."
+      }
+    },
+    {
+      "id": "DORA-27.1.c",
+      "nature": "obligation",
+      "matrix_ref": "P-03",
+      "source": {
+        "instrument": "DORA",
+        "article": "27",
+        "paragraph": "1",
+        "point": "c"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Certification ou code de conduite",
+        "en": "Certification or code of conduct"
+      },
+      "summary": {
+        "fr": "Certification par un organisme d'accréditation d'un État membre, ou adhésion à des codes de conduite ou cadres éthiques formels.",
+        "en": "Certified by an accreditation body in a Member State or adhering to formal codes of conduct or ethical frameworks."
+      }
+    },
+    {
+      "id": "DORA-27.1.d",
+      "nature": "obligation",
+      "matrix_ref": "P-04",
+      "source": {
+        "instrument": "DORA",
+        "article": "27",
+        "paragraph": "1",
+        "point": "d"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Assurance indépendante ou rapport d'audit",
+        "en": "Independent assurance or audit report"
+      },
+      "summary": {
+        "fr": "Assurance indépendante ou rapport d'audit sur la gestion des risques du TLPT, la protection des informations confidentielles et la réparation des risques métier.",
+        "en": "Independent assurance or audit report on sound management of TLPT risks, protection of confidential information and redress for business risks."
+      }
+    },
+    {
+      "id": "DORA-27.1.e",
+      "nature": "obligation",
+      "matrix_ref": "P-05",
+      "source": {
+        "instrument": "DORA",
+        "article": "27",
+        "paragraph": "1",
+        "point": "e"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Assurance responsabilité civile professionnelle",
+        "en": "Professional indemnity insurance"
+      },
+      "summary": {
+        "fr": "Couverture par une assurance responsabilité civile professionnelle, y compris contre la faute et la négligence.",
+        "en": "Fully covered by professional indemnity insurance, including against misconduct and negligence."
+      }
+    },
+    {
+      "id": "DORA-27.2",
+      "nature": "obligation",
+      "matrix_ref": "P-06",
+      "source": {
+        "instrument": "DORA",
+        "article": "27",
+        "paragraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE",
+        "CA"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "testers",
+            "in": [
+              "internal",
+              "mixed"
+            ]
+          }
+        ]
+      },
+      "title": {
+        "fr": "Conditions du recours aux testeurs internes",
+        "en": "Conditions for internal testers"
+      },
+      "summary": {
+        "fr": "Recours approuvé par l'autorité ; ressources suffisantes et absence de conflit d'intérêts vérifiées ; TIP externe à l'entité.",
+        "en": "Use approved by the authority; sufficient resources and no conflicts of interest verified; TIP external to the entity."
+      }
+    },
+    {
+      "id": "DORA-27.3",
+      "nature": "obligation",
+      "matrix_ref": "P-07",
+      "source": {
+        "instrument": "DORA",
+        "article": "27",
+        "paragraph": "3"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "title": {
+        "fr": "Contrats : gestion saine des résultats",
+        "en": "Contracts: sound management of results"
+      },
+      "summary": {
+        "fr": "Les contrats avec les testeurs externes imposent une gestion saine des résultats du TLPT et de tout traitement de données associé, sans risque pour l'entité.",
+        "en": "Contracts with external testers require sound management of TLPT results and any data processing, creating no risk for the entity."
+      }
+    },
+    {
+      "id": "RTS-2",
+      "nature": "obligation",
+      "matrix_ref": "G-14",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "2"
+      },
+      "phase": "cycle",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "title": {
+        "fr": "Critères d'identification des entités soumises au TLPT",
+        "en": "Criteria to identify entities required to perform TLPT"
+      },
+      "summary": {
+        "fr": "L'autorité évalue l'impact, le caractère systémique et le profil de risque TIC. Sont visés par défaut : G-SII/O-SII, IP et EME au-dessus des seuils, DCT, CCP, plateformes de négociation et (ré)assureurs au-dessus des seuils.",
+        "en": "The authority assesses impact, systemic character and ICT risk profile; by default G-SIIs/O-SIIs, PIs/EMIs above thresholds, CSDs, CCPs, trading venues and (re)insurers above thresholds."
+      }
+    },
+    {
+      "id": "RTS-4.1",
+      "nature": "obligation",
+      "matrix_ref": "O-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "4",
+        "paragraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "title": {
+        "fr": "Nommer un Control Team Lead",
+        "en": "Appoint a control team lead"
+      },
+      "summary": {
+        "fr": "Le CTL est responsable de la gestion quotidienne du TLPT ainsi que des décisions et actions du CT.",
+        "en": "The CTL is responsible for day-to-day management of the TLPT and the decisions and actions of the control team."
+      }
+    },
+    {
+      "id": "RTS-4.2.a",
+      "nature": "obligation",
+      "matrix_ref": "O-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "4",
+        "paragraph": "2",
+        "point": "a"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "title": {
+        "fr": "Accès limité au besoin d'en connaître",
+        "en": "Need-to-know access"
+      },
+      "summary": {
+        "fr": "L'accès aux informations sur le TLPT est limité au CT, à l'organe de direction, aux testeurs, au TIP et à l'autorité TLPT.",
+        "en": "Access to TLPT information is limited to the control team, management body, testers, TIP and TLPT authority."
+      }
+    },
+    {
+      "id": "RTS-4.2.b",
+      "nature": "obligation",
+      "matrix_ref": "O-03",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "4",
+        "paragraph": "2",
+        "point": "b"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "title": {
+        "fr": "Consulter les TM avant d'impliquer la blue team",
+        "en": "Consult TMs before involving blue team"
+      },
+      "summary": {
+        "fr": "Le CT consulte les test managers avant d'impliquer un membre de la blue team dans le TLPT.",
+        "en": "The control team consults the test managers before involving any blue team member."
+      }
+    },
+    {
+      "id": "RTS-4.2.c",
+      "nature": "obligation",
+      "matrix_ref": "O-04",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "4",
+        "paragraph": "2",
+        "point": "c"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "title": {
+        "fr": "Être informé des détections et contenir l'escalade",
+        "en": "Be informed of detections and contain escalation"
+      },
+      "summary": {
+        "fr": "Le CT est informé de toute détection du TLPT par du personnel de l'entité ou de ses prestataires, et contient si besoin l'escalade de la réponse à incident.",
+        "en": "The control team is informed of any detection by staff of the entity or its providers and contains escalation of incident response where needed."
+      }
+    },
+    {
+      "id": "RTS-4.2.d",
+      "nature": "obligation",
+      "matrix_ref": "O-05",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "4",
+        "paragraph": "2",
+        "point": "d"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "title": {
+        "fr": "Dispositifs de secret",
+        "en": "Secrecy arrangements"
+      },
+      "summary": {
+        "fr": "Des dispositifs de secret s'appliquent au personnel de l'entité, des prestataires TIC tiers concernés, aux testeurs et au TIP.",
+        "en": "Secrecy arrangements apply to staff of the entity, the ICT third-party providers concerned, testers and the TIP."
+      },
+      "evidence": {
+        "fr": "NDA, clauses de confidentialité.",
+        "en": "NDAs, confidentiality clauses."
+      }
+    },
+    {
+      "id": "RTS-4.2.e",
+      "nature": "obligation",
+      "matrix_ref": "O-06",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "4",
+        "paragraph": "2",
+        "point": "e"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "title": {
+        "fr": "Informer les TM sur demande",
+        "en": "Inform TMs on request"
+      },
+      "summary": {
+        "fr": "Le CT fournit aux test managers toute information sur le TLPT qu'ils demandent.",
+        "en": "The control team provides any TLPT information to the test managers upon request."
+      }
+    },
+    {
+      "id": "RTS-4.2.f",
+      "nature": "obligation",
+      "matrix_ref": "O-07",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "4",
+        "paragraph": "2",
+        "point": "f"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE",
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "title": {
+        "fr": "Désigner le TLPT par son nom de code",
+        "en": "Refer to the TLPT by code name"
+      },
+      "summary": {
+        "fr": "Dans la mesure du possible, les parties ne désignent le TLPT que par son nom de code.",
+        "en": "Where possible, parties refer to the TLPT by code name only."
+      }
+    },
+    {
+      "id": "RTS-5.1",
+      "nature": "obligation",
+      "matrix_ref": "R-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "5",
+        "paragraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-RISK"
+      ],
+      "title": {
+        "fr": "Analyser les risques du test en production",
+        "en": "Assess risks of testing live production"
+      },
+      "summary": {
+        "fr": "Pendant la préparation, évaluer les risques du test des systèmes de production des FCI, y compris les impacts sur le secteur financier et la stabilité financière, puis les revoir tout au long du test.",
+        "en": "During preparation, assess risks of testing live CIF systems, including impacts on the financial sector and financial stability, and review them throughout testing."
+      }
+    },
+    {
+      "id": "RTS-5.2",
+      "nature": "obligation",
+      "matrix_ref": "R-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "5",
+        "paragraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-RISK"
+      ],
+      "title": {
+        "fr": "Types de risques à couvrir au minimum",
+        "en": "Minimum risk types to cover"
+      },
+      "summary": {
+        "fr": "Au minimum : accès du TIP et des testeurs aux informations sensibles ; non-conformité privant de l'attestation (confidentialité, éthique) ; escalade de crise ; phase active red team ; activité de la blue team ; restauration incomplète.",
+        "en": "At least: TIP/tester access to sensitive information; non-compliance preventing attestation (confidentiality, ethics); crisis escalation; active red team phase; blue team activity; incomplete restoration."
+      }
+    },
+    {
+      "id": "RTS-6",
+      "nature": "obligation",
+      "matrix_ref": "R-03",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "6"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "pooled",
+            "eq": true
+          },
+          {
+            "fact": "joint",
+            "eq": true
+          }
+        ]
+      },
+      "deliverables": [
+        "DLV-RISK"
+      ],
+      "title": {
+        "fr": "Risques des TLPT communs ou mutualisés",
+        "en": "Risk management for pooled or joint TLPT"
+      },
+      "summary": {
+        "fr": "Chaque CT fait sa propre analyse. Le CT de l'entité désignée évalue en plus les risques liés à la pluralité d'entités, avec la coopération des autres CT.",
+        "en": "Each control team performs its own assessment; the designated entity's CT also assesses multi-entity risks, with the other CTs cooperating."
+      }
+    },
+    {
+      "id": "RTS-7.1.a",
+      "nature": "obligation",
+      "matrix_ref": "P-10",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "a"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "CV détaillés et copies des certifications",
+        "en": "Detailed CVs and copies of certifications"
+      },
+      "summary": {
+        "fr": "Le TIP et les testeurs externes fournissent des CV détaillés et les copies des certifications reconnues par le marché.",
+        "en": "TIP and external testers provide detailed CVs and copies of market-recognised certifications."
+      }
+    },
+    {
+      "id": "RTS-7.1.b",
+      "nature": "obligation",
+      "matrix_ref": "P-11",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "b"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Assurance RC professionnelle",
+        "en": "Professional indemnity insurance"
+      },
+      "summary": {
+        "fr": "Le TIP et les testeurs externes sont couverts par une assurance RC professionnelle, y compris contre la faute et la négligence.",
+        "en": "TIP and external testers are covered by professional indemnity insurance, including misconduct and negligence."
+      }
+    },
+    {
+      "id": "RTS-7.1.c",
+      "nature": "obligation",
+      "matrix_ref": "P-12",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "c"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "TIP : au moins 3 références",
+        "en": "TIP: at least 3 references"
+      },
+      "summary": {
+        "fr": "Le TIP fournit au moins trois références de missions en test d'intrusion ou red team.",
+        "en": "The TIP provides at least three references from penetration testing or red team assignments."
+      }
+    },
+    {
+      "id": "RTS-7.1.d",
+      "nature": "obligation",
+      "matrix_ref": "P-13",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "d"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Testeurs externes : au moins 5 références",
+        "en": "External testers: at least 5 references"
+      },
+      "summary": {
+        "fr": "Les testeurs externes fournissent au moins cinq références de missions en test d'intrusion ou red team.",
+        "en": "External testers provide at least five references from penetration testing or red team assignments."
+      }
+    },
+    {
+      "id": "RTS-7.1.e.i",
+      "nature": "obligation",
+      "matrix_ref": "P-14",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "e(i)-(iii)"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Composition et expérience de l'équipe TI",
+        "en": "TI team composition and experience"
+      },
+      "summary": {
+        "fr": "Un manager avec au moins 5 ans d'expérience en TI et au moins un membre avec 2 ans ; compétences en collecte, géopolitique, technique, sectoriel et communication ; au moins 3 missions TI cumulées.",
+        "en": "A manager with ≥ 5 years in TI and ≥ 1 member with ≥ 2 years; skills in collection, geopolitics, technical, sector, communication; ≥ 3 combined TI assignments."
+      }
+    },
+    {
+      "id": "RTS-7.1.e.iv",
+      "nature": "obligation",
+      "matrix_ref": "P-15",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "e(iv)"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "TI : pas de tâches blue team ni de conflit d'intérêts",
+        "en": "TI: no blue team tasks or conflicts of interest"
+      },
+      "summary": {
+        "fr": "L'équipe TI n'exerce simultanément aucune tâche blue team ni service en conflit d'intérêts vis-à-vis des parties au TLPT.",
+        "en": "TI staff does not simultaneously perform blue team tasks or conflicting services for parties to the TLPT."
+      }
+    },
+    {
+      "id": "RTS-7.1.e.v",
+      "nature": "obligation",
+      "matrix_ref": "P-15",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "e(v)"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "title": {
+        "fr": "Équipe TI séparée de l'équipe RT du même prestataire",
+        "en": "TI staff separated from RT staff of the same provider"
+      },
+      "summary": {
+        "fr": "Le personnel TI affecté est séparé du personnel du même prestataire qui fournit les testeurs externes, et ne lui rend pas compte.",
+        "en": "Assigned TI staff is separated from, and does not report to, staff of the same provider supplying external testers."
+      },
+      "evidence": {
+        "fr": "Organigramme, déclaration de cloisonnement.",
+        "en": "Organisation chart, separation statement."
+      }
+    },
+    {
+      "id": "RTS-7.1.f.i",
+      "nature": "obligation",
+      "matrix_ref": "P-16",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "f(i)-(iii)"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Composition et expérience de la red team",
+        "en": "Red team composition and experience"
+      },
+      "summary": {
+        "fr": "Un manager avec au moins 5 ans d'expérience et au moins 2 testeurs avec 2 ans chacun ; compétences étendues (métier, reconnaissance, risques, exploits, physique, ingénierie sociale, vulnérabilités, communication) ; au moins 5 missions cumulées.",
+        "en": "A manager with ≥ 5 years and ≥ 2 testers with ≥ 2 years each; broad skills (business, recon, risk, exploits, physical, social engineering, vulnerabilities, communication); ≥ 5 combined assignments."
+      }
+    },
+    {
+      "id": "RTS-7.1.f.iv",
+      "nature": "obligation",
+      "matrix_ref": "P-17",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "f(iv)"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Red team : indépendance vis-à-vis d'un TIP faisant du blue team",
+        "en": "Red team: independence from a TIP doing blue team work"
+      },
+      "summary": {
+        "fr": "La red team n'est ni employée par un TIP ni prestataire d'un TIP qui exerce simultanément des tâches blue team pour une partie au TLPT.",
+        "en": "The red team is not employed by, nor serves, a TIP simultaneously performing blue team tasks for a party to the TLPT."
+      }
+    },
+    {
+      "id": "RTS-7.1.f.v",
+      "nature": "obligation",
+      "matrix_ref": "P-17",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "f(v)"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "title": {
+        "fr": "Équipe RT séparée de l'équipe TI du même prestataire",
+        "en": "RT staff separated from TI staff of the same provider"
+      },
+      "summary": {
+        "fr": "La red team est séparée de tout personnel du même prestataire fournissant la threat intelligence pour le même TLPT.",
+        "en": "The red team is separated from any staff of the same provider providing threat intelligence for the same TLPT."
+      },
+      "evidence": {
+        "fr": "Organigramme, déclaration de cloisonnement.",
+        "en": "Organisation chart, separation statement."
+      }
+    },
+    {
+      "id": "RTS-7.1.g",
+      "nature": "obligation",
+      "matrix_ref": "P-18",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "g"
+      },
+      "phase": "closure",
+      "carriers": [
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-RESTORATION"
+      ],
+      "title": {
+        "fr": "Procédures de restauration (TIP et testeurs)",
+        "en": "Restoration procedures (TIP and testers)"
+      },
+      "summary": {
+        "fr": "Suppression sécurisée des mots de passe, identifiants et clés compromis ; communication sécurisée des comptes compromis ; collecte, stockage, gestion et destruction sécurisés des données.",
+        "en": "Secure deletion of compromised passwords, credentials and keys; secure communication of compromised accounts; secure collection, storage, management and disposal of data."
+      }
+    },
+    {
+      "id": "RTS-7.1.h",
+      "nature": "obligation",
+      "matrix_ref": "P-19",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "h"
+      },
+      "phase": "closure",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-RESTORATION"
+      ],
+      "title": {
+        "fr": "Restauration technique par les testeurs",
+        "en": "Technical restoration by testers"
+      },
+      "summary": {
+        "fr": "Désactivation du C2, kill switches de périmètre et de date, retrait des backdoors et malwares, notification éventuelle de violation, procédures de restauration de sauvegardes, surveillance de la BT et information du CT.",
+        "en": "C2 deactivation, scope and date kill switches, removal of backdoors and malware, potential breach notification, back-up restoration procedures, monitoring blue team and informing the CT."
+      }
+    },
+    {
+      "id": "RTS-7.1.i",
+      "nature": "obligation",
+      "matrix_ref": "P-20",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "1",
+        "point": "i"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "TIP",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "title": {
+        "fr": "Activités interdites",
+        "en": "Prohibited activities"
+      },
+      "summary": {
+        "fr": "Interdits : destruction non autorisée d'équipements, modification non contrôlée d'informations ou d'actifs, atteinte intentionnelle à la continuité des FCI, inclusion non autorisée de systèmes hors périmètre, divulgation non autorisée des résultats.",
+        "en": "Prohibited: unauthorised destruction of equipment, uncontrolled modification of information or assets, intentional compromise of CIF continuity, unauthorised out-of-scope systems, unauthorised disclosure of results."
+      }
+    },
+    {
+      "id": "RTS-7.2.1",
+      "nature": "obligation",
+      "matrix_ref": "P-21",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "2",
+        "subparagraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "title": {
+        "fr": "Conserver les preuves de conformité des prestataires",
+        "en": "Keep provider compliance records"
+      },
+      "summary": {
+        "fr": "Le CT conserve la documentation fournie par les testeurs et le TIP qui prouve la conformité aux points (a) à (f).",
+        "en": "The CT keeps record of documentation from testers and TIP evidencing compliance with points (a) to (f)."
+      }
+    },
+    {
+      "id": "RTS-7.2.2",
+      "nature": "obligation",
+      "matrix_ref": "P-22",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "7",
+        "paragraph": "2",
+        "subparagraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "provider_derogation",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Dérogation exceptionnelle pour un prestataire",
+        "en": "Exceptional derogation for providers"
+      },
+      "summary": {
+        "fr": "Dans des circonstances exceptionnelles, un prestataire qui ne remplit pas tous les critères (a) à (f) est possible, avec des mesures d'atténuation appropriées et consignées.",
+        "en": "In exceptional circumstances, providers not meeting all of (a) to (f) may be contracted, with appropriate recorded mitigating measures."
+      }
+    },
+    {
+      "id": "RTS-8.1",
+      "nature": "obligation",
+      "matrix_ref": "MP-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "8",
+        "paragraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "pooled",
+            "eq": true
+          },
+          {
+            "fact": "joint",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Chaque entité suit les étapes des art. 9 à 15",
+        "en": "Each entity follows Articles 9 to 15"
+      },
+      "summary": {
+        "fr": "Sauf décision contraire de l'autorité chef de file, chaque entité d'un TLPT commun ou mutualisé suit chacune des étapes des articles 9 à 15.",
+        "en": "Unless the lead authority decides otherwise, each entity in a pooled or joint TLPT follows each step of Articles 9 to 15."
+      }
+    },
+    {
+      "id": "RTS-8.2",
+      "nature": "obligation",
+      "matrix_ref": "MP-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "8",
+        "paragraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "applies_when": {
+        "any": [
+          {
+            "fact": "pooled",
+            "eq": true
+          },
+          {
+            "fact": "joint",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Autorité chef de file",
+        "en": "Lead TLPT authority"
+      },
+      "summary": {
+        "fr": "Quand plusieurs autorités interviennent, « autorité TLPT » s'entend de l'autorité chef de file.",
+        "en": "Where several authorities are involved, 'TLPT authority' means the lead authority."
+      }
+    },
+    {
+      "id": "RTS-9.1",
+      "nature": "obligation",
+      "matrix_ref": "PR-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "title": {
+        "fr": "Notification de l'autorité",
+        "en": "Authority notification"
+      },
+      "summary": {
+        "fr": "L'entité engage le TLPT à la suite de la notification de l'autorité TLPT.",
+        "en": "The entity initiates TLPT following the TLPT authority's notification."
+      }
+    },
+    {
+      "id": "RTS-9.2",
+      "nature": "obligation",
+      "matrix_ref": "PR-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-INIT"
+      ],
+      "deadlines": [
+        "D-01"
+      ],
+      "title": {
+        "fr": "Remettre les informations d'initiation",
+        "en": "Submit TLPT initiation information"
+      },
+      "summary": {
+        "fr": "Dans les 3 mois : charte projet (annexe I), contact du CTL, testeurs internes/externes, canaux de communication, nom de code.",
+        "en": "Within 3 months: project charter (Annex I), CTL contact, internal/external testers, communication channels, code name."
+      }
+    },
+    {
+      "id": "RTS-9.3",
+      "nature": "obligation",
+      "matrix_ref": "PR-03",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "3"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "deliverables": [
+        "DLV-INIT"
+      ],
+      "title": {
+        "fr": "Validation de l'initiation par l'autorité",
+        "en": "Authority validates initiation"
+      },
+      "summary": {
+        "fr": "Si les informations d'initiation sont complètes, l'autorité les valide et le notifie à l'entité.",
+        "en": "Where initiation information is complete, the authority validates it and notifies the entity."
+      }
+    },
+    {
+      "id": "RTS-9.4",
+      "nature": "obligation",
+      "matrix_ref": "PR-04",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "4"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE",
+        "CTL"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "title": {
+        "fr": "Constituer le control team",
+        "en": "Set up the control team"
+      },
+      "summary": {
+        "fr": "Après validation de l'initiation, constituer le CT pour : canaux de communication, information de l'organe de direction, décisions, exécution conforme, sélection du TIP et des testeurs, rédaction du SSD.",
+        "en": "After initiation is validated, set up the CT for: communication channels, informing the management body, decisions, compliant execution, selecting TIP and testers, preparing the SSD."
+      }
+    },
+    {
+      "id": "RTS-9.5",
+      "nature": "obligation",
+      "matrix_ref": "PR-05",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "5"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "title": {
+        "fr": "Validation de la composition du CT et de ses changements",
+        "en": "Validation of CT composition and changes"
+      },
+      "summary": {
+        "fr": "L'autorité valide la composition initiale du CT et chacune de ses modifications, et le notifie au CTL.",
+        "en": "The authority validates the initial CT composition and any subsequent change, and notifies the CTL."
+      }
+    },
+    {
+      "id": "RTS-9.6",
+      "nature": "obligation",
+      "matrix_ref": "PR-06",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "6"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE",
+        "MB"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-SSD"
+      ],
+      "deadlines": [
+        "D-02"
+      ],
+      "title": {
+        "fr": "Remettre le SSD approuvé par l'organe de direction",
+        "en": "Submit SSD approved by management body"
+      },
+      "summary": {
+        "fr": "Dans les 6 mois suivant la notification, SSD conforme à l'annexe II, approuvé par l'organe de direction.",
+        "en": "Within 6 months of notification, SSD per Annex II, approved by the management body."
+      }
+    },
+    {
+      "id": "RTS-9.7",
+      "nature": "obligation",
+      "matrix_ref": "PR-07",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "7"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-SSD"
+      ],
+      "title": {
+        "fr": "Critères d'inclusion des FCI",
+        "en": "Criteria for including CIFs"
+      },
+      "summary": {
+        "fr": "Criticité et impact sectoriel ; importance pour l'activité ; substituabilité ; interconnexion ; localisation ; dépendance sectorielle ; threat intelligence disponible.",
+        "en": "Criticality and sector impact; importance for business; exchangeability; interconnectedness; location; sector dependence; available threat intelligence."
+      }
+    },
+    {
+      "id": "RTS-9.8",
+      "nature": "obligation",
+      "matrix_ref": "PR-08",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "8"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "title": {
+        "fr": "Partager l'initiation et le SSD avec les prestataires",
+        "en": "Share initiation and SSD with providers"
+      },
+      "summary": {
+        "fr": "Une fois les prestataires contractualisés, leur communiquer les informations d'initiation et le SSD, et les informer du processus de test.",
+        "en": "Once contracted, share initiation information and the SSD with testers and TIP and inform them of the testing process."
+      }
+    },
+    {
+      "id": "RTS-9.9",
+      "nature": "obligation",
+      "matrix_ref": "PR-09",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "9"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deadlines": [
+        "D-03"
+      ],
+      "title": {
+        "fr": "Prestataires en place avant la phase de test",
+        "en": "Providers in place before testing"
+      },
+      "summary": {
+        "fr": "L'achat ou l'affectation des testeurs et du TIP est terminé avant le début de la phase de test.",
+        "en": "Procurement or assignment of testers and TIP is completed before the testing phase starts."
+      }
+    },
+    {
+      "id": "RTS-9.10",
+      "nature": "obligation",
+      "matrix_ref": "PR-10",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "10"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-RISK"
+      ],
+      "deadlines": [
+        "D-04"
+      ],
+      "title": {
+        "fr": "Consulter les TM sur l'analyse de risques",
+        "en": "Consult TMs on the risk assessment"
+      },
+      "summary": {
+        "fr": "Avant la phase de test, consulter les TM sur l'analyse de risques et les mesures ; les réviser si l'autorité les juge insuffisantes.",
+        "en": "Before testing, consult TMs on the risk assessment and measures; revise them if the authority deems them inadequate."
+      }
+    },
+    {
+      "id": "RTS-9.11",
+      "nature": "obligation",
+      "matrix_ref": "PR-11",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "11"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-PROVIDER-EVIDENCE"
+      ],
+      "deadlines": [
+        "D-05"
+      ],
+      "title": {
+        "fr": "Évaluer les prestataires et transmettre les preuves avant contrat",
+        "en": "Assess providers and send evidence before contracting"
+      },
+      "summary": {
+        "fr": "Évaluer et documenter la conformité (DORA 27, RTS 7(1)) ; transmettre les preuves aux TM avant contrat ; ne pas contracter en cas d'objection de l'autorité.",
+        "en": "Assess and document compliance (DORA 27, RTS 7(1)); send evidence to TMs before contracting; do not contract if the authority objects."
+      }
+    },
+    {
+      "id": "RTS-9.12",
+      "nature": "obligation",
+      "matrix_ref": "PR-12",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "9",
+        "paragraph": "12"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "deliverables": [
+        "DLV-SSD"
+      ],
+      "title": {
+        "fr": "Approbation du SSD par l'autorité",
+        "en": "Authority approves SSD"
+      },
+      "summary": {
+        "fr": "Si le SSD est complet et permet un test approprié et efficace, l'autorité l'approuve et en informe le CTL.",
+        "en": "Where the SSD is complete and ensures an appropriate and effective TLPT, the authority approves it and informs the CTL."
+      }
+    },
+    {
+      "id": "RTS-10.1",
+      "nature": "obligation",
+      "matrix_ref": "TI-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "10",
+        "paragraph": "1"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "title": {
+        "fr": "Analyse de la menace et du ciblage",
+        "en": "Threat and target analysis"
+      },
+      "summary": {
+        "fr": "Après approbation du SSD, analyser la menace générique et sectorielle (le GTL national peut servir de base), identifier menaces et vulnérabilités, et collecter un renseignement ciblé exploitable en consultant le CT et les TM.",
+        "en": "After SSD approval, analyse generic and sector threat intelligence (national GTL may serve as baseline), identify threats and vulnerabilities, and gather actionable targeted intelligence, consulting CT and TMs."
+      }
+    },
+    {
+      "id": "RTS-10.2",
+      "nature": "obligation",
+      "matrix_ref": "TI-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "10",
+        "paragraph": "2"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "title": {
+        "fr": "Proposer des scénarios différenciés couvrant chaque FCI",
+        "en": "Propose differentiated scenarios covering each CIF"
+      },
+      "summary": {
+        "fr": "Présenter les menaces au CT, aux testeurs et aux TM, et proposer des scénarios différents par acteurs et TTP, ciblant chaque FCI du périmètre.",
+        "en": "Present threats to CT, testers and TMs and propose scenarios differing by actors and TTPs, targeting each in-scope CIF."
+      }
+    },
+    {
+      "id": "RTS-10.3",
+      "nature": "obligation",
+      "matrix_ref": "TI-03",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "10",
+        "paragraph": "3"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CTL"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "title": {
+        "fr": "Sélectionner au moins 3 scénarios",
+        "en": "Select at least 3 scenarios"
+      },
+      "summary": {
+        "fr": "Le CTL retient au moins trois scénarios selon la recommandation du TIP, l'avis des TM, la faisabilité selon les testeurs et le profil de l'entité.",
+        "en": "The CTL selects at least three scenarios based on TIP recommendation, TM input, tester feasibility and the entity's profile."
+      }
+    },
+    {
+      "id": "RTS-10.4.1",
+      "nature": "obligation",
+      "matrix_ref": "TI-04",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "10",
+        "paragraph": "4",
+        "subparagraph": "1"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CTL",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "title": {
+        "fr": "Au plus un scénario non fondé sur la menace",
+        "en": "At most one non-threat-led scenario"
+      },
+      "summary": {
+        "fr": "Au plus un des scénarios retenus peut ne pas être fondé sur la menace et reposer sur une menace prospective, éventuellement fictive.",
+        "en": "No more than one selected scenario may be non-threat-led, based on a forward-looking, potentially fictive threat."
+      }
+    },
+    {
+      "id": "RTS-10.4.2",
+      "nature": "obligation",
+      "matrix_ref": "TI-05",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "10",
+        "paragraph": "4",
+        "subparagraph": "2-3"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CTL",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "pooled",
+            "eq": true
+          },
+          {
+            "fact": "joint",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Scénario incluant le prestataire TIC tiers ou intragroupe",
+        "en": "Scenario including the ICT third-party or intra-group provider"
+      },
+      "summary": {
+        "fr": "TLPT mutualisé : au moins un scénario inclut les systèmes du prestataire TIC tiers. TLPT commun avec un prestataire intragroupe : au moins un scénario inclut ses systèmes.",
+        "en": "Pooled TLPT: at least one scenario includes the ICT third-party provider's systems; joint TLPT with intra-group provider: at least one includes its systems."
+      }
+    },
+    {
+      "id": "RTS-10.5",
+      "nature": "obligation",
+      "matrix_ref": "TI-06",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "10",
+        "paragraph": "5"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "deliverables": [
+        "DLV-TTIR"
+      ],
+      "title": {
+        "fr": "Remettre le TTIR",
+        "en": "Deliver the TTI report"
+      },
+      "summary": {
+        "fr": "Le TIP remet au CT le rapport de threat intelligence ciblée (annexe III), avec les scénarios retenus.",
+        "en": "The TIP provides the CT with the targeted threat intelligence report (Annex III), including the selected scenarios."
+      }
+    },
+    {
+      "id": "RTS-10.6",
+      "nature": "obligation",
+      "matrix_ref": "TI-07",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "10",
+        "paragraph": "6"
+      },
+      "phase": "testing_ti",
+      "carriers": [
+        "CT",
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-TTIR"
+      ],
+      "title": {
+        "fr": "Approbation du TTIR par l'autorité",
+        "en": "Authority approves TTI report"
+      },
+      "summary": {
+        "fr": "Le CT soumet le TTIR aux TM ; s'il est complet, l'autorité l'approuve et en informe le CTL.",
+        "en": "The CT submits the TTIR to the TMs; if complete, the authority approves it and informs the CTL."
+      }
+    },
+    {
+      "id": "RTS-11.1",
+      "nature": "obligation",
+      "matrix_ref": "RT-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "1"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-RTTP"
+      ],
+      "title": {
+        "fr": "Rédiger le plan de test red team",
+        "en": "Prepare the red team test plan"
+      },
+      "summary": {
+        "fr": "Après approbation du TTIR, les testeurs préparent le plan de test (annexe IV) à partir du SSD et du TTIR.",
+        "en": "After TTIR approval, testers prepare the red team test plan (Annex IV) based on the SSD and TTIR."
+      }
+    },
+    {
+      "id": "RTS-11.2",
+      "nature": "obligation",
+      "matrix_ref": "RT-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "2"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-RTTP"
+      ],
+      "title": {
+        "fr": "Consulter CT, TIP et TM sur le plan",
+        "en": "Consult CT, TIP and TMs on the plan"
+      },
+      "summary": {
+        "fr": "Consulter le CT, le TIP et les TM sur le plan : communication, gestion de projet, préparation et cas d'usage des leg-ups, modalités de reporting.",
+        "en": "Consult CT, TIP and TMs on the plan: communication, project management, leg-up preparation and use cases, reporting."
+      }
+    },
+    {
+      "id": "RTS-11.3",
+      "nature": "obligation",
+      "matrix_ref": "RT-03",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "3"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-RTTP"
+      ],
+      "title": {
+        "fr": "Approbation du plan de test RT",
+        "en": "Approval of the RT test plan"
+      },
+      "summary": {
+        "fr": "Le CT et l'autorité approuvent le plan de test red team complet.",
+        "en": "The control team and the authority approve the complete red team test plan."
+      }
+    },
+    {
+      "id": "RTS-11.4",
+      "nature": "obligation",
+      "matrix_ref": "RT-04",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "4"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "title": {
+        "fr": "Exécuter le test après approbation du plan",
+        "en": "Execute the test after plan approval"
+      },
+      "summary": {
+        "fr": "Une fois le plan approuvé, les testeurs réalisent le TLPT pendant la phase de test red team active.",
+        "en": "Upon plan approval, testers carry out the TLPT during the active red team testing phase."
+      }
+    },
+    {
+      "id": "RTS-11.5",
+      "nature": "obligation",
+      "matrix_ref": "RT-05",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "5"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "TIP",
+        "RTT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deadlines": [
+        "D-06"
+      ],
+      "title": {
+        "fr": "Phase active d'au moins 12 semaines, fin convenue",
+        "en": "Active phase of at least 12 weeks, agreed end"
+      },
+      "summary": {
+        "fr": "Durée proportionnée, au minimum 12 semaines ; fin de phase convenue entre CT, TIP, testeurs et TM.",
+        "en": "Proportionate duration, at least 12 weeks; end agreed between CT, TIP, testers and TMs."
+      }
+    },
+    {
+      "id": "RTS-11.6",
+      "nature": "obligation",
+      "matrix_ref": "RT-06",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "6"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CTL",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "title": {
+        "fr": "Approuver toute modification du plan",
+        "en": "Approve any change to the plan"
+      },
+      "summary": {
+        "fr": "Toute modification du plan après approbation (calendrier, périmètre, systèmes ciblés, flags) est approuvée par le CTL et les TM.",
+        "en": "Any change after approval (timeline, scope, target systems, flags) is approved by the CTL and TMs."
+      }
+    },
+    {
+      "id": "RTS-11.7",
+      "nature": "obligation",
+      "matrix_ref": "RT-07",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "7"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "RTT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-WEEKLY"
+      ],
+      "deadlines": [
+        "D-07"
+      ],
+      "title": {
+        "fr": "Rapport au moins hebdomadaire ; TIP disponible",
+        "en": "At least weekly reporting; TIP available"
+      },
+      "summary": {
+        "fr": "Les testeurs rendent compte au moins chaque semaine au CT et aux TM ; le TIP reste disponible.",
+        "en": "Testers report at least weekly to CT and TMs; the TIP remains available."
+      }
+    },
+    {
+      "id": "RTS-11.8",
+      "nature": "obligation",
+      "matrix_ref": "RT-08",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "8"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "title": {
+        "fr": "Fournir les leg-ups à temps",
+        "en": "Provide leg-ups timely"
+      },
+      "summary": {
+        "fr": "Le CT fournit à temps les leg-ups prévus au plan ; leur ajout ou adaptation est approuvé par le CT et les TM.",
+        "en": "The CT timely provides leg-ups designed in the plan; additions or adaptations require CT and TM approval."
+      }
+    },
+    {
+      "id": "RTS-11.9",
+      "nature": "obligation",
+      "matrix_ref": "RT-09",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "9"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CT",
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "title": {
+        "fr": "Détection : mesures de poursuite validées par les TM",
+        "en": "Detection: continuation measures validated by TMs"
+      },
+      "summary": {
+        "fr": "En cas de détection par du personnel, le CT propose avec les testeurs des mesures de poursuite qui préservent le secret, et les soumet à la validation des TM.",
+        "en": "Upon detection by staff, the CT with testers proposes measures to continue while preserving secrecy, for TM validation."
+      }
+    },
+    {
+      "id": "RTS-11.10",
+      "nature": "obligation",
+      "matrix_ref": "RT-10",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "11",
+        "paragraph": "10"
+      },
+      "phase": "testing_rt",
+      "carriers": [
+        "CTL"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "title": {
+        "fr": "Suspension ou purple teaming limité",
+        "en": "Suspension or limited purple teaming"
+      },
+      "summary": {
+        "fr": "En circonstances exceptionnelles, le CTL peut suspendre le test. En dernier recours, et après validation de l'autorité, il peut le poursuivre en purple teaming limité, dont la durée compte dans les 12 semaines.",
+        "en": "In exceptional circumstances the CTL may suspend the TLPT or, as last resort and with authority validation, continue with limited purple teaming, counted towards the 12 weeks."
+      }
+    },
+    {
+      "id": "RTS-12.1",
+      "nature": "obligation",
+      "matrix_ref": "CL-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "12",
+        "paragraph": "1"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CTL"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "title": {
+        "fr": "Informer la blue team",
+        "en": "Inform the blue team"
+      },
+      "summary": {
+        "fr": "Après la fin de la phase active, le CTL informe la blue team qu'un TLPT a eu lieu.",
+        "en": "After the active phase ends, the CTL informs the blue team that a TLPT took place."
+      }
+    },
+    {
+      "id": "RTS-12.2",
+      "nature": "obligation",
+      "matrix_ref": "CL-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "12",
+        "paragraph": "2"
+      },
+      "phase": "closure",
+      "carriers": [
+        "RTT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-RTTR"
+      ],
+      "deadlines": [
+        "D-08"
+      ],
+      "title": {
+        "fr": "Rapport de test red team sous 4 semaines",
+        "en": "Red team test report within 4 weeks"
+      },
+      "summary": {
+        "fr": "Dans les 4 semaines suivant la fin de la phase active, rapport conforme à l'annexe V remis au CT.",
+        "en": "Within 4 weeks of the end of the active phase, report per Annex V submitted to the CT."
+      }
+    },
+    {
+      "id": "RTS-12.3",
+      "nature": "obligation",
+      "matrix_ref": "CL-03",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "12",
+        "paragraph": "3"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-RTTR"
+      ],
+      "title": {
+        "fr": "Transmettre le rapport RT à la BT et aux TM",
+        "en": "Forward RT report to BT and TMs"
+      },
+      "summary": {
+        "fr": "Le CT transmet le rapport RT à la blue team et aux TM sans délai injustifié. Sur demande des TM, ce rapport ne contient pas d'informations sensibles.",
+        "en": "The CT provides the RT report to the blue team and TMs without undue delay; at TM request, without sensitive information."
+      }
+    },
+    {
+      "id": "RTS-12.4",
+      "nature": "obligation",
+      "matrix_ref": "CL-04",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "12",
+        "paragraph": "4"
+      },
+      "phase": "closure",
+      "carriers": [
+        "BT",
+        "CT"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-BTTR"
+      ],
+      "deadlines": [
+        "D-09"
+      ],
+      "title": {
+        "fr": "Rapport de test blue team sous 10 semaines",
+        "en": "Blue team test report within 10 weeks"
+      },
+      "summary": {
+        "fr": "Après réception du rapport RT et au plus tard 10 semaines après la phase active, rapport BT (annexe VI) au CT, transmis aux testeurs et TM.",
+        "en": "After receiving the RT report and no later than 10 weeks after the active phase, BT report (Annex VI) to the CT, forwarded to testers and TMs."
+      }
+    },
+    {
+      "id": "RTS-12.5",
+      "nature": "obligation",
+      "matrix_ref": "CL-05",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "12",
+        "paragraph": "5"
+      },
+      "phase": "closure",
+      "carriers": [
+        "BT",
+        "RTT",
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-REPLAY-PT"
+      ],
+      "deadlines": [
+        "D-10"
+      ],
+      "title": {
+        "fr": "Replay et purple teaming sous 10 semaines",
+        "en": "Replay and purple teaming within 10 weeks"
+      },
+      "summary": {
+        "fr": "Au plus tard 10 semaines après la phase active : rejeu des actions offensives et défensives, puis purple teaming sur des sujets choisis conjointement.",
+        "en": "No later than 10 weeks after the active phase: replay of offensive and defensive actions, then purple teaming on jointly identified topics."
+      }
+    },
+    {
+      "id": "RTS-12.6",
+      "nature": "obligation",
+      "matrix_ref": "CL-06",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "12",
+        "paragraph": "6"
+      },
+      "phase": "closure",
+      "carriers": [
+        "CT",
+        "BT",
+        "RTT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "deliverables": [
+        "DLV-FEEDBACK"
+      ],
+      "title": {
+        "fr": "Retours réciproques sur le processus",
+        "en": "Mutual feedback on the process"
+      },
+      "summary": {
+        "fr": "Après le replay et le purple teaming, le CT, la BT, les testeurs et le TIP se font des retours réciproques ; les TM peuvent y participer.",
+        "en": "After replay and purple teaming, CT, blue team, testers and TIP give each other feedback; TMs may contribute."
+      }
+    },
+    {
+      "id": "RTS-12.7",
+      "nature": "obligation",
+      "matrix_ref": "CL-07",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "12",
+        "paragraph": "7"
+      },
+      "phase": "closure",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-TSR"
+      ],
+      "deadlines": [
+        "D-11"
+      ],
+      "title": {
+        "fr": "Rapport de synthèse sous 8 semaines après notification",
+        "en": "Test summary report within 8 weeks of notification"
+      },
+      "summary": {
+        "fr": "Dans les 8 semaines suivant la notification de l'autorité (rapports RT et BT complets), rapport de synthèse (annexe VII) pour approbation.",
+        "en": "Within 8 weeks of the authority's notification (RT and BT reports complete), test summary report (Annex VII) for approval."
+      }
+    },
+    {
+      "id": "RTS-13.1",
+      "nature": "obligation",
+      "matrix_ref": "RM-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "13",
+        "paragraph": "1"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-REMEDIATION"
+      ],
+      "deadlines": [
+        "D-12"
+      ],
+      "title": {
+        "fr": "Plan de remédiation sous 8 semaines après notification",
+        "en": "Remediation plan within 8 weeks of notification"
+      },
+      "summary": {
+        "fr": "Plans de remédiation et documentation DORA 26(6) à l'autorité TLPT et, si elle est différente, à l'autorité compétente.",
+        "en": "Remediation plans and DORA 26(6) documentation to the TLPT authority and, where different, the competent authority."
+      }
+    },
+    {
+      "id": "RTS-13.2",
+      "nature": "obligation",
+      "matrix_ref": "RM-02",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "13",
+        "paragraph": "2"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-REMEDIATION"
+      ],
+      "title": {
+        "fr": "Contenu du plan de remédiation",
+        "en": "Content of the remediation plan"
+      },
+      "summary": {
+        "fr": "Pour chaque constat : description du manquement ; mesures, priorité et échéance ; cause racine ; responsables ; risques à ne pas agir et, le cas échéant, risques à agir.",
+        "en": "For each finding: shortcoming; measures, priority and completion; root cause; owners; risks of not implementing and, where relevant, of implementing."
+      }
+    },
+    {
+      "id": "RTS-14.1",
+      "nature": "obligation",
+      "matrix_ref": "AT-01",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "14",
+        "paragraph": "1"
+      },
+      "phase": "remediation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "deliverables": [
+        "DLV-ATTESTATION"
+      ],
+      "title": {
+        "fr": "Attestation délivrée par l'autorité",
+        "en": "Attestation issued by the authority"
+      },
+      "summary": {
+        "fr": "L'attestation DORA 26(7) contient les informations de l'annexe VIII ; l'autorité chef de file la délivre en cas de pluralité d'autorités.",
+        "en": "The DORA 26(7) attestation contains the Annex VIII information; the lead authority issues it where several authorities are involved."
+      }
+    },
+    {
+      "id": "RTS-15.1",
+      "nature": "obligation",
+      "matrix_ref": "IT-01..IT-04",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "15",
+        "paragraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "deliverables": [
+        "DLV-IT-POLICY"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "testers",
+            "in": [
+              "internal",
+              "mixed"
+            ]
+          }
+        ]
+      },
+      "title": {
+        "fr": "Dispositif pour testeurs internes",
+        "en": "Arrangements for internal testers"
+      },
+      "summary": {
+        "fr": "Politique documentée et revue ; pas d'impact sur la défense ; ressources suffisantes ; équipe d'un lead et ≥ 2 membres employés depuis 12 mois ; formation.",
+        "en": "Documented, reviewed policy; no impact on defence; sufficient resources; team of a lead and ≥ 2 members employed for 12 months; training."
+      }
+    },
+    {
+      "id": "RTS-15.2",
+      "nature": "obligation",
+      "matrix_ref": "IT-07",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "15",
+        "paragraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "applies_when": {
+        "any": [
+          {
+            "fact": "testers",
+            "in": [
+              "internal",
+              "mixed"
+            ]
+          }
+        ]
+      },
+      "title": {
+        "fr": "Approbation des testeurs internes au regard de l'art. 7(1)",
+        "en": "Internal testers approved against Art. 7(1)"
+      },
+      "summary": {
+        "fr": "Pour approuver le recours à des testeurs internes, l'autorité tient compte des exigences de l'article 7(1).",
+        "en": "When approving internal testers, the authority considers the requirements of Article 7(1)."
+      }
+    },
+    {
+      "id": "RTS-15.3",
+      "nature": "obligation",
+      "matrix_ref": "IT-05",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "15",
+        "paragraph": "3"
+      },
+      "phase": "closure",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "testers",
+            "in": [
+              "internal",
+              "mixed"
+            ]
+          }
+        ]
+      },
+      "deliverables": [
+        "DLV-INIT",
+        "DLV-RTTR",
+        "DLV-TSR"
+      ],
+      "title": {
+        "fr": "Mentionner le recours aux testeurs internes",
+        "en": "Mention use of internal testers"
+      },
+      "summary": {
+        "fr": "Le recours à des testeurs internes figure dans les informations d'initiation, le rapport RT et le rapport de synthèse.",
+        "en": "Use of internal testers is mentioned in the initiation information, the RT report and the test summary report."
+      }
+    },
+    {
+      "id": "RTS-15.4",
+      "nature": "obligation",
+      "matrix_ref": "IT-06",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "15",
+        "paragraph": "4"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "title": {
+        "fr": "Testeurs intragroupe = testeurs internes",
+        "en": "Intra-group testers count as internal"
+      },
+      "summary": {
+        "fr": "Les testeurs employés par un prestataire TIC intragroupe sont considérés comme des testeurs internes.",
+        "en": "Testers employed by an ICT intra-group service provider are considered internal testers."
+      }
+    },
+    {
+      "id": "RTS-16.1",
+      "nature": "obligation",
+      "matrix_ref": "MP-03",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "16",
+        "paragraph": "1"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "deadlines": [
+        "D-15"
+      ],
+      "applies_when": {
+        "all": [
+          {
+            "fact": "cross_border",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Association des autorités d'accueil",
+        "en": "Involvement of host authorities"
+      },
+      "summary": {
+        "fr": "L'autorité d'origine associe les autorités d'accueil, qui disposent de 20 jours ouvrés pour se positionner.",
+        "en": "The home authority involves host authorities, who have 20 working days to respond."
+      }
+    },
+    {
+      "id": "RTS-16.2",
+      "nature": "obligation",
+      "matrix_ref": "MP-04",
+      "source": {
+        "instrument": "RTS_2025_1190",
+        "article": "16",
+        "paragraph": "2"
+      },
+      "phase": "preparation",
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "display": "info",
+      "applies_when": {
+        "any": [
+          {
+            "fact": "joint",
+            "eq": true
+          },
+          {
+            "fact": "cross_border",
+            "eq": true
+          }
+        ]
+      },
+      "title": {
+        "fr": "Préférence pour le TLPT commun",
+        "en": "Preference for joint TLPT"
+      },
+      "summary": {
+        "fr": "Un TLPT commun est préféré à des TLPT individuels s'il réduit coûts et ressources sans nuire à la solidité du test.",
+        "en": "A joint TLPT is preferred where it reduces costs and resources without prejudicing soundness and efficacy."
+      }
+    }
+  ],
+  "notes": [
+    {
+      "id": "NOTE-RTS-ANNEX-VIII",
+      "targets": [
+        "RTS-14.1"
+      ],
+      "text": {
+        "fr": "L'annexe VIII (a)(vi)(2) renvoie à « Article 5(3), second subparagraph », qui n'existe pas. Le renvoi vise probablement l'art. 7(2) al. 2.",
+        "en": "Annex VIII (a)(vi)(2) refers to 'Article 5(3), second subparagraph', which does not exist; likely intended: Art. 7(2) second subparagraph."
+      }
+    },
+    {
+      "id": "NOTE-RECITAL-27",
+      "targets": [
+        "DORA-26.8.1"
+      ],
+      "text": {
+        "fr": "RTS considérant 27 (interprétatif) : un TLPT mêlant testeurs internes et externes compte comme réalisé avec des testeurs internes au sens de DORA 26(8). C'est pourquoi le fait « testers = mixed » déclenche les règles « internes ».",
+        "en": "RTS recital 27 (interpretative): a TLPT mixing internal and external testers counts as performed with internal testers for DORA 26(8); hence fact 'testers = mixed' triggers the internal-tester rules."
+      }
+    },
+    {
+      "id": "NOTE-RTS-11.3",
+      "targets": [
+        "RTS-11.3"
+      ],
+      "text": {
+        "fr": "L'art. 11(3) dit « the TLPT shall inform the control team lead ». Il faut lire « the TLPT authority ».",
+        "en": "Art. 11(3) reads 'the TLPT shall inform the control team lead'; read 'the TLPT authority'."
+      }
+    }
+  ]
+}
