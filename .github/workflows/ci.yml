@@ -20,6 +20,8 @@ jobs:
           python-version: "3.12"
       - run: pip install jsonschema==4.23.0
       - run: python tools/validate_ref.py
+      - name: Points de conformité à jour
+        run: python tools/gen_compliance_doc.py --check
 
   engine:
     name: Moteur (tests + typage)

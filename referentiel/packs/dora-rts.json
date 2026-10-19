@@ -2,7 +2,7 @@
   "$schema": "../schema/pack.schema.json",
   "pack_id": "dora-rts",
   "framework": "DORA+RTS_TLPT",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "title": {
     "fr": "Obligations DORA art. 26-27 et RTS TLPT (UE) 2025/1190",
     "en": "Obligations: DORA Art. 26-27 and RTS TLPT (EU) 2025/1190"
@@ -34,6 +34,7 @@
     {
       "id": "DORA-26.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-01",
       "source": {
         "instrument": "DORA",
@@ -62,6 +63,7 @@
     {
       "id": "DORA-26.2.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-02",
       "source": {
         "instrument": "DORA",
@@ -91,6 +93,7 @@
     {
       "id": "DORA-26.2.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-03",
       "source": {
         "instrument": "DORA",
@@ -120,6 +123,7 @@
     {
       "id": "DORA-26.2.3",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-04",
       "source": {
         "instrument": "DORA",
@@ -150,6 +154,7 @@
     {
       "id": "DORA-26.3",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-05",
       "source": {
         "instrument": "DORA",
@@ -187,6 +192,7 @@
     {
       "id": "DORA-26.4",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-06",
       "source": {
         "instrument": "DORA",
@@ -225,6 +231,7 @@
     {
       "id": "DORA-26.5",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-07",
       "source": {
         "instrument": "DORA",
@@ -258,6 +265,7 @@
     {
       "id": "DORA-26.6",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "G-08",
       "source": {
         "instrument": "DORA",
@@ -289,6 +297,7 @@
     {
       "id": "DORA-26.7.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "G-09 / AT-02",
       "source": {
         "instrument": "DORA",
@@ -319,6 +328,7 @@
     {
       "id": "DORA-26.7.2",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "G-10",
       "source": {
         "instrument": "DORA",
@@ -354,6 +364,7 @@
     {
       "id": "DORA-26.8.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-11",
       "source": {
         "instrument": "DORA",
@@ -395,6 +406,7 @@
     {
       "id": "DORA-26.8.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-12",
       "source": {
         "instrument": "DORA",
@@ -429,6 +441,7 @@
     {
       "id": "DORA-27.1.a",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-01",
       "source": {
         "instrument": "DORA",
@@ -462,6 +475,7 @@
     {
       "id": "DORA-27.1.b",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-02",
       "source": {
         "instrument": "DORA",
@@ -495,6 +509,7 @@
     {
       "id": "DORA-27.1.c",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-03",
       "source": {
         "instrument": "DORA",
@@ -528,6 +543,7 @@
     {
       "id": "DORA-27.1.d",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-04",
       "source": {
         "instrument": "DORA",
@@ -561,6 +577,7 @@
     {
       "id": "DORA-27.1.e",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-05",
       "source": {
         "instrument": "DORA",
@@ -594,6 +611,7 @@
     {
       "id": "DORA-27.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-06",
       "source": {
         "instrument": "DORA",
@@ -631,6 +649,7 @@
     {
       "id": "DORA-27.3",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-07",
       "source": {
         "instrument": "DORA",
@@ -658,6 +677,7 @@
     {
       "id": "RTS-2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "G-14",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -683,6 +703,7 @@
     {
       "id": "RTS-4.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "O-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -708,6 +729,7 @@
     {
       "id": "RTS-4.2.a",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "O-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -736,6 +758,7 @@
     {
       "id": "RTS-4.2.b",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "O-03",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -762,6 +785,7 @@
     {
       "id": "RTS-4.2.c",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "O-04",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -788,6 +812,7 @@
     {
       "id": "RTS-4.2.d",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "O-05",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -820,6 +845,7 @@
     {
       "id": "RTS-4.2.e",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "O-06",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -846,6 +872,7 @@
     {
       "id": "RTS-4.2.f",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "O-07",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -876,6 +903,7 @@
     {
       "id": "RTS-5.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "R-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -904,6 +932,7 @@
     {
       "id": "RTS-5.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "R-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -932,6 +961,7 @@
     {
       "id": "RTS-6",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "R-03",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -971,6 +1001,7 @@
     {
       "id": "RTS-7.1.a",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-10",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1003,6 +1034,7 @@
     {
       "id": "RTS-7.1.b",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-11",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1035,6 +1067,7 @@
     {
       "id": "RTS-7.1.c",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-12",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1065,6 +1098,7 @@
     {
       "id": "RTS-7.1.d",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-13",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1095,6 +1129,7 @@
     {
       "id": "RTS-7.1.e.i",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-14",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1125,6 +1160,7 @@
     {
       "id": "RTS-7.1.e.iv",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-15",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1155,6 +1191,7 @@
     {
       "id": "RTS-7.1.e.v",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-15",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1186,6 +1223,7 @@
     {
       "id": "RTS-7.1.f.i",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-16",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1216,6 +1254,7 @@
     {
       "id": "RTS-7.1.f.iv",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-17",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1246,6 +1285,7 @@
     {
       "id": "RTS-7.1.f.v",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-17",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1277,6 +1317,7 @@
     {
       "id": "RTS-7.1.g",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "P-18",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1309,6 +1350,7 @@
     {
       "id": "RTS-7.1.h",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "P-19",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1339,6 +1381,7 @@
     {
       "id": "RTS-7.1.i",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-20",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1368,6 +1411,7 @@
     {
       "id": "RTS-7.2.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-21",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1397,6 +1441,7 @@
     {
       "id": "RTS-7.2.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "P-22",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1431,6 +1476,7 @@
     {
       "id": "RTS-8.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "MP-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1468,6 +1514,7 @@
     {
       "id": "RTS-8.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "MP-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1506,6 +1553,7 @@
     {
       "id": "RTS-9.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1532,6 +1580,7 @@
     {
       "id": "RTS-9.2",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1563,6 +1612,7 @@
     {
       "id": "RTS-9.3",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-03",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1592,6 +1642,7 @@
     {
       "id": "RTS-9.4",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-04",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1618,6 +1669,7 @@
     {
       "id": "RTS-9.5",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-05",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1644,6 +1696,7 @@
     {
       "id": "RTS-9.6",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-06",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1676,6 +1729,7 @@
     {
       "id": "RTS-9.7",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-07",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1704,6 +1758,7 @@
     {
       "id": "RTS-9.8",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-08",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1731,6 +1786,7 @@
     {
       "id": "RTS-9.9",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-09",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1761,6 +1817,7 @@
     {
       "id": "RTS-9.10",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-10",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1792,6 +1849,7 @@
     {
       "id": "RTS-9.11",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-11",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1825,6 +1883,7 @@
     {
       "id": "RTS-9.12",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "PR-12",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1854,6 +1913,7 @@
     {
       "id": "RTS-10.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "TI-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1880,6 +1940,7 @@
     {
       "id": "RTS-10.2",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "TI-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1906,6 +1967,7 @@
     {
       "id": "RTS-10.3",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "TI-03",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1931,6 +1993,7 @@
     {
       "id": "RTS-10.4.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "TI-04",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1959,6 +2022,7 @@
     {
       "id": "RTS-10.4.2",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "TI-05",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -1999,6 +2063,7 @@
     {
       "id": "RTS-10.5",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "TI-06",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2028,6 +2093,7 @@
     {
       "id": "RTS-10.6",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "TI-07",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2057,6 +2123,7 @@
     {
       "id": "RTS-11.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2086,6 +2153,7 @@
     {
       "id": "RTS-11.2",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2116,6 +2184,7 @@
     {
       "id": "RTS-11.3",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-03",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2146,6 +2215,7 @@
     {
       "id": "RTS-11.4",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-04",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2172,6 +2242,7 @@
     {
       "id": "RTS-11.5",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-05",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2205,6 +2276,7 @@
     {
       "id": "RTS-11.6",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-06",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2232,6 +2304,7 @@
     {
       "id": "RTS-11.7",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-07",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2266,6 +2339,7 @@
     {
       "id": "RTS-11.8",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-08",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2292,6 +2366,7 @@
     {
       "id": "RTS-11.9",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-09",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2319,6 +2394,7 @@
     {
       "id": "RTS-11.10",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RT-10",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2345,6 +2421,7 @@
     {
       "id": "RTS-12.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "CL-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2370,6 +2447,7 @@
     {
       "id": "RTS-12.2",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "CL-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2402,6 +2480,7 @@
     {
       "id": "RTS-12.3",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "CL-03",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2430,6 +2509,7 @@
     {
       "id": "RTS-12.4",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "CL-04",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2462,6 +2542,7 @@
     {
       "id": "RTS-12.5",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "CL-05",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2496,6 +2577,7 @@
     {
       "id": "RTS-12.6",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "CL-06",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2529,6 +2611,7 @@
     {
       "id": "RTS-12.7",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "CL-07",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2560,6 +2643,7 @@
     {
       "id": "RTS-13.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RM-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2591,6 +2675,7 @@
     {
       "id": "RTS-13.2",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "RM-02",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2619,6 +2704,7 @@
     {
       "id": "RTS-14.1",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "AT-01",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2648,6 +2734,7 @@
     {
       "id": "RTS-15.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "IT-01..IT-04",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2687,6 +2774,7 @@
     {
       "id": "RTS-15.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "IT-07",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2724,6 +2812,7 @@
     {
       "id": "RTS-15.3",
       "nature": "obligation",
+      "scope": "stepwise",
       "matrix_ref": "IT-05",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2766,6 +2855,7 @@
     {
       "id": "RTS-15.4",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "IT-06",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2792,6 +2882,7 @@
     {
       "id": "RTS-16.1",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "MP-03",
       "source": {
         "instrument": "RTS_2025_1190",
@@ -2829,6 +2920,7 @@
     {
       "id": "RTS-16.2",
       "nature": "obligation",
+      "scope": "standing",
       "matrix_ref": "MP-04",
       "source": {
         "instrument": "RTS_2025_1190",

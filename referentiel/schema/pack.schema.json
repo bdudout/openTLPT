@@ -230,6 +230,10 @@
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
         "nature": { "enum": ["obligation", "good_practice", "national_obligation"] },
+        "scope": {
+          "enum": ["standing", "stepwise"],
+          "description": "Obligations only. standing = permanent compliance point (applies to the whole exercise); stepwise = point to secure as the test progresses (dated step or validation)."
+        },
         "matrix_ref": { "type": "string" },
         "source": { "$ref": "#/$defs/LegalRef" },
         "phase": { "$ref": "#/$defs/Id" },
@@ -253,7 +257,7 @@
         },
         {
           "if": { "properties": { "nature": { "const": "obligation" } } },
-          "then": { "not": { "required": ["relation"] } }
+          "then": { "required": ["scope"], "not": { "required": ["relation"] } }
         }
       ]
     },

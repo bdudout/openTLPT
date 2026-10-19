@@ -83,8 +83,12 @@ def cross_check(packs, errors):
                 errors.append(f"{name}: core pack must not contain items ({item['id']})")
             elif fw in OBLIGATION_FRAMEWORKS and nature != "obligation":
                 errors.append(f"{name}: {item['id']}: regulatory pack may only hold obligations (got {nature})")
+            elif fw in OBLIGATION_FRAMEWORKS and item.get("scope") not in ("standing", "stepwise"):
+                errors.append(f"{name}: {item['id']}: obligation without scope (standing | stepwise)")
             elif fw.startswith("TIBER-") and nature == "obligation":
                 errors.append(f"{name}: {item['id']}: TIBER pack must not hold 'obligation' items")
+            if fw.startswith("TIBER-") and "scope" in item:
+                errors.append(f"{name}: {item['id']}: scope is reserved to obligations")
 
     for prof_id, (name, _, prof) in index["profiles"].items():
         for inc in prof.get("includes", []):

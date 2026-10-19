@@ -62,6 +62,7 @@ Toute bonne pratique déclare son **lien** avec les obligations (`relation`) :
 {
   "id": "RTS-9.6",                       // stable, unique dans tous les packs
   "nature": "obligation",                // obligation | good_practice | national_obligation
+  "scope": "stepwise",                   // obligations uniquement : standing (point permanent) | stepwise (au fil du test)
   "matrix_ref": "PR-06",                 // ID lisible des fichiers docs/referentiel/*.md
   "source": { "instrument": "RTS_2025_1190", "article": "9", "paragraph": "6",
               "eli": "http://data.europa.eu/eli/reg_del/2025/1190/oj" },
