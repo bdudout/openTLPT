@@ -4,13 +4,13 @@
 import { canonicalize, type JsonValue } from './jcs.ts';
 import { insertEntry, journalHead, prepareEntry, verifyChain, type Anchor, type ChainCheck, type JournalAction } from './journal.ts';
 import { isValidISODate } from './dates.ts';
+import type { ChecklistStatus, Response } from './checklist.ts';
 import type { Row, SqlDb, SqlDbFactory, SqlValue } from './db.ts';
 import type { DeadlineOverride, ExerciseState, FactValue, ISODate, OffsetUnit } from './types.ts';
 
 export const SCHEMA_VERSION = '1';
 export const PROFILES = ['entity', 'ti', 'rt', 'ti_rt'] as const;
 export type Profile = (typeof PROFILES)[number];
-export type ChecklistStatus = 'open' | 'in_progress' | 'done' | 'not_applicable' | 'accepted_gap';
 
 /** Tables à clé unique modifiables par le moteur, et leur clé primaire. */
 const KEYED_TABLES = {
@@ -196,6 +196,16 @@ export class Exercise {
 
   meta(): Record<string, string> {
     return Object.fromEntries(this.db.all<{ key: string; value: string }>('SELECT key, value FROM meta').map((r) => [r.key, r.value]));
+  }
+
+  /** Réponses aux checklists, pour `buildChecklist`. */
+  checklistResponses(): Record<string, Response> {
+    type R = { item_ref: string; status: string; justification: string | null; decided_by: string | null; ref_version: string };
+    const out: Record<string, Response> = {};
+    for (const r of this.db.all<R>('SELECT item_ref, status, justification, decided_by, ref_version FROM checklist')) {
+      out[r.item_ref] = { status: r.status as ChecklistStatus, justification: r.justification, decided_by: r.decided_by, ref_version: r.ref_version };
+    }
+    return out;
   }
 
   /** État de l'exercice pour `computeDeadlines` (les occurrences récurrentes viendront des registres). */

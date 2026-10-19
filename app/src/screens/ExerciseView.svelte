@@ -3,15 +3,16 @@
   import { currentExercise, loadState, lock, mutate, save, todayISO, ui } from '../lib/app.svelte.ts';
   import { actorsById, core, eventsById, phasesOrdered, type UiDeadlineDef } from '../lib/ref.ts';
   import { hasFsa } from '../lib/files.ts';
+  import Checklists from './Checklists.svelte';
   import {
     checkEventOrder, computeDeadlines, effectiveFacts, type DeadlineResult, type FactValue,
   } from '../../../engine/src/index.ts';
 
   const meta = $derived.by(() => { void ui.rev; return currentExercise().meta(); });
-  const state = $derived(loadState());
-  const results = $derived(computeDeadlines(core, state));
-  const facts = $derived(effectiveFacts(core.facts, state.facts));
-  const orderIssues = $derived(checkEventOrder(core, state.events));
+  const exState = $derived(loadState());
+  const results = $derived(computeDeadlines(core, exState));
+  const facts = $derived(effectiveFacts(core.facts, exState.facts));
+  const orderIssues = $derived(checkEventOrder(core, exState.events));
   const defs = Object.fromEntries(core.deadlines.map((d) => [d.id, d])) as Record<string, UiDeadlineDef>;
   const profile = $derived(core.profiles.find((p) => p.id === meta.profile));
   const fsa = hasFsa();
@@ -39,6 +40,8 @@
   function setFact(id: string, value: FactValue) { void mutate((ex) => ex.setFact(id, value)); }
 
   function onLock() { lock(); }
+
+  let tab = $state<'deadlines' | 'checklists'>('deadlines');
 </script>
 
 <section class="bar card">
@@ -63,6 +66,12 @@
   <p class="alert warn" role="alert">{t('order.issue', { event: eventLabel(i.event), d1: formatDate(i.date), other: eventLabel(i.mustFollow), d2: formatDate(i.otherDate) })}</p>
 {/each}
 
+<nav class="tabs" aria-label="openTLPT">
+  <button type="button" class="tab" aria-pressed={tab === 'deadlines'} onclick={() => (tab = 'deadlines')}>{t('tab.deadlines')}</button>
+  <button type="button" class="tab" aria-pressed={tab === 'checklists'} onclick={() => (tab = 'checklists')}>{t('tab.checklists')}</button>
+</nav>
+
+{#if tab === 'deadlines'}
 <section class="card block" aria-labelledby="h-deadlines">
   <div class="head">
     <h2 id="h-deadlines">{t('sec.deadlines')}</h2>
@@ -110,7 +119,7 @@
               <td data-label={t('dl.col.state')}><span class="badge {tone[r.state]}">{t(`state.${r.state}` as MsgKey)}</span></td>
               <td class="done" data-label={t('dl.col.done')}>
                 {#if canMarkDone(r)}
-                  <input type="date" aria-label={`${t('dl.col.done')} — ${loc(d.label)}`} value={state.done?.[r.id] ?? ''}
+                  <input type="date" aria-label={`${t('dl.col.done')} — ${loc(d.label)}`} value={exState.done?.[r.id] ?? ''}
                     onchange={(e) => setDone(r.id, e.currentTarget.value)} />
                 {/if}
               </td>
@@ -134,7 +143,7 @@
           {#each evs as ev (ev.id)}
             <div class="ev">
               <label for={`ev-${ev.id}`}>{loc(ev.label)}</label>
-              <input id={`ev-${ev.id}`} type="date" value={state.events[ev.id] ?? ''} onchange={(e) => setEvent(ev.id, e.currentTarget.value)} />
+              <input id={`ev-${ev.id}`} type="date" value={exState.events[ev.id] ?? ''} onchange={(e) => setEvent(ev.id, e.currentTarget.value)} />
             </div>
           {/each}
         </fieldset>
@@ -163,8 +172,14 @@
     {/each}
   </section>
 </div>
+{:else}
+<Checklists />
+{/if}
 
 <style>
+  .tabs { display: flex; gap: 4px; margin: 0 0 12px; border-bottom: 1px solid var(--border); }
+  .tab { background: transparent; color: var(--muted); border: 0; border-bottom: 3px solid transparent; border-radius: 0; padding: 8px 14px; font-weight: 600; }
+  .tab[aria-pressed='true'] { color: var(--accent); border-bottom-color: var(--accent); }
   .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
   .bar h1 { margin: 0; }
   .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }

@@ -64,6 +64,38 @@ async function runOne(name) {
     await page.getByRole('alert').filter({ hasText: 'ne peut pas précéder' }).waitFor({ state: 'detached' });
   });
 
+  await step('checklists : obligations et bonnes pratiques séparées, statut et justification', async () => {
+    await page.getByRole('button', { name: 'Checklists' }).click();
+    const obl = page.getByTestId('obligations');
+    const bp = page.getByTestId('practices');
+    await obl.locator('article[data-item="RTS-9.2"]').waitFor();
+    assert.equal(await obl.locator('article[data-item^="EU-"]').count(), 0, 'aucune bonne pratique côté obligations');
+    assert.equal(await bp.locator('article[data-item^="RTS-"], article[data-item^="DORA-"]').count(), 0, 'aucune obligation côté bonnes pratiques');
+    assert.ok(await bp.locator('article[data-item="EU-02"]').count() === 1);
+    assert.equal(await bp.locator('article[data-item^="FR-"]').count(), 0, 'TIBER-FR masqué par défaut');
+    await obl.locator('article[data-item="RTS-9.2"] select').selectOption('done');
+    await obl.locator('article[data-item="RTS-9.2"][data-status="done"]').waitFor();
+    const na = obl.locator('article[data-item="RTS-9.7"]');
+    await na.locator('select').selectOption('not_applicable');
+    await na.getByRole('button', { name: 'Enregistrer la réponse' }).click();
+    await na.getByRole('alert').filter({ hasText: 'Justification obligatoire' }).waitFor();
+    await na.locator('textarea').fill('Une seule FCI concernée, critères évalués dans le SSD');
+    await na.getByRole('button', { name: 'Enregistrer la réponse' }).click();
+    await obl.locator('article[data-item="RTS-9.7"][data-status="not_applicable"]').waitFor();
+    await page.getByRole('tab', { name: /Clôture/ }).click();
+    await obl.locator('article[data-item="RTS-12.4"]').filter({ hasText: 'diffère de cette obligation' }).waitFor();
+    await bp.locator('article[data-item="EU-T6"]').filter({ hasText: 'Diffère de' }).waitFor();
+  });
+
+  await step('TIBER-FR apparaît quand la déclinaison nationale est choisie', async () => {
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.getByLabel('Déclinaison nationale TIBER').selectOption('TIBER-FR');
+    await page.getByRole('button', { name: 'Checklists' }).click();
+    await page.getByRole('tab', { name: /Préparation/ }).click();
+    await page.getByTestId('practices').locator('article[data-item="FR-01"]').waitFor();
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+  });
+
   let saved;
   await step('enregistrement (téléchargement, mode sans FSA)', async () => {
     const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Enregistrer', exact: true }).click()]);
@@ -87,6 +119,10 @@ async function runOne(name) {
     await page.locator('tr[data-deadline="D-15"] time[datetime="2026-11-02"]').waitFor();
     assert.match(await page.locator('.bar .help').innerText(), /Dominique \(CTL\)/);
     assert.equal(await page.getByRole('alert').filter({ hasText: 'intégrité' }).count(), 0);
+    await page.getByRole('button', { name: 'Checklists' }).click();
+    await page.locator('article[data-item="RTS-9.2"][data-status="done"]').waitFor();
+    await page.locator('article[data-item="RTS-9.7"]').filter({ hasText: 'Une seule FCI concernée' }).waitFor();
+    await page.getByTestId('practices').locator('article[data-item="FR-01"]').waitFor();
   });
 
   await step('mauvaise passphrase : message générique', async () => {

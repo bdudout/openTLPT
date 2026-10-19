@@ -9,4 +9,5 @@ export * from './journal.ts';
 export * from './kdf.ts';
 export * from './envelope.ts';
 export * from './exercise.ts';
+export * from './checklist.ts';
 // Adaptateur SQLite WASM (dépendance d'exécution) : import explicite './sqlite-wasm.ts'.

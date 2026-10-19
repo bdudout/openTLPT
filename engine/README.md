@@ -8,6 +8,7 @@ Il n'appelle jamais l'horloge système et ne fait aucune E/S : la date du jour, 
 | `dates.ts` | Dates calendaires en UTC : fin de mois, 29 février, jours ouvrés | aucune |
 | `applicability.ts` | Conditions `applies_when` sur les faits de l'exercice | aucune |
 | `deadlines.ts` | Échéances `max` / `min` / `before` / `recurring`, surcharges justifiées, cohérence de la chronologie | aucune |
+| `checklist.ts` | Checklists par phase : filtrage par profil (TI+RT = TI ∪ RT) et par applicabilité. Obligations et bonnes pratiques en **listes séparées**, et seules les obligations entrent dans la progression. Liens reformule / diffère / complète, réponses périmées ou orphelines | aucune |
 | `jcs.ts`, `bytes.ts` | JSON canonique (RFC 8785), base64, SHA-256 (WebCrypto) | aucune |
 | `db.ts` | **Contrat** d'accès SQLite (`SqlDb`, `SqlDbFactory`) | aucune |
 | `sqlite-wasm.ts` | Adaptateur SQLite WASM officiel, base mémoire uniquement (ADR-0002) | `@sqlite.org/sqlite-wasm` |
