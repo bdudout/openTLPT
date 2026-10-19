@@ -1,7 +1,7 @@
 # Points de conformité suivis par openTLPT
 
 > Document **généré** par `tools/gen_compliance_doc.py` à partir des packs du référentiel. Ne pas modifier à la main.
-> Référentiel : `core@0.1.0` · `dora-rts@0.3.0` · `tiber-eu@0.2.0` · `tiber-fr@0.2.0`. Les libellés sont des synthèses : le texte qui fait foi est celui publié au JO de l'UE.
+> Référentiel : `core@0.2.0` · `dora-rts@0.3.0` · `tiber-eu@0.2.0` · `tiber-fr@0.2.0`. Les libellés sont des synthèses : le texte qui fait foi est celui publié au JO de l'UE.
 
 ## Lecture
 

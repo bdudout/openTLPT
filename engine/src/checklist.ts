@@ -13,6 +13,10 @@ export interface LegalRefDef {
 export interface ItemDef {
   id: string;
   nature: Nature;
+  /** Obligations : point permanent (socle) ou point à assurer au fil du test. */
+  scope?: 'standing' | 'stepwise';
+  /** Obligations du socle : thème (core.themes). */
+  theme?: string;
   matrix_ref?: string;
   source: LegalRefDef;
   phase: string;
@@ -71,8 +75,19 @@ export interface ChecklistInput {
   refVersion: string;
 }
 
+export interface StandingChecklist {
+  /** Obligations permanentes (socle), valables pour tout l'exercice. */
+  obligations: Entry[];
+  /** Bonnes pratiques liées à au moins une obligation du socle (aussi visibles dans leur phase). */
+  practices: Entry[];
+  progress: Progress;
+}
+
 export interface ChecklistResult {
+  /** Points au fil du test (et bonnes pratiques), par phase. */
   phases: Record<string, PhaseChecklist>;
+  /** Socle permanent : séparé des phases, avec sa propre progression. */
+  standing: StandingChecklist;
   /** Réponses qui ne correspondent plus à un item visible (profil, applicabilité ou référentiel modifiés). */
   orphanResponses: string[];
   /** Bonnes pratiques qui reformulent ou contredisent chaque obligation (affichage replié / avertissement). */
@@ -105,6 +120,8 @@ export function buildChecklist(input: ChecklistInput): ChecklistResult {
   const phases: Record<string, PhaseChecklist> = {};
   const related: ChecklistResult['related'] = {};
   const visible = new Set<string>();
+  const standing: StandingChecklist = { obligations: [], practices: [], progress: emptyProgress() };
+  const allPractices: Entry[] = [];
 
   for (const pack of input.packs) {
     if (pack.framework === 'core') continue;
@@ -119,6 +136,14 @@ export function buildChecklist(input: ChecklistInput): ChecklistResult {
         ...(response ? { response } : {}),
         stale: !!response && response.ref_version !== input.refVersion,
       };
+      if (obligationPack && item.scope === 'standing') {
+        standing.obligations.push(entry);
+        if ((item.display ?? 'check') === 'check') {
+          standing.progress.total++;
+          standing.progress[entry.status]++;
+        }
+        continue;
+      }
       const ph = (phases[item.phase] ??= { phase: item.phase, obligations: [], practices: [], progress: emptyProgress() });
       if (obligationPack) {
         ph.obligations.push(entry);
@@ -128,6 +153,7 @@ export function buildChecklist(input: ChecklistInput): ChecklistResult {
         }
       } else {
         ph.practices.push(entry);
+        allPractices.push(entry);
         if (item.relation) {
           for (const target of item.relation.targets ?? []) {
             const r = (related[target] ??= { restates: [], diverges: [], adds: [] });
@@ -137,19 +163,30 @@ export function buildChecklist(input: ChecklistInput): ChecklistResult {
       }
     }
   }
-  for (const ph of Object.values(phases)) {
-    ph.progress.handled = ph.progress.done + ph.progress.not_applicable + ph.progress.accepted_gap;
-  }
+  const finish = (p: Progress) => { p.handled = p.done + p.not_applicable + p.accepted_gap; };
+  for (const ph of Object.values(phases)) finish(ph.progress);
+  finish(standing.progress);
+  const standingIds = new Set(standing.obligations.map((e) => e.item.id));
+  standing.practices = allPractices.filter((e) => (e.item.relation?.targets ?? []).some((t) => standingIds.has(t)));
   const orphanResponses = Object.keys(input.responses).filter((id) => !visible.has(id)).sort();
-  return { phases, orphanResponses, related };
+  return { phases, standing, orphanResponses, related };
 }
 
-/** Progression globale (toutes phases) sur les obligations. */
-export function totalProgress(result: ChecklistResult): Progress {
+function addProgress(t: Progress, p: Progress): void {
+  for (const k of Object.keys(t) as (keyof Progress)[]) t[k] += p[k];
+}
+
+/** Progression des points au fil du test (toutes phases). */
+export function stepwiseProgress(result: ChecklistResult): Progress {
   const t = emptyProgress();
-  for (const ph of Object.values(result.phases)) {
-    for (const k of Object.keys(t) as (keyof Progress)[]) t[k] += ph.progress[k];
-  }
+  for (const ph of Object.values(result.phases)) addProgress(t, ph.progress);
+  return t;
+}
+
+/** Progression globale sur les obligations : socle + au fil du test. */
+export function totalProgress(result: ChecklistResult): Progress {
+  const t = stepwiseProgress(result);
+  addProgress(t, result.standing.progress);
   return t;
 }
 

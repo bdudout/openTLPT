@@ -2,120 +2,1395 @@
   "$schema": "../schema/pack.schema.json",
   "pack_id": "core",
   "framework": "core",
-  "version": "0.1.0",
-  "title": { "fr": "Noyau openTLPT : profils, acteurs, phases, événements, livrables, délais", "en": "openTLPT core: profiles, actors, phases, events, deliverables, deadlines" },
+  "version": "0.2.0",
+  "title": {
+    "fr": "Noyau openTLPT : profils, acteurs, phases, événements, livrables, délais",
+    "en": "openTLPT core: profiles, actors, phases, events, deliverables, deadlines"
+  },
   "sources": [
-    { "id": "SRC-DORA", "title": "Regulation (EU) 2022/2554 (DORA)", "celex": "32022R2554", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554", "eli": "http://data.europa.eu/eli/reg/2022/2554/oj", "checked_at": "2026-10-19" },
-    { "id": "SRC-RTS", "title": "Commission Delegated Regulation (EU) 2025/1190 (RTS TLPT)", "date": "2025-02-13", "celex": "32025R1190", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R1190", "eli": "http://data.europa.eu/eli/reg_del/2025/1190/oj", "checked_at": "2026-10-19" }
+    {
+      "id": "SRC-DORA",
+      "title": "Regulation (EU) 2022/2554 (DORA)",
+      "celex": "32022R2554",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554",
+      "eli": "http://data.europa.eu/eli/reg/2022/2554/oj",
+      "checked_at": "2026-10-19"
+    },
+    {
+      "id": "SRC-RTS",
+      "title": "Commission Delegated Regulation (EU) 2025/1190 (RTS TLPT)",
+      "date": "2025-02-13",
+      "celex": "32025R1190",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R1190",
+      "eli": "http://data.europa.eu/eli/reg_del/2025/1190/oj",
+      "checked_at": "2026-10-19"
+    }
   ],
-
   "profiles": [
-    { "id": "entity", "label": { "fr": "Entité financière", "en": "Financial entity" }, "description": { "fr": "PMO ou Control Team Lead de l'entité testée.", "en": "PMO or Control Team Lead of the tested entity." } },
-    { "id": "ti", "label": { "fr": "Prestataire Threat Intelligence", "en": "Threat Intelligence provider" } },
-    { "id": "rt", "label": { "fr": "Prestataire Red Team", "en": "Red Team provider" } },
-    { "id": "ti_rt", "label": { "fr": "Prestataire TI + RT", "en": "TI + RT provider" }, "includes": ["ti", "rt"], "description": { "fr": "Équipes TI et RT séparées, sans lien hiérarchique (RTS 7(1)(e)(v), (f)(v)).", "en": "Separate TI and RT teams with no reporting line (RTS 7(1)(e)(v), (f)(v))." } }
+    {
+      "id": "entity",
+      "label": {
+        "fr": "Entité financière",
+        "en": "Financial entity"
+      },
+      "description": {
+        "fr": "PMO ou Control Team Lead de l'entité testée.",
+        "en": "PMO or Control Team Lead of the tested entity."
+      }
+    },
+    {
+      "id": "ti",
+      "label": {
+        "fr": "Prestataire Threat Intelligence",
+        "en": "Threat Intelligence provider"
+      }
+    },
+    {
+      "id": "rt",
+      "label": {
+        "fr": "Prestataire Red Team",
+        "en": "Red Team provider"
+      }
+    },
+    {
+      "id": "ti_rt",
+      "label": {
+        "fr": "Prestataire TI + RT",
+        "en": "TI + RT provider"
+      },
+      "includes": [
+        "ti",
+        "rt"
+      ],
+      "description": {
+        "fr": "Équipes TI et RT séparées, sans lien hiérarchique (RTS 7(1)(e)(v), (f)(v)).",
+        "en": "Separate TI and RT teams with no reporting line (RTS 7(1)(e)(v), (f)(v))."
+      }
+    }
   ],
-
   "actors": [
-    { "id": "FE",        "label": { "fr": "Entité financière", "en": "Financial entity" } },
-    { "id": "CT",        "label": { "fr": "Control team", "en": "Control team" }, "source": "SRC-RTS" },
-    { "id": "CTL",       "label": { "fr": "Control team lead", "en": "Control team lead" }, "source": "SRC-RTS" },
-    { "id": "MB",        "label": { "fr": "Organe de direction", "en": "Management body" } },
-    { "id": "TIP",       "label": { "fr": "Prestataire de threat intelligence", "en": "Threat intelligence provider" }, "source": "SRC-RTS" },
-    { "id": "RTT",       "label": { "fr": "Testeurs (red team)", "en": "Testers (red team)" }, "source": "SRC-RTS" },
-    { "id": "BT",        "label": { "fr": "Blue team", "en": "Blue team" }, "external": true, "source": "SRC-RTS" },
-    { "id": "TLPT_AUTH", "label": { "fr": "Autorité TLPT", "en": "TLPT authority" }, "external": true, "source": "SRC-RTS" },
-    { "id": "TM",        "label": { "fr": "Test managers (TCT)", "en": "Test managers (TCT)" }, "external": true, "source": "SRC-RTS" },
-    { "id": "CA",        "label": { "fr": "Autorité compétente", "en": "Competent authority" }, "external": true, "source": "SRC-DORA" },
-    { "id": "ICT_TPP",   "label": { "fr": "Prestataire TIC tiers", "en": "ICT third-party service provider" }, "external": true, "source": "SRC-DORA" }
+    {
+      "id": "FE",
+      "label": {
+        "fr": "Entité financière",
+        "en": "Financial entity"
+      }
+    },
+    {
+      "id": "CT",
+      "label": {
+        "fr": "Control team",
+        "en": "Control team"
+      },
+      "source": "SRC-RTS"
+    },
+    {
+      "id": "CTL",
+      "label": {
+        "fr": "Control team lead",
+        "en": "Control team lead"
+      },
+      "source": "SRC-RTS"
+    },
+    {
+      "id": "MB",
+      "label": {
+        "fr": "Organe de direction",
+        "en": "Management body"
+      }
+    },
+    {
+      "id": "TIP",
+      "label": {
+        "fr": "Prestataire de threat intelligence",
+        "en": "Threat intelligence provider"
+      },
+      "source": "SRC-RTS"
+    },
+    {
+      "id": "RTT",
+      "label": {
+        "fr": "Testeurs (red team)",
+        "en": "Testers (red team)"
+      },
+      "source": "SRC-RTS"
+    },
+    {
+      "id": "BT",
+      "label": {
+        "fr": "Blue team",
+        "en": "Blue team"
+      },
+      "external": true,
+      "source": "SRC-RTS"
+    },
+    {
+      "id": "TLPT_AUTH",
+      "label": {
+        "fr": "Autorité TLPT",
+        "en": "TLPT authority"
+      },
+      "external": true,
+      "source": "SRC-RTS"
+    },
+    {
+      "id": "TM",
+      "label": {
+        "fr": "Test managers (TCT)",
+        "en": "Test managers (TCT)"
+      },
+      "external": true,
+      "source": "SRC-RTS"
+    },
+    {
+      "id": "CA",
+      "label": {
+        "fr": "Autorité compétente",
+        "en": "Competent authority"
+      },
+      "external": true,
+      "source": "SRC-DORA"
+    },
+    {
+      "id": "ICT_TPP",
+      "label": {
+        "fr": "Prestataire TIC tiers",
+        "en": "ICT third-party service provider"
+      },
+      "external": true,
+      "source": "SRC-DORA"
+    }
   ],
-
   "phases": [
-    { "id": "cycle",       "order": 0, "label": { "fr": "Cycle et assujettissement", "en": "Cycle and scoping of obligation" } },
-    { "id": "preparation", "order": 1, "label": { "fr": "Préparation", "en": "Preparation" }, "starts_at": "N0", "ends_at": "TESTING_START" },
-    { "id": "testing_ti",  "order": 2, "label": { "fr": "Test : threat intelligence", "en": "Testing: threat intelligence" }, "starts_at": "TESTING_START", "ends_at": "TTIR_APPROVED" },
-    { "id": "testing_rt",  "order": 3, "label": { "fr": "Test : red team", "en": "Testing: red team" }, "starts_at": "TTIR_APPROVED", "ends_at": "R1" },
-    { "id": "closure",     "order": 4, "label": { "fr": "Clôture", "en": "Closure" }, "starts_at": "R1", "ends_at": "TSR_APPROVED" },
-    { "id": "remediation", "order": 5, "label": { "fr": "Remédiation et attestation", "en": "Remediation and attestation" }, "starts_at": "N2", "ends_at": "ATTESTATION" }
+    {
+      "id": "cycle",
+      "order": 0,
+      "label": {
+        "fr": "Cycle et assujettissement",
+        "en": "Cycle and scoping of obligation"
+      }
+    },
+    {
+      "id": "preparation",
+      "order": 1,
+      "label": {
+        "fr": "Préparation",
+        "en": "Preparation"
+      },
+      "starts_at": "N0",
+      "ends_at": "TESTING_START"
+    },
+    {
+      "id": "testing_ti",
+      "order": 2,
+      "label": {
+        "fr": "Test : threat intelligence",
+        "en": "Testing: threat intelligence"
+      },
+      "starts_at": "TESTING_START",
+      "ends_at": "TTIR_APPROVED"
+    },
+    {
+      "id": "testing_rt",
+      "order": 3,
+      "label": {
+        "fr": "Test : red team",
+        "en": "Testing: red team"
+      },
+      "starts_at": "TTIR_APPROVED",
+      "ends_at": "R1"
+    },
+    {
+      "id": "closure",
+      "order": 4,
+      "label": {
+        "fr": "Clôture",
+        "en": "Closure"
+      },
+      "starts_at": "R1",
+      "ends_at": "TSR_APPROVED"
+    },
+    {
+      "id": "remediation",
+      "order": 5,
+      "label": {
+        "fr": "Remédiation et attestation",
+        "en": "Remediation and attestation"
+      },
+      "starts_at": "N2",
+      "ends_at": "ATTESTATION"
+    }
   ],
-
+  "themes": [
+    {
+      "id": "th_scope_frequency",
+      "order": 0,
+      "label": {
+        "fr": "Assujettissement, fréquence et périmètre",
+        "en": "Obligation, frequency and scope"
+      }
+    },
+    {
+      "id": "th_ict_tpp_risk",
+      "order": 1,
+      "label": {
+        "fr": "Prestataires TIC tiers, test mutualisé et maîtrise des risques du test",
+        "en": "ICT third parties, pooled testing and test risk controls"
+      }
+    },
+    {
+      "id": "th_testers",
+      "order": 2,
+      "label": {
+        "fr": "Testeurs internes ou externes",
+        "en": "Internal or external testers"
+      }
+    },
+    {
+      "id": "th_providers",
+      "order": 3,
+      "label": {
+        "fr": "Exigences sur les prestataires (TI et red team)",
+        "en": "Requirements on providers (TI and red team)"
+      }
+    },
+    {
+      "id": "th_organisation",
+      "order": 4,
+      "label": {
+        "fr": "Organisation et confidentialité",
+        "en": "Organisation and confidentiality"
+      }
+    },
+    {
+      "id": "th_risk",
+      "order": 5,
+      "label": {
+        "fr": "Gestion des risques du TLPT",
+        "en": "TLPT risk management"
+      }
+    },
+    {
+      "id": "th_multi",
+      "order": 6,
+      "label": {
+        "fr": "TLPT communs, mutualisés et transfrontières",
+        "en": "Joint, pooled and cross-border TLPT"
+      }
+    }
+  ],
   "events": [
-    { "id": "PREV_TLPT",             "phase": "cycle",       "set_by": ["TLPT_AUTH"], "label": { "fr": "Date d'attestation du TLPT précédent", "en": "Attestation date of previous TLPT" } },
-    { "id": "N0",                    "phase": "preparation", "set_by": ["TLPT_AUTH"], "label": { "fr": "Réception de la notification TLPT", "en": "Receipt of TLPT notification" }, "sources": ["RTS-9.1"] },
-    { "id": "HOST_INFORMED",         "phase": "preparation", "set_by": ["TLPT_AUTH"], "label": { "fr": "Information des autorités d'accueil", "en": "Host authorities informed" }, "after": ["N0"] },
-    { "id": "INIT_SUBMITTED",        "phase": "preparation", "set_by": ["CT"], "label": { "fr": "Informations d'initiation remises", "en": "Initiation information submitted" }, "after": ["N0"] },
-    { "id": "INIT_VALIDATED",        "phase": "preparation", "set_by": ["TLPT_AUTH"], "label": { "fr": "Initiation validée par l'autorité", "en": "Initiation validated by authority" }, "after": ["INIT_SUBMITTED"] },
-    { "id": "CT_VALIDATED",          "phase": "preparation", "set_by": ["TLPT_AUTH"], "label": { "fr": "Composition du CT validée", "en": "Control team composition validated" }, "after": ["INIT_VALIDATED"] },
-    { "id": "PROVIDERS_CONTRACTED",  "phase": "preparation", "set_by": ["CT"], "label": { "fr": "Contrats TIP / testeurs externes signés", "en": "TIP / external testers contracted" }, "after": ["N0"] },
-    { "id": "SSD_SUBMITTED",         "phase": "preparation", "set_by": ["CT"], "label": { "fr": "SSD remis", "en": "Scope specification submitted" }, "after": ["N0"] },
-    { "id": "SSD_APPROVED",          "phase": "preparation", "set_by": ["TLPT_AUTH"], "label": { "fr": "SSD approuvé par l'autorité", "en": "Scope specification approved" }, "after": ["SSD_SUBMITTED"] },
-    { "id": "TESTING_START",         "phase": "testing_ti",  "set_by": ["CT"], "label": { "fr": "Début de la phase de test", "en": "Start of testing phase" }, "after": ["SSD_APPROVED", "PROVIDERS_CONTRACTED"] },
-    { "id": "TTIR_APPROVED",         "phase": "testing_ti",  "set_by": ["TLPT_AUTH"], "label": { "fr": "TTIR approuvé", "en": "TTI report approved" }, "after": ["TESTING_START"] },
-    { "id": "R0",                    "phase": "testing_rt",  "set_by": ["CT", "TLPT_AUTH"], "label": { "fr": "Plan de test RT approuvé, début de la phase active", "en": "RT test plan approved, start of active phase" }, "after": ["TTIR_APPROVED"], "sources": ["RTS-11.3"] },
-    { "id": "R1",                    "phase": "testing_rt",  "set_by": ["CT", "TIP", "RTT", "TM"], "label": { "fr": "Fin convenue de la phase active", "en": "Agreed end of active phase" }, "after": ["R0"], "sources": ["RTS-11.5"] },
-    { "id": "BT_INFORMED",           "phase": "closure",     "set_by": ["CTL"], "label": { "fr": "Blue team informée", "en": "Blue team informed" }, "after": ["R1"] },
-    { "id": "RTTR_SUBMITTED",        "phase": "closure",     "set_by": ["RTT"], "label": { "fr": "Rapport RT remis au CT", "en": "RT test report submitted" }, "after": ["R1"] },
-    { "id": "BTTR_SUBMITTED",        "phase": "closure",     "set_by": ["BT"], "label": { "fr": "Rapport BT remis au CT", "en": "BT test report submitted" }, "after": ["RTTR_SUBMITTED"] },
-    { "id": "REPLAY_PT_DONE",        "phase": "closure",     "set_by": ["CT"], "label": { "fr": "Replay et purple teaming réalisés", "en": "Replay and purple teaming done" }, "after": ["R1"] },
-    { "id": "N2",                    "phase": "closure",     "set_by": ["TLPT_AUTH"], "label": { "fr": "Notification : rapports RT et BT jugés complets", "en": "Notification: RT and BT reports assessed complete" }, "after": ["RTTR_SUBMITTED", "BTTR_SUBMITTED"], "sources": ["RTS-12.7"] },
-    { "id": "TSR_SUBMITTED",         "phase": "closure",     "set_by": ["CT"], "label": { "fr": "Rapport de synthèse soumis", "en": "Test summary report submitted" }, "after": ["N2"] },
-    { "id": "REMEDIATION_SUBMITTED", "phase": "remediation", "set_by": ["CT"], "label": { "fr": "Plan de remédiation transmis", "en": "Remediation plan submitted" }, "after": ["N2"] },
-    { "id": "TSR_APPROVED",          "phase": "closure",     "set_by": ["TLPT_AUTH"], "label": { "fr": "Rapport de synthèse approuvé", "en": "Test summary report approved" }, "after": ["TSR_SUBMITTED"] },
-    { "id": "ATTESTATION",           "phase": "remediation", "set_by": ["TLPT_AUTH"], "label": { "fr": "Attestation reçue", "en": "Attestation received" }, "after": ["TSR_APPROVED"] }
+    {
+      "id": "PREV_TLPT",
+      "phase": "cycle",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Date d'attestation du TLPT précédent",
+        "en": "Attestation date of previous TLPT"
+      }
+    },
+    {
+      "id": "N0",
+      "phase": "preparation",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Réception de la notification TLPT",
+        "en": "Receipt of TLPT notification"
+      },
+      "sources": [
+        "RTS-9.1"
+      ]
+    },
+    {
+      "id": "HOST_INFORMED",
+      "phase": "preparation",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Information des autorités d'accueil",
+        "en": "Host authorities informed"
+      },
+      "after": [
+        "N0"
+      ]
+    },
+    {
+      "id": "INIT_SUBMITTED",
+      "phase": "preparation",
+      "set_by": [
+        "CT"
+      ],
+      "label": {
+        "fr": "Informations d'initiation remises",
+        "en": "Initiation information submitted"
+      },
+      "after": [
+        "N0"
+      ]
+    },
+    {
+      "id": "INIT_VALIDATED",
+      "phase": "preparation",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Initiation validée par l'autorité",
+        "en": "Initiation validated by authority"
+      },
+      "after": [
+        "INIT_SUBMITTED"
+      ]
+    },
+    {
+      "id": "CT_VALIDATED",
+      "phase": "preparation",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Composition du CT validée",
+        "en": "Control team composition validated"
+      },
+      "after": [
+        "INIT_VALIDATED"
+      ]
+    },
+    {
+      "id": "PROVIDERS_CONTRACTED",
+      "phase": "preparation",
+      "set_by": [
+        "CT"
+      ],
+      "label": {
+        "fr": "Contrats TIP / testeurs externes signés",
+        "en": "TIP / external testers contracted"
+      },
+      "after": [
+        "N0"
+      ]
+    },
+    {
+      "id": "SSD_SUBMITTED",
+      "phase": "preparation",
+      "set_by": [
+        "CT"
+      ],
+      "label": {
+        "fr": "SSD remis",
+        "en": "Scope specification submitted"
+      },
+      "after": [
+        "N0"
+      ]
+    },
+    {
+      "id": "SSD_APPROVED",
+      "phase": "preparation",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "SSD approuvé par l'autorité",
+        "en": "Scope specification approved"
+      },
+      "after": [
+        "SSD_SUBMITTED"
+      ]
+    },
+    {
+      "id": "TESTING_START",
+      "phase": "testing_ti",
+      "set_by": [
+        "CT"
+      ],
+      "label": {
+        "fr": "Début de la phase de test",
+        "en": "Start of testing phase"
+      },
+      "after": [
+        "SSD_APPROVED",
+        "PROVIDERS_CONTRACTED"
+      ]
+    },
+    {
+      "id": "TTIR_APPROVED",
+      "phase": "testing_ti",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "TTIR approuvé",
+        "en": "TTI report approved"
+      },
+      "after": [
+        "TESTING_START"
+      ]
+    },
+    {
+      "id": "R0",
+      "phase": "testing_rt",
+      "set_by": [
+        "CT",
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Plan de test RT approuvé, début de la phase active",
+        "en": "RT test plan approved, start of active phase"
+      },
+      "after": [
+        "TTIR_APPROVED"
+      ],
+      "sources": [
+        "RTS-11.3"
+      ]
+    },
+    {
+      "id": "R1",
+      "phase": "testing_rt",
+      "set_by": [
+        "CT",
+        "TIP",
+        "RTT",
+        "TM"
+      ],
+      "label": {
+        "fr": "Fin convenue de la phase active",
+        "en": "Agreed end of active phase"
+      },
+      "after": [
+        "R0"
+      ],
+      "sources": [
+        "RTS-11.5"
+      ]
+    },
+    {
+      "id": "BT_INFORMED",
+      "phase": "closure",
+      "set_by": [
+        "CTL"
+      ],
+      "label": {
+        "fr": "Blue team informée",
+        "en": "Blue team informed"
+      },
+      "after": [
+        "R1"
+      ]
+    },
+    {
+      "id": "RTTR_SUBMITTED",
+      "phase": "closure",
+      "set_by": [
+        "RTT"
+      ],
+      "label": {
+        "fr": "Rapport RT remis au CT",
+        "en": "RT test report submitted"
+      },
+      "after": [
+        "R1"
+      ]
+    },
+    {
+      "id": "BTTR_SUBMITTED",
+      "phase": "closure",
+      "set_by": [
+        "BT"
+      ],
+      "label": {
+        "fr": "Rapport BT remis au CT",
+        "en": "BT test report submitted"
+      },
+      "after": [
+        "RTTR_SUBMITTED"
+      ]
+    },
+    {
+      "id": "REPLAY_PT_DONE",
+      "phase": "closure",
+      "set_by": [
+        "CT"
+      ],
+      "label": {
+        "fr": "Replay et purple teaming réalisés",
+        "en": "Replay and purple teaming done"
+      },
+      "after": [
+        "R1"
+      ]
+    },
+    {
+      "id": "N2",
+      "phase": "closure",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Notification : rapports RT et BT jugés complets",
+        "en": "Notification: RT and BT reports assessed complete"
+      },
+      "after": [
+        "RTTR_SUBMITTED",
+        "BTTR_SUBMITTED"
+      ],
+      "sources": [
+        "RTS-12.7"
+      ]
+    },
+    {
+      "id": "TSR_SUBMITTED",
+      "phase": "closure",
+      "set_by": [
+        "CT"
+      ],
+      "label": {
+        "fr": "Rapport de synthèse soumis",
+        "en": "Test summary report submitted"
+      },
+      "after": [
+        "N2"
+      ]
+    },
+    {
+      "id": "REMEDIATION_SUBMITTED",
+      "phase": "remediation",
+      "set_by": [
+        "CT"
+      ],
+      "label": {
+        "fr": "Plan de remédiation transmis",
+        "en": "Remediation plan submitted"
+      },
+      "after": [
+        "N2"
+      ]
+    },
+    {
+      "id": "TSR_APPROVED",
+      "phase": "closure",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Rapport de synthèse approuvé",
+        "en": "Test summary report approved"
+      },
+      "after": [
+        "TSR_SUBMITTED"
+      ]
+    },
+    {
+      "id": "ATTESTATION",
+      "phase": "remediation",
+      "set_by": [
+        "TLPT_AUTH"
+      ],
+      "label": {
+        "fr": "Attestation reçue",
+        "en": "Attestation received"
+      },
+      "after": [
+        "TSR_APPROVED"
+      ]
+    }
   ],
-
   "facts": [
-    { "id": "testers", "type": "enum", "values": ["external", "internal", "mixed"], "default": "external", "label": { "fr": "Testeurs utilisés", "en": "Testers used" }, "help": { "fr": "« mixed » compte comme interne au sens de DORA 26(8) (RTS considérant 27).", "en": "'mixed' counts as internal for DORA 26(8) (RTS recital 27)." } },
-    { "id": "ssm_significant", "type": "boolean", "default": false, "label": { "fr": "Établissement de crédit « significant » (MSU)", "en": "SSM significant credit institution" } },
-    { "id": "tlpt_authority", "type": "enum", "values": ["national", "ecb"], "default": "national", "label": { "fr": "Autorité TLPT", "en": "TLPT authority" } },
-    { "id": "pooled", "type": "boolean", "default": false, "label": { "fr": "TLPT mutualisé (DORA 26(4))", "en": "Pooled TLPT (DORA 26(4))" } },
-    { "id": "joint", "type": "boolean", "default": false, "label": { "fr": "TLPT commun (RTS 1(18))", "en": "Joint TLPT (RTS 1(18))" } },
-    { "id": "cross_border", "type": "boolean", "default": false, "label": { "fr": "FCI exploitées dans plusieurs États membres", "en": "CIFs operated in several Member States" } },
-    { "id": "ict_tpp_in_scope", "type": "boolean", "default": false, "label": { "fr": "Prestataires TIC tiers dans le périmètre", "en": "ICT third-party providers in scope" } },
-    { "id": "provider_derogation", "type": "boolean", "default": false, "label": { "fr": "Dérogation prestataire (RTS 7(2) al. 2)", "en": "Provider derogation (RTS 7(2) 2nd subpara.)" } },
-    { "id": "national_framework", "type": "enum", "values": ["none", "TIBER-FR"], "default": "none", "label": { "fr": "Déclinaison nationale TIBER", "en": "National TIBER implementation" } },
-    { "id": "oiv_siiv_flags", "type": "boolean", "default": false, "label": { "fr": "Flags sur des SIIV d'un OIV (FR)", "en": "Flags on French SIIV systems" } },
-    { "id": "physical_scenario", "type": "boolean", "default": false, "label": { "fr": "Scénario d'intrusion physique", "en": "Physical intrusion scenario" } }
+    {
+      "id": "testers",
+      "type": "enum",
+      "values": [
+        "external",
+        "internal",
+        "mixed"
+      ],
+      "default": "external",
+      "label": {
+        "fr": "Testeurs utilisés",
+        "en": "Testers used"
+      },
+      "help": {
+        "fr": "« mixed » compte comme interne au sens de DORA 26(8) (RTS considérant 27).",
+        "en": "'mixed' counts as internal for DORA 26(8) (RTS recital 27)."
+      }
+    },
+    {
+      "id": "ssm_significant",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "Établissement de crédit « significant » (MSU)",
+        "en": "SSM significant credit institution"
+      }
+    },
+    {
+      "id": "tlpt_authority",
+      "type": "enum",
+      "values": [
+        "national",
+        "ecb"
+      ],
+      "default": "national",
+      "label": {
+        "fr": "Autorité TLPT",
+        "en": "TLPT authority"
+      }
+    },
+    {
+      "id": "pooled",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "TLPT mutualisé (DORA 26(4))",
+        "en": "Pooled TLPT (DORA 26(4))"
+      }
+    },
+    {
+      "id": "joint",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "TLPT commun (RTS 1(18))",
+        "en": "Joint TLPT (RTS 1(18))"
+      }
+    },
+    {
+      "id": "cross_border",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "FCI exploitées dans plusieurs États membres",
+        "en": "CIFs operated in several Member States"
+      }
+    },
+    {
+      "id": "ict_tpp_in_scope",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "Prestataires TIC tiers dans le périmètre",
+        "en": "ICT third-party providers in scope"
+      }
+    },
+    {
+      "id": "provider_derogation",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "Dérogation prestataire (RTS 7(2) al. 2)",
+        "en": "Provider derogation (RTS 7(2) 2nd subpara.)"
+      }
+    },
+    {
+      "id": "national_framework",
+      "type": "enum",
+      "values": [
+        "none",
+        "TIBER-FR"
+      ],
+      "default": "none",
+      "label": {
+        "fr": "Déclinaison nationale TIBER",
+        "en": "National TIBER implementation"
+      }
+    },
+    {
+      "id": "oiv_siiv_flags",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "Flags sur des SIIV d'un OIV (FR)",
+        "en": "Flags on French SIIV systems"
+      }
+    },
+    {
+      "id": "physical_scenario",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "fr": "Scénario d'intrusion physique",
+        "en": "Physical intrusion scenario"
+      }
+    }
   ],
-
   "deliverables": [
-    { "id": "DLV-INIT",        "phase": "preparation", "producers": ["CT"],  "recipients": ["TM"], "approved_by": ["TLPT_AUTH"], "annex": "RTS Annex I",   "profiles": ["entity"], "label": { "fr": "Informations d'initiation (charte projet)", "en": "TLPT initiation information (project charter)" } },
-    { "id": "DLV-RISK",        "phase": "preparation", "producers": ["CT"],  "recipients": ["TM"], "profiles": ["entity"], "sensitive": true, "label": { "fr": "Analyse de risques et mesures de maîtrise", "en": "Risk assessment and risk management measures" } },
-    { "id": "DLV-SSD",         "phase": "preparation", "producers": ["CT"],  "recipients": ["TM"], "approved_by": ["MB", "TLPT_AUTH"], "annex": "RTS Annex II", "profiles": ["entity"], "label": { "fr": "Document de spécification du périmètre", "en": "Scope specification document" } },
-    { "id": "DLV-PROVIDER-EVIDENCE", "phase": "preparation", "producers": ["TIP", "RTT"], "recipients": ["CT", "TM"], "profiles": ["entity", "ti", "rt"], "label": { "fr": "Preuves de conformité des prestataires (DORA 27, RTS 7(1))", "en": "Provider compliance evidence (DORA 27, RTS 7(1))" } },
-    { "id": "DLV-IT-POLICY",   "phase": "preparation", "producers": ["FE"],  "profiles": ["entity"], "applies_when": { "any": [ { "fact": "testers", "in": ["internal", "mixed"] } ] }, "label": { "fr": "Politique de gestion des testeurs internes", "en": "Internal testers management policy" } },
-    { "id": "DLV-TTIR",        "phase": "testing_ti",  "producers": ["TIP"], "recipients": ["CT", "TM"], "approved_by": ["TLPT_AUTH"], "annex": "RTS Annex III", "profiles": ["entity", "ti"], "sensitive": true, "label": { "fr": "Rapport de threat intelligence ciblée", "en": "Targeted threat intelligence report" } },
-    { "id": "DLV-RTTP",        "phase": "testing_rt",  "producers": ["RTT"], "recipients": ["CT", "TM", "TIP"], "approved_by": ["CT", "TLPT_AUTH"], "annex": "RTS Annex IV", "profiles": ["entity", "rt"], "sensitive": true, "label": { "fr": "Plan de test red team", "en": "Red team test plan" } },
-    { "id": "DLV-WEEKLY",      "phase": "testing_rt",  "producers": ["RTT"], "recipients": ["CT", "TM"], "profiles": ["entity", "rt"], "label": { "fr": "Rapports hebdomadaires d'avancement", "en": "Weekly progress reports" } },
-    { "id": "DLV-RESTORATION", "phase": "closure",     "producers": ["RTT", "TIP"], "recipients": ["CT"], "profiles": ["entity", "ti", "rt"], "label": { "fr": "PV de restauration", "en": "Restoration record" } },
-    { "id": "DLV-RTTR",        "phase": "closure",     "producers": ["RTT"], "recipients": ["CT", "BT", "TM"], "annex": "RTS Annex V", "profiles": ["entity", "rt"], "sensitive": true, "label": { "fr": "Rapport de test red team", "en": "Red team test report" } },
-    { "id": "DLV-BTTR",        "phase": "closure",     "producers": ["BT"],  "recipients": ["CT", "RTT", "TM"], "annex": "RTS Annex VI", "profiles": ["entity", "rt"], "sensitive": true, "label": { "fr": "Rapport de test blue team", "en": "Blue team test report" } },
-    { "id": "DLV-REPLAY-PT",   "phase": "closure",     "producers": ["CT"],  "profiles": ["entity", "rt"], "label": { "fr": "Compte rendu replay et purple teaming", "en": "Replay and purple teaming minutes" } },
-    { "id": "DLV-FEEDBACK",    "phase": "closure",     "producers": ["CT", "BT", "RTT", "TIP"], "profiles": ["entity", "ti", "rt"], "label": { "fr": "Retours réciproques sur le processus", "en": "Mutual process feedback" } },
-    { "id": "DLV-TSR",         "phase": "closure",     "producers": ["CT"],  "recipients": ["TLPT_AUTH"], "approved_by": ["TLPT_AUTH"], "annex": "RTS Annex VII", "profiles": ["entity"], "label": { "fr": "Rapport de synthèse du test", "en": "Test summary report" } },
-    { "id": "DLV-REMEDIATION", "phase": "remediation", "producers": ["CT"],  "recipients": ["TLPT_AUTH", "CA"], "profiles": ["entity"], "label": { "fr": "Plan de remédiation", "en": "Remediation plan" } },
-    { "id": "DLV-ATTESTATION", "phase": "remediation", "producers": ["TLPT_AUTH"], "recipients": ["FE"], "annex": "RTS Annex VIII", "profiles": ["entity"], "label": { "fr": "Attestation TLPT", "en": "TLPT attestation" } }
+    {
+      "id": "DLV-INIT",
+      "phase": "preparation",
+      "producers": [
+        "CT"
+      ],
+      "recipients": [
+        "TM"
+      ],
+      "approved_by": [
+        "TLPT_AUTH"
+      ],
+      "annex": "RTS Annex I",
+      "profiles": [
+        "entity"
+      ],
+      "label": {
+        "fr": "Informations d'initiation (charte projet)",
+        "en": "TLPT initiation information (project charter)"
+      }
+    },
+    {
+      "id": "DLV-RISK",
+      "phase": "preparation",
+      "producers": [
+        "CT"
+      ],
+      "recipients": [
+        "TM"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "sensitive": true,
+      "label": {
+        "fr": "Analyse de risques et mesures de maîtrise",
+        "en": "Risk assessment and risk management measures"
+      }
+    },
+    {
+      "id": "DLV-SSD",
+      "phase": "preparation",
+      "producers": [
+        "CT"
+      ],
+      "recipients": [
+        "TM"
+      ],
+      "approved_by": [
+        "MB",
+        "TLPT_AUTH"
+      ],
+      "annex": "RTS Annex II",
+      "profiles": [
+        "entity"
+      ],
+      "label": {
+        "fr": "Document de spécification du périmètre",
+        "en": "Scope specification document"
+      }
+    },
+    {
+      "id": "DLV-PROVIDER-EVIDENCE",
+      "phase": "preparation",
+      "producers": [
+        "TIP",
+        "RTT"
+      ],
+      "recipients": [
+        "CT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "label": {
+        "fr": "Preuves de conformité des prestataires (DORA 27, RTS 7(1))",
+        "en": "Provider compliance evidence (DORA 27, RTS 7(1))"
+      }
+    },
+    {
+      "id": "DLV-IT-POLICY",
+      "phase": "preparation",
+      "producers": [
+        "FE"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "applies_when": {
+        "any": [
+          {
+            "fact": "testers",
+            "in": [
+              "internal",
+              "mixed"
+            ]
+          }
+        ]
+      },
+      "label": {
+        "fr": "Politique de gestion des testeurs internes",
+        "en": "Internal testers management policy"
+      }
+    },
+    {
+      "id": "DLV-TTIR",
+      "phase": "testing_ti",
+      "producers": [
+        "TIP"
+      ],
+      "recipients": [
+        "CT",
+        "TM"
+      ],
+      "approved_by": [
+        "TLPT_AUTH"
+      ],
+      "annex": "RTS Annex III",
+      "profiles": [
+        "entity",
+        "ti"
+      ],
+      "sensitive": true,
+      "label": {
+        "fr": "Rapport de threat intelligence ciblée",
+        "en": "Targeted threat intelligence report"
+      }
+    },
+    {
+      "id": "DLV-RTTP",
+      "phase": "testing_rt",
+      "producers": [
+        "RTT"
+      ],
+      "recipients": [
+        "CT",
+        "TM",
+        "TIP"
+      ],
+      "approved_by": [
+        "CT",
+        "TLPT_AUTH"
+      ],
+      "annex": "RTS Annex IV",
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "sensitive": true,
+      "label": {
+        "fr": "Plan de test red team",
+        "en": "Red team test plan"
+      }
+    },
+    {
+      "id": "DLV-WEEKLY",
+      "phase": "testing_rt",
+      "producers": [
+        "RTT"
+      ],
+      "recipients": [
+        "CT",
+        "TM"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "label": {
+        "fr": "Rapports hebdomadaires d'avancement",
+        "en": "Weekly progress reports"
+      }
+    },
+    {
+      "id": "DLV-RESTORATION",
+      "phase": "closure",
+      "producers": [
+        "RTT",
+        "TIP"
+      ],
+      "recipients": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "label": {
+        "fr": "PV de restauration",
+        "en": "Restoration record"
+      }
+    },
+    {
+      "id": "DLV-RTTR",
+      "phase": "closure",
+      "producers": [
+        "RTT"
+      ],
+      "recipients": [
+        "CT",
+        "BT",
+        "TM"
+      ],
+      "annex": "RTS Annex V",
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "sensitive": true,
+      "label": {
+        "fr": "Rapport de test red team",
+        "en": "Red team test report"
+      }
+    },
+    {
+      "id": "DLV-BTTR",
+      "phase": "closure",
+      "producers": [
+        "BT"
+      ],
+      "recipients": [
+        "CT",
+        "RTT",
+        "TM"
+      ],
+      "annex": "RTS Annex VI",
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "sensitive": true,
+      "label": {
+        "fr": "Rapport de test blue team",
+        "en": "Blue team test report"
+      }
+    },
+    {
+      "id": "DLV-REPLAY-PT",
+      "phase": "closure",
+      "producers": [
+        "CT"
+      ],
+      "profiles": [
+        "entity",
+        "rt"
+      ],
+      "label": {
+        "fr": "Compte rendu replay et purple teaming",
+        "en": "Replay and purple teaming minutes"
+      }
+    },
+    {
+      "id": "DLV-FEEDBACK",
+      "phase": "closure",
+      "producers": [
+        "CT",
+        "BT",
+        "RTT",
+        "TIP"
+      ],
+      "profiles": [
+        "entity",
+        "ti",
+        "rt"
+      ],
+      "label": {
+        "fr": "Retours réciproques sur le processus",
+        "en": "Mutual process feedback"
+      }
+    },
+    {
+      "id": "DLV-TSR",
+      "phase": "closure",
+      "producers": [
+        "CT"
+      ],
+      "recipients": [
+        "TLPT_AUTH"
+      ],
+      "approved_by": [
+        "TLPT_AUTH"
+      ],
+      "annex": "RTS Annex VII",
+      "profiles": [
+        "entity"
+      ],
+      "label": {
+        "fr": "Rapport de synthèse du test",
+        "en": "Test summary report"
+      }
+    },
+    {
+      "id": "DLV-REMEDIATION",
+      "phase": "remediation",
+      "producers": [
+        "CT"
+      ],
+      "recipients": [
+        "TLPT_AUTH",
+        "CA"
+      ],
+      "profiles": [
+        "entity"
+      ],
+      "label": {
+        "fr": "Plan de remédiation",
+        "en": "Remediation plan"
+      }
+    },
+    {
+      "id": "DLV-ATTESTATION",
+      "phase": "remediation",
+      "producers": [
+        "TLPT_AUTH"
+      ],
+      "recipients": [
+        "FE"
+      ],
+      "annex": "RTS Annex VIII",
+      "profiles": [
+        "entity"
+      ],
+      "label": {
+        "fr": "Attestation TLPT",
+        "en": "TLPT attestation"
+      }
+    }
   ],
-
   "deadlines": [
-    { "id": "D-01", "anchor": "N0", "kind": "max", "offset": { "value": 3, "unit": "months" }, "carriers": ["CT"], "target": { "deliverable": "DLV-INIT" }, "sources": ["RTS-9.2"], "label": { "fr": "Remise des informations d'initiation", "en": "Submit initiation information" } },
-    { "id": "D-02", "anchor": "N0", "kind": "max", "offset": { "value": 6, "unit": "months" }, "carriers": ["CT", "MB"], "target": { "deliverable": "DLV-SSD" }, "sources": ["RTS-9.6"], "label": { "fr": "Remise du SSD approuvé par l'organe de direction", "en": "Submit SSD approved by management body" } },
-    { "id": "D-03", "anchor": "TESTING_START", "kind": "before", "carriers": ["FE"], "target": { "milestone": { "fr": "Achat / affectation des testeurs et du TIP terminé", "en": "Procurement/assignment of testers and TIP completed" } }, "sources": ["RTS-9.9"], "label": { "fr": "Prestataires en place avant la phase de test", "en": "Providers in place before testing phase" } },
-    { "id": "D-04", "anchor": "TESTING_START", "kind": "before", "carriers": ["CT"], "target": { "deliverable": "DLV-RISK" }, "sources": ["RTS-9.10"], "label": { "fr": "Consultation des TM sur l'analyse de risques", "en": "Consult TMs on risk assessment" } },
-    { "id": "D-05", "anchor": "PROVIDERS_CONTRACTED", "kind": "before", "carriers": ["CT"], "target": { "deliverable": "DLV-PROVIDER-EVIDENCE" }, "sources": ["RTS-9.11"], "label": { "fr": "Preuves de conformité des prestataires aux TM avant contrat", "en": "Provider compliance evidence to TMs before contracting" } },
-    { "id": "D-06", "anchor": "R0", "kind": "min", "offset": { "value": 12, "unit": "weeks" }, "end_event": "R1", "carriers": ["RTT", "CT"], "sources": ["RTS-11.5"], "label": { "fr": "Phase red team active d'au moins 12 semaines", "en": "Active red team phase of at least 12 weeks" }, "note": { "fr": "Le purple teaming limité (RTS 11(10)) compte dans la durée.", "en": "Limited purple teaming (RTS 11(10)) counts towards the duration." } },
-    { "id": "D-07", "anchor": "R0", "kind": "recurring", "every": { "value": 1, "unit": "weeks" }, "until": "R1", "carriers": ["RTT"], "target": { "deliverable": "DLV-WEEKLY" }, "sources": ["RTS-11.7"], "label": { "fr": "Rapport au moins hebdomadaire au CT et aux TM", "en": "At least weekly report to CT and TMs" } },
-    { "id": "D-08", "anchor": "R1", "kind": "max", "offset": { "value": 4, "unit": "weeks" }, "carriers": ["RTT"], "target": { "deliverable": "DLV-RTTR" }, "sources": ["RTS-12.2"], "label": { "fr": "Rapport de test red team", "en": "Red team test report" } },
-    { "id": "D-09", "anchor": "R1", "kind": "max", "offset": { "value": 10, "unit": "weeks" }, "carriers": ["BT"], "target": { "deliverable": "DLV-BTTR" }, "sources": ["RTS-12.4"], "label": { "fr": "Rapport de test blue team", "en": "Blue team test report" } },
-    { "id": "D-10", "anchor": "R1", "kind": "max", "offset": { "value": 10, "unit": "weeks" }, "carriers": ["BT", "RTT", "CT"], "target": { "deliverable": "DLV-REPLAY-PT" }, "sources": ["RTS-12.5"], "label": { "fr": "Replay et purple teaming", "en": "Replay and purple teaming" } },
-    { "id": "D-11", "anchor": "N2", "kind": "max", "offset": { "value": 8, "unit": "weeks" }, "carriers": ["FE"], "target": { "deliverable": "DLV-TSR" }, "sources": ["RTS-12.7"], "label": { "fr": "Rapport de synthèse soumis pour approbation", "en": "Test summary report submitted for approval" } },
-    { "id": "D-12", "anchor": "N2", "kind": "max", "offset": { "value": 8, "unit": "weeks" }, "carriers": ["FE"], "target": { "deliverable": "DLV-REMEDIATION" }, "sources": ["RTS-13.1"], "label": { "fr": "Plan de remédiation transmis", "en": "Remediation plan provided" } },
-    { "id": "D-13", "anchor": "PREV_TLPT", "kind": "max", "offset": { "value": 3, "unit": "years" }, "overridable": true, "carriers": ["FE"], "target": { "milestone": { "fr": "TLPT suivant", "en": "Next TLPT" } }, "sources": ["DORA-26.1"], "label": { "fr": "TLPT au moins tous les 3 ans", "en": "TLPT at least every 3 years" }, "note": { "fr": "Fréquence modulable par l'autorité compétente : surcharge justifiée.", "en": "Frequency may be adjusted by the competent authority: justified override." } },
-    { "id": "D-15", "anchor": "HOST_INFORMED", "kind": "max", "offset": { "value": 20, "unit": "working_days" }, "display": "info", "applies_when": { "all": [ { "fact": "cross_border", "eq": true } ] }, "carriers": ["TLPT_AUTH"], "sources": ["RTS-16.1"], "label": { "fr": "Positionnement des autorités d'accueil", "en": "Host authorities' response" } }
+    {
+      "id": "D-01",
+      "anchor": "N0",
+      "kind": "max",
+      "offset": {
+        "value": 3,
+        "unit": "months"
+      },
+      "carriers": [
+        "CT"
+      ],
+      "target": {
+        "deliverable": "DLV-INIT"
+      },
+      "sources": [
+        "RTS-9.2"
+      ],
+      "label": {
+        "fr": "Remise des informations d'initiation",
+        "en": "Submit initiation information"
+      }
+    },
+    {
+      "id": "D-02",
+      "anchor": "N0",
+      "kind": "max",
+      "offset": {
+        "value": 6,
+        "unit": "months"
+      },
+      "carriers": [
+        "CT",
+        "MB"
+      ],
+      "target": {
+        "deliverable": "DLV-SSD"
+      },
+      "sources": [
+        "RTS-9.6"
+      ],
+      "label": {
+        "fr": "Remise du SSD approuvé par l'organe de direction",
+        "en": "Submit SSD approved by management body"
+      }
+    },
+    {
+      "id": "D-03",
+      "anchor": "TESTING_START",
+      "kind": "before",
+      "carriers": [
+        "FE"
+      ],
+      "target": {
+        "milestone": {
+          "fr": "Achat / affectation des testeurs et du TIP terminé",
+          "en": "Procurement/assignment of testers and TIP completed"
+        }
+      },
+      "sources": [
+        "RTS-9.9"
+      ],
+      "label": {
+        "fr": "Prestataires en place avant la phase de test",
+        "en": "Providers in place before testing phase"
+      }
+    },
+    {
+      "id": "D-04",
+      "anchor": "TESTING_START",
+      "kind": "before",
+      "carriers": [
+        "CT"
+      ],
+      "target": {
+        "deliverable": "DLV-RISK"
+      },
+      "sources": [
+        "RTS-9.10"
+      ],
+      "label": {
+        "fr": "Consultation des TM sur l'analyse de risques",
+        "en": "Consult TMs on risk assessment"
+      }
+    },
+    {
+      "id": "D-05",
+      "anchor": "PROVIDERS_CONTRACTED",
+      "kind": "before",
+      "carriers": [
+        "CT"
+      ],
+      "target": {
+        "deliverable": "DLV-PROVIDER-EVIDENCE"
+      },
+      "sources": [
+        "RTS-9.11"
+      ],
+      "label": {
+        "fr": "Preuves de conformité des prestataires aux TM avant contrat",
+        "en": "Provider compliance evidence to TMs before contracting"
+      }
+    },
+    {
+      "id": "D-06",
+      "anchor": "R0",
+      "kind": "min",
+      "offset": {
+        "value": 12,
+        "unit": "weeks"
+      },
+      "end_event": "R1",
+      "carriers": [
+        "RTT",
+        "CT"
+      ],
+      "sources": [
+        "RTS-11.5"
+      ],
+      "label": {
+        "fr": "Phase red team active d'au moins 12 semaines",
+        "en": "Active red team phase of at least 12 weeks"
+      },
+      "note": {
+        "fr": "Le purple teaming limité (RTS 11(10)) compte dans la durée.",
+        "en": "Limited purple teaming (RTS 11(10)) counts towards the duration."
+      }
+    },
+    {
+      "id": "D-07",
+      "anchor": "R0",
+      "kind": "recurring",
+      "every": {
+        "value": 1,
+        "unit": "weeks"
+      },
+      "until": "R1",
+      "carriers": [
+        "RTT"
+      ],
+      "target": {
+        "deliverable": "DLV-WEEKLY"
+      },
+      "sources": [
+        "RTS-11.7"
+      ],
+      "label": {
+        "fr": "Rapport au moins hebdomadaire au CT et aux TM",
+        "en": "At least weekly report to CT and TMs"
+      }
+    },
+    {
+      "id": "D-08",
+      "anchor": "R1",
+      "kind": "max",
+      "offset": {
+        "value": 4,
+        "unit": "weeks"
+      },
+      "carriers": [
+        "RTT"
+      ],
+      "target": {
+        "deliverable": "DLV-RTTR"
+      },
+      "sources": [
+        "RTS-12.2"
+      ],
+      "label": {
+        "fr": "Rapport de test red team",
+        "en": "Red team test report"
+      }
+    },
+    {
+      "id": "D-09",
+      "anchor": "R1",
+      "kind": "max",
+      "offset": {
+        "value": 10,
+        "unit": "weeks"
+      },
+      "carriers": [
+        "BT"
+      ],
+      "target": {
+        "deliverable": "DLV-BTTR"
+      },
+      "sources": [
+        "RTS-12.4"
+      ],
+      "label": {
+        "fr": "Rapport de test blue team",
+        "en": "Blue team test report"
+      }
+    },
+    {
+      "id": "D-10",
+      "anchor": "R1",
+      "kind": "max",
+      "offset": {
+        "value": 10,
+        "unit": "weeks"
+      },
+      "carriers": [
+        "BT",
+        "RTT",
+        "CT"
+      ],
+      "target": {
+        "deliverable": "DLV-REPLAY-PT"
+      },
+      "sources": [
+        "RTS-12.5"
+      ],
+      "label": {
+        "fr": "Replay et purple teaming",
+        "en": "Replay and purple teaming"
+      }
+    },
+    {
+      "id": "D-11",
+      "anchor": "N2",
+      "kind": "max",
+      "offset": {
+        "value": 8,
+        "unit": "weeks"
+      },
+      "carriers": [
+        "FE"
+      ],
+      "target": {
+        "deliverable": "DLV-TSR"
+      },
+      "sources": [
+        "RTS-12.7"
+      ],
+      "label": {
+        "fr": "Rapport de synthèse soumis pour approbation",
+        "en": "Test summary report submitted for approval"
+      }
+    },
+    {
+      "id": "D-12",
+      "anchor": "N2",
+      "kind": "max",
+      "offset": {
+        "value": 8,
+        "unit": "weeks"
+      },
+      "carriers": [
+        "FE"
+      ],
+      "target": {
+        "deliverable": "DLV-REMEDIATION"
+      },
+      "sources": [
+        "RTS-13.1"
+      ],
+      "label": {
+        "fr": "Plan de remédiation transmis",
+        "en": "Remediation plan provided"
+      }
+    },
+    {
+      "id": "D-13",
+      "anchor": "PREV_TLPT",
+      "kind": "max",
+      "offset": {
+        "value": 3,
+        "unit": "years"
+      },
+      "overridable": true,
+      "carriers": [
+        "FE"
+      ],
+      "target": {
+        "milestone": {
+          "fr": "TLPT suivant",
+          "en": "Next TLPT"
+        }
+      },
+      "sources": [
+        "DORA-26.1"
+      ],
+      "label": {
+        "fr": "TLPT au moins tous les 3 ans",
+        "en": "TLPT at least every 3 years"
+      },
+      "note": {
+        "fr": "Fréquence modulable par l'autorité compétente : surcharge justifiée.",
+        "en": "Frequency may be adjusted by the competent authority: justified override."
+      }
+    },
+    {
+      "id": "D-15",
+      "anchor": "HOST_INFORMED",
+      "kind": "max",
+      "offset": {
+        "value": 20,
+        "unit": "working_days"
+      },
+      "display": "info",
+      "applies_when": {
+        "all": [
+          {
+            "fact": "cross_border",
+            "eq": true
+          }
+        ]
+      },
+      "carriers": [
+        "TLPT_AUTH"
+      ],
+      "sources": [
+        "RTS-16.1"
+      ],
+      "label": {
+        "fr": "Positionnement des autorités d'accueil",
+        "en": "Host authorities' response"
+      }
+    }
   ],
-
   "notes": [
-    { "id": "NOTE-D14", "targets": ["DORA-26.8.1"], "text": { "fr": "D-14 (testeurs externes au moins tous les trois tests) est une règle de cycle, pas une échéance datée. Elle est portée par l'item DORA-26.8.1.", "en": "D-14 (external testers at least every three tests) is a cycle rule, not a dated deadline; handled by item DORA-26.8.1." } },
-    { "id": "NOTE-AUTH-DELAYS", "text": { "fr": "Le RTS ne fixe aucun délai à l'autorité pour ses validations. Ces événements sont des jalons d'attente.", "en": "The RTS sets no deadline for authority validations; those events are waiting milestones." } }
+    {
+      "id": "NOTE-D14",
+      "targets": [
+        "DORA-26.8.1"
+      ],
+      "text": {
+        "fr": "D-14 (testeurs externes au moins tous les trois tests) est une règle de cycle, pas une échéance datée. Elle est portée par l'item DORA-26.8.1.",
+        "en": "D-14 (external testers at least every three tests) is a cycle rule, not a dated deadline; handled by item DORA-26.8.1."
+      }
+    },
+    {
+      "id": "NOTE-AUTH-DELAYS",
+      "text": {
+        "fr": "Le RTS ne fixe aucun délai à l'autorité pour ses validations. Ces événements sont des jalons d'attente.",
+        "en": "The RTS sets no deadline for authority validations; those events are waiting milestones."
+      }
+    }
   ]
 }

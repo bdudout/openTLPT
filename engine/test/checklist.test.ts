@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { effectiveFacts } from '../src/applicability.ts';
-import { buildChecklist, expandProfile, formatSource, totalProgress, type ChecklistInput, type PackDef, type ProfileDef } from '../src/checklist.ts';
+import { buildChecklist, expandProfile, formatSource, stepwiseProgress, totalProgress, type ChecklistInput, type PackDef, type ProfileDef } from '../src/checklist.ts';
 import type { CoreRef, FactValue } from '../src/types.ts';
 
 const load = (name: string) => JSON.parse(readFileSync(new URL(`../../referentiel/packs/${name}.json`, import.meta.url), 'utf8'));
@@ -13,7 +13,8 @@ function run(profile: string, facts: Record<string, FactValue> = {}, responses: 
   return buildChecklist({ packs, profiles: core.profiles, profile, facts: effectiveFacts(core.facts, facts), responses, refVersion: 'R1' });
 }
 const ids = (es: { item: { id: string } }[]) => es.map((e) => e.item.id);
-const all = (r: ReturnType<typeof run>, kind: 'obligations' | 'practices') => Object.values(r.phases).flatMap((p) => ids(p[kind]));
+const all = (r: ReturnType<typeof run>, kind: 'obligations' | 'practices') =>
+  [...Object.values(r.phases).flatMap((p) => ids(p[kind])), ...(kind === 'obligations' ? ids(r.standing.obligations) : [])];
 
 test('profils : TI+RT = union de TI et RT', () => {
   assert.deepEqual([...expandProfile(core.profiles, 'ti_rt')].sort(), ['rt', 'ti', 'ti_rt']);
@@ -66,7 +67,7 @@ test('regroupement par phase et liens : reformulations et divergences rattachée
 test('progression : seules les obligations « à cocher » comptent ; réponses et versions périmées', () => {
   const base = run('entity');
   const prep = base.phases.preparation?.progress;
-  assert.ok(prep && prep.total > 30 && prep.open === prep.total && prep.handled === 0);
+  assert.ok(prep && prep.total >= 8 && prep.open === prep.total && prep.handled === 0);
   // RTS-9.1 est « info » (jalon de l'autorité) : non compté.
   assert.ok(base.phases.preparation?.obligations.some((e) => e.item.id === 'RTS-9.1'));
   const r = run('entity', {}, {
@@ -90,4 +91,31 @@ test('références lisibles', () => {
   assert.equal(formatSource({ instrument: 'RTS_2025_1190', article: '7', paragraph: '1', point: 'e(v)' }), 'RTS 2025/1190, art. 7(1)(e)(v)');
   assert.equal(formatSource({ instrument: 'RTS_2025_1190', article: '4', paragraph: '2', point: 'f' }), 'RTS 2025/1190, art. 4(2)(f)');
   assert.equal(formatSource({ instrument: 'TIBER-EU_2025', article: '7.3', section: 'x' }), 'TIBER-EU (2025) §7.3');
+});
+
+test('socle permanent séparé des phases, avec sa propre progression', () => {
+  const r = run('entity', {}, {
+    'RTS-4.1': { status: 'done', justification: null, decided_by: null, ref_version: 'R1' },
+    'RTS-9.2': { status: 'done', justification: null, decided_by: null, ref_version: 'R1' },
+  });
+  const standing = ids(r.standing.obligations);
+  assert.ok(standing.includes('RTS-4.1') && standing.includes('DORA-27.1.a') && standing.includes('RTS-7.1.i'));
+  assert.ok(!standing.includes('RTS-9.2'), 'les étapes datées restent dans les phases');
+  const inPhases = Object.values(r.phases).flatMap((p) => ids(p.obligations));
+  assert.ok(inPhases.includes('RTS-9.2') && !inPhases.includes('RTS-4.1'), 'aucun point du socle dans les phases');
+  assert.ok(r.standing.obligations.every((e) => e.item.scope === 'standing' && !!e.item.theme));
+  assert.equal(r.standing.progress.handled, 1);
+  assert.equal(stepwiseProgress(r).handled, 1);
+  assert.equal(totalProgress(r).handled, 2);
+  assert.equal(totalProgress(r).total, r.standing.progress.total + stepwiseProgress(r).total);
+  // Bonnes pratiques liées au socle (ex. EU-05 reformule RTS-4.2.f) ; elles restent aussi dans leur phase.
+  assert.ok(ids(r.standing.practices).includes('EU-05'));
+  assert.ok(ids(r.phases.preparation?.practices ?? []).includes('EU-05'));
+});
+
+test('socle filtré par profil et applicabilité', () => {
+  const ti = ids(run('ti').standing.obligations);
+  assert.ok(ti.includes('RTS-7.1.c') && !ti.includes('RTS-7.1.d') && !ti.includes('RTS-4.1'));
+  assert.ok(!ids(run('entity').standing.obligations).includes('RTS-15.1'));
+  assert.ok(ids(run('entity', { testers: 'internal' }).standing.obligations).includes('RTS-15.1'));
 });

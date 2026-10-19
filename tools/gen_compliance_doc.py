@@ -22,18 +22,6 @@ FACT_VALUE = {
 }
 UNIT = {"days": "jours", "weeks": "semaines", "months": "mois", "working_days": "jours ouvrés", "years": "ans"}
 
-# Thèmes des points permanents, par instrument et article (premier critère qui correspond).
-THEMES = [
-    ("Assujettissement, fréquence et périmètre", lambda s: (s["instrument"] == "DORA" and s["article"] == "26" and s.get("paragraph") in ("1", "2")) or (s["instrument"] == "RTS_2025_1190" and s["article"] == "2")),
-    ("Prestataires TIC tiers, test mutualisé et maîtrise des risques du test", lambda s: s["instrument"] == "DORA" and s["article"] == "26" and s.get("paragraph") in ("3", "4", "5")),
-    ("Testeurs internes ou externes", lambda s: (s["instrument"] == "DORA" and (s["article"] == "27" and s.get("paragraph") == "2" or s["article"] == "26" and s.get("paragraph") == "8")) or (s["instrument"] == "RTS_2025_1190" and s["article"] == "15")),
-    ("Exigences sur les prestataires (TI et red team)", lambda s: (s["instrument"] == "DORA" and s["article"] == "27") or (s["instrument"] == "RTS_2025_1190" and s["article"] == "7")),
-    ("Organisation et confidentialité", lambda s: s["instrument"] == "RTS_2025_1190" and s["article"] == "4"),
-    ("Gestion des risques du TLPT", lambda s: s["instrument"] == "RTS_2025_1190" and s["article"] in ("5", "6")),
-    ("TLPT communs, mutualisés et transfrontières", lambda s: s["instrument"] == "RTS_2025_1190" and s["article"] in ("8", "16")),
-]
-
-
 def load():
     packs = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted(PACKS.glob("*.json"))}
     return packs["core"], [packs["dora-rts"]], [packs[k] for k in ("tiber-eu", "tiber-fr") if k in packs]
@@ -135,10 +123,10 @@ def build():
     w("")
     by_theme = defaultdict(list)
     for i in standing:
-        theme = next((name for name, test in THEMES if test(i["source"])), "Autres")
-        by_theme[theme].append(i)
-    for name, _ in THEMES + [("Autres", None)]:
-        items = by_theme.get(name)
+        by_theme[i["theme"]].append(i)
+    for th in sorted(core.get("themes", []), key=lambda x: x["order"]):
+        items = by_theme.get(th["id"])
+        name = fr(th["label"])
         if not items:
             continue
         w(f"### {name} ({len(items)})")

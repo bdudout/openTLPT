@@ -69,7 +69,16 @@ async function runOne(name) {
     await page.getByRole('button', { name: 'Checklists' }).click();
     const obl = page.getByTestId('obligations');
     const bp = page.getByTestId('practices');
+    // Vue par défaut : socle permanent, séparé des étapes datées.
+    await page.getByRole('tab', { name: /Socle permanent/ }).waitFor();
+    await obl.locator('article[data-item="RTS-4.1"]').waitFor();
+    assert.equal(await obl.locator('article[data-item="RTS-9.2"]').count(), 0, 'pas d\'étape datée dans le socle');
+    await obl.locator('h4[data-theme="th_providers"]').waitFor();
+    await obl.locator('article[data-item="RTS-4.1"] select').selectOption('done');
+    await page.getByTestId('cl-summary').filter({ hasText: /Socle : 1\/\d+/ }).waitFor();
+    await page.getByRole('tab', { name: /Préparation/ }).click();
     await obl.locator('article[data-item="RTS-9.2"]').waitFor();
+    assert.equal(await obl.locator('article[data-item="RTS-4.1"]').count(), 0, 'pas de point du socle dans les phases');
     assert.equal(await obl.locator('article[data-item^="EU-"]').count(), 0, 'aucune bonne pratique côté obligations');
     assert.equal(await bp.locator('article[data-item^="RTS-"], article[data-item^="DORA-"]').count(), 0, 'aucune obligation côté bonnes pratiques');
     assert.ok(await bp.locator('article[data-item="EU-02"]').count() === 1);
@@ -183,6 +192,8 @@ async function runOne(name) {
     assert.match(await page.locator('.bar .help').innerText(), /Dominique \(CTL\)/);
     assert.equal(await page.getByRole('alert').filter({ hasText: 'intégrité' }).count(), 0);
     await page.getByRole('button', { name: 'Checklists' }).click();
+    await page.getByTestId('cl-summary').filter({ hasText: /Socle : 1\/\d+ · Au fil du test : 2\/\d+/ }).waitFor();
+    await page.getByRole('tab', { name: /Préparation/ }).click();
     await page.locator('article[data-item="RTS-9.2"][data-status="done"]').waitFor();
     await page.locator('article[data-item="RTS-9.7"]').filter({ hasText: 'Une seule FCI concernée' }).waitFor();
     await page.getByTestId('practices').locator('article[data-item="FR-01"]').waitFor();

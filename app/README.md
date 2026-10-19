@@ -7,7 +7,10 @@ Fonctions de cette première version :
 - **création** d'un exercice : nom de code, rôle, auteur, passphrase d'au moins 14 caractères, avec confirmation explicite qu'aucune récupération n'est possible ;
 - **ouverture** d'un fichier `.tlpt`. L'intégrité du journal est vérifiée, une rupture déclenche une alerte, et un fichier PBKDF2 sera réécrit en Argon2id ;
 - **calendrier des échéances réglementaires**, calculé par le moteur à partir des dates de la chronologie et des caractéristiques de l'exercice, avec une alerte si la chronologie est incohérente ;
-- **checklists par phase** (onglet dédié) :
+- **checklists de conformité** (onglet dédié) :
+  - **socle permanent** : les points valables pour tout l'exercice, regroupés par thème avec leur propre progression ;
+  - **un onglet par phase** pour les points à assurer au fil du test ;
+  - un résumé global « Socle · Au fil du test · Total » ;
   - deux colonnes séparées : *Obligations DORA / RTS*, qui comptent dans la progression, et *Bonnes pratiques TIBER*, signalées comme non contraignantes ;
   - filtrage par rôle et par caractéristiques de l'exercice ; TIBER-FR n'apparaît que si la déclinaison nationale est choisie ;
   - statuts : à traiter, en cours, traité, non applicable (justification), écart accepté (justification + décideur) ;

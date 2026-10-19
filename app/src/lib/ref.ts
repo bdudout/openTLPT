@@ -20,6 +20,7 @@ interface CorePack extends CoreRef {
   profiles: ProfileDef[];
   actors: Labeled[];
   phases: PhaseDef[];
+  themes: PhaseDef[];
   events: UiEventDef[];
   facts: UiFactDef[];
   deliverables: DeliverableDef[];
@@ -43,3 +44,4 @@ export const eventsById = index(core.events);
 export const phasesById = index(core.phases);
 export const deliverablesById = index(core.deliverables);
 export const phasesOrdered = [...core.phases].sort((a, b) => a.order - b.order);
+export const themesOrdered = [...core.themes].sort((a, b) => a.order - b.order);

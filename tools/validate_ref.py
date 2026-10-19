@@ -44,7 +44,7 @@ def schema_check(ref_dir, packs, errors):
 
 
 def cross_check(packs, errors):
-    kinds = ["profiles", "actors", "phases", "events", "facts", "deliverables", "deadlines", "items"]
+    kinds = ["profiles", "actors", "phases", "themes", "events", "facts", "deliverables", "deadlines", "items"]
     index = {k: {} for k in kinds}
     seen = {}
     for name, pack in packs:
@@ -137,6 +137,13 @@ def cross_check(packs, errors):
 
     for it_id, (name, _, it) in index["items"].items():
         ref(name, f"item {it_id}", "phases", it["phase"])
+        if it.get("scope") == "standing":
+            if "theme" not in it:
+                errors.append(f"{name}: item {it_id}: standing obligation without theme")
+            else:
+                ref(name, f"item {it_id}.theme", "themes", it["theme"])
+        elif "theme" in it:
+            errors.append(f"{name}: item {it_id}: theme is reserved to standing obligations")
         for a in it["carriers"]:
             ref(name, f"item {it_id}.carriers", "actors", a)
         for p in it["profiles"]:

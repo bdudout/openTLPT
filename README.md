@@ -81,7 +81,7 @@ Une règle de droit national relayée par un guide est marquée « obligation na
 | Onglet | Contenu |
 |---|---|
 | **Échéances et chronologie** | Les 14 échéances réglementaires, chacune avec son statut (à venir, bientôt, en retard, fait, fait en retard, en attente d'une date…) ; la chronologie de l'exercice par phase, avec alerte en cas d'incohérence ; les caractéristiques de l'exercice qui rendent les items applicables ou non |
-| **Checklists** | Pour chaque phase, deux colonnes séparées : *Obligations*, avec l'avancement, et *Bonnes pratiques*. Statuts : à traiter, en cours, traité, non applicable (justification obligatoire), écart accepté (justification et décideur obligatoires) |
+| **Checklists** | Un onglet **Socle permanent**, qui regroupe les 47 points par thème avec leur propre progression, puis un onglet par phase pour les **points au fil du test**. Un résumé global indique « Socle x/y · Au fil du test x/y ». Dans chaque vue, deux colonnes séparées : *Obligations*, avec l'avancement, et *Bonnes pratiques*. Statuts : à traiter, en cours, traité, non applicable (justification obligatoire), écart accepté (justification et décideur obligatoires) |
 | **Livrables** | Livrables attendus et leurs échéances ; statut, version, emplacement, dates ; **empreinte SHA-256 calculée sur le poste**, sans copier le document, puis vérification « conforme » ou « différent ». La date de remise vaut réalisation de l'échéance |
 | **Registres** | Rapports hebdomadaires, qui alimentent D-07 ; leg-ups, avec alerte RTS 11(8) ; détections, suspensions et purple teaming limité, avec alertes RTS 11(9) / 11(10) |
 

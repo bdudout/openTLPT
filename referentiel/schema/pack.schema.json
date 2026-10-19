@@ -16,6 +16,7 @@
     "profiles":     { "type": "array", "items": { "$ref": "#/$defs/Profile" } },
     "actors":       { "type": "array", "items": { "$ref": "#/$defs/Actor" } },
     "phases":       { "type": "array", "items": { "$ref": "#/$defs/Phase" } },
+    "themes":       { "type": "array", "items": { "$ref": "#/$defs/Theme" } },
     "events":       { "type": "array", "items": { "$ref": "#/$defs/Event" } },
     "facts":        { "type": "array", "items": { "$ref": "#/$defs/Fact" } },
     "deliverables": { "type": "array", "items": { "$ref": "#/$defs/Deliverable" } },
@@ -86,6 +87,16 @@
         "label": { "$ref": "#/$defs/LocalizedText" },
         "starts_at": { "$ref": "#/$defs/Id" },
         "ends_at": { "$ref": "#/$defs/Id" }
+      }
+    },
+    "Theme": {
+      "type": "object",
+      "required": ["id", "order", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "order": { "type": "integer", "minimum": 0 },
+        "label": { "$ref": "#/$defs/LocalizedText" }
       }
     },
     "Event": {
@@ -234,6 +245,7 @@
           "enum": ["standing", "stepwise"],
           "description": "Obligations only. standing = permanent compliance point (applies to the whole exercise); stepwise = point to secure as the test progresses (dated step or validation)."
         },
+        "theme": { "$ref": "#/$defs/Id", "description": "Standing obligations only: theme id from core.themes." },
         "matrix_ref": { "type": "string" },
         "source": { "$ref": "#/$defs/LegalRef" },
         "phase": { "$ref": "#/$defs/Id" },
