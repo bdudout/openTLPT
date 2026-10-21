@@ -6,6 +6,7 @@
   import Checklists from './Checklists.svelte';
   import Deliverables from './Deliverables.svelte';
   import Registers from './Registers.svelte';
+  import Dashboard from './Dashboard.svelte';
   import {
     checkEventOrder, computeDeadlines, effectiveFacts, type DeadlineResult, type FactValue,
   } from '../../../engine/src/index.ts';
@@ -43,7 +44,6 @@
 
   function onLock() { lock(); }
 
-  let tab = $state<'deadlines' | 'checklists' | 'deliverables' | 'registers'>('deadlines');
 </script>
 
 <section class="bar card">
@@ -69,13 +69,16 @@
 {/each}
 
 <nav class="tabs" aria-label="openTLPT">
-  <button type="button" class="tab" aria-pressed={tab === 'deadlines'} onclick={() => (tab = 'deadlines')}>{t('tab.deadlines')}</button>
-  <button type="button" class="tab" aria-pressed={tab === 'checklists'} onclick={() => (tab = 'checklists')}>{t('tab.checklists')}</button>
-  <button type="button" class="tab" aria-pressed={tab === 'deliverables'} onclick={() => (tab = 'deliverables')}>{t('tab.deliverables')}</button>
-  <button type="button" class="tab" aria-pressed={tab === 'registers'} onclick={() => (tab = 'registers')}>{t('tab.registers')}</button>
+  <button type="button" class="tab" aria-pressed={ui.tab === 'dashboard'} onclick={() => (ui.tab = 'dashboard')}>{t('tab.dashboard')}</button>
+  <button type="button" class="tab" aria-pressed={ui.tab === 'deadlines'} onclick={() => (ui.tab = 'deadlines')}>{t('tab.deadlines')}</button>
+  <button type="button" class="tab" aria-pressed={ui.tab === 'checklists'} onclick={() => (ui.tab = 'checklists')}>{t('tab.checklists')}</button>
+  <button type="button" class="tab" aria-pressed={ui.tab === 'deliverables'} onclick={() => (ui.tab = 'deliverables')}>{t('tab.deliverables')}</button>
+  <button type="button" class="tab" aria-pressed={ui.tab === 'registers'} onclick={() => (ui.tab = 'registers')}>{t('tab.registers')}</button>
 </nav>
 
-{#if tab === 'deadlines'}
+{#if ui.tab === 'dashboard'}
+<Dashboard />
+{:else if ui.tab === 'deadlines'}
 <section class="card block" aria-labelledby="h-deadlines">
   <div class="head">
     <h2 id="h-deadlines">{t('sec.deadlines')}</h2>
@@ -176,9 +179,9 @@
     {/each}
   </section>
 </div>
-{:else if tab === 'checklists'}
+{:else if ui.tab === 'checklists'}
 <Checklists />
-{:else if tab === 'deliverables'}
+{:else if ui.tab === 'deliverables'}
 <Deliverables />
 {:else}
 <Registers />

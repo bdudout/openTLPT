@@ -10,6 +10,7 @@ Il n'appelle jamais l'horloge système et ne fait aucune E/S : la date du jour, 
 | `deadlines.ts` | Échéances `max` / `min` / `before` / `recurring`, surcharges justifiées, cohérence de la chronologie | aucune |
 | `checklist.ts` | Socle permanent (obligations `standing`, par thème et avec sa propre progression) et checklists par phase (obligations `stepwise`) : filtrage par profil (TI+RT = TI ∪ RT) et par applicabilité. Obligations et bonnes pratiques en **listes séparées**, et seules les obligations entrent dans la progression. Liens reformule / diffère / complète, réponses périmées ou orphelines | aucune |
 | `registers.ts` | Livrables et registres (leg-ups, détections, rapports hebdomadaires). Contrôles RTS 11(8), 11(9) et 11(10). Rapprochement livrables / échéances, la date de remise valant réalisation | aucune |
+| `dashboard.ts` | Tableau de bord : actions de la semaine (retards en tête, rapport hebdomadaire de la semaine en cours), actions à préparer en amont, prochains jalons à dater, statut des phases, conformité par étape, alertes et KPI du TLPT | aucune |
 | `migrations.ts` | Migrations de schéma (v1 → v2), appliquées et journalisées à l'ouverture | aucune |
 | `jcs.ts`, `bytes.ts` | JSON canonique (RFC 8785), base64, SHA-256 (WebCrypto) | aucune |
 | `db.ts` | **Contrat** d'accès SQLite (`SqlDb`, `SqlDbFactory`) | aucune |

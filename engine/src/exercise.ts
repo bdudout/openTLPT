@@ -353,6 +353,13 @@ export class Exercise {
 
   verify(): Promise<ChainCheck> { return verifyChain(this.db); }
 
+  /** Statistiques du journal pour le tableau de bord : nombre d'entrées, dernier ancrage. */
+  journalStats(): { entries: number; lastAnchor?: { seq: number; ts: string } } {
+    const n = this.db.get<{ n: number }>('SELECT count(*) AS n FROM journal')?.n ?? 0;
+    const a = this.db.get<{ seq: number; ts: string }>("SELECT seq, ts FROM journal WHERE action = 'anchor' ORDER BY seq DESC LIMIT 1");
+    return { entries: n, ...(a ? { lastAnchor: a } : {}) };
+  }
+
   /** Ancre le hash de tête courant et journalise l'ancrage. Le texte renvoyé est à recopier dans un PV ou un mail. */
   anchor(): Promise<Anchor> {
     return this.#serial(async () => {

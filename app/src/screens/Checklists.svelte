@@ -6,7 +6,8 @@
   import ChecklistItem from './ChecklistItem.svelte';
 
   const STANDING = 'standing';
-  let view = $state<string>(STANDING);
+  // Vue courante partagée (le tableau de bord peut ouvrir directement une étape).
+  const view = $derived(ui.checklistView);
   let hideHandled = $state(false);
 
   const result = $derived.by(() => {
@@ -39,7 +40,7 @@
   </p>
   <div class="phases" role="tablist" aria-label={t('cl.title')}>
     <button type="button" role="tab" id="tab-standing" aria-selected={isStanding} aria-controls="cl-panel"
-      class="phase standing" class:active={isStanding} onclick={() => (view = STANDING)}>
+      class="phase standing" class:active={isStanding} onclick={() => (ui.checklistView = STANDING)}>
       <span>{t('cl.standing.tab')}</span>
       <span class="count">{frac(result.standing.progress)}</span>
     </button>
@@ -47,7 +48,7 @@
     {#each phasesOrdered as ph (ph.id)}
       {@const p = result.phases[ph.id]?.progress}
       <button type="button" role="tab" id={`tab-${ph.id}`} aria-selected={view === ph.id} aria-controls="cl-panel"
-        class="phase" class:active={view === ph.id} onclick={() => (view = ph.id)}>
+        class="phase" class:active={view === ph.id} onclick={() => (ui.checklistView = ph.id)}>
         <span>{loc(ph.label)}</span>
         {#if p && p.total}<span class="count">{frac(p)}</span>{/if}
       </button>

@@ -15,6 +15,10 @@ const engines = { chromium, firefox, webkit, msedge: chromium };
 const names = (process.env.TARGETS ?? 'chromium,firefox,webkit').split(',').map((s) => s.trim()).filter(Boolean);
 const PASS = 'heron vole au-dessus du marais';
 
+// Dates relatives au jour d'exécution (heure locale, comme l'application).
+const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const shift = (days, months = 0) => { const d = new Date(); d.setHours(12, 0, 0, 0); d.setMonth(d.getMonth() + months); d.setDate(d.getDate() + days); return d; };
+
 async function runOne(name) {
   const browser = await engines[name].launch(name === 'msedge' ? { channel: 'msedge' } : {});
   const context = await browser.newContext({ acceptDownloads: true, locale: 'fr-FR' });
@@ -42,9 +46,46 @@ async function runOne(name) {
     await page.getByRole('button', { name: 'Créer l\'exercice' }).click();
     await page.getByTestId('codename').filter({ hasText: 'HERON' }).waitFor({ timeout: 60_000 });
     await page.getByTestId('dirty').waitFor();
+    await page.getByTestId('db-ident').filter({ hasText: 'TLPT non démarré' }).waitFor(); // tableau de bord par défaut
+  });
+
+  await step('tableau de bord : semaine, amont, jalons à dater, conformité par étape, KPI, ancrage', async () => {
+    // N0 tel que D-01 (N0 + 3 mois) tombe dans 3 jours ; début de la phase de test dans 20 jours.
+    const n0 = (() => { const d = shift(3); d.setMonth(d.getMonth() - 3); return iso(d); })();
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.locator('#ev-N0').fill(n0);
+    await page.locator('#ev-TESTING_START').fill(iso(shift(20)));
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.getByTestId('db-week').locator('li[data-action="D-01"]').waitFor();
+    await page.getByTestId('db-upstream').locator('li[data-action="D-03"]').waitFor();
+    await page.getByTestId('db-upstream').locator('li[data-action="D-04"]').filter({ hasText: 'avant « Début de la phase de test »' }).waitFor();
+    await page.getByTestId('db-ident').filter({ hasText: 'Phase en cours : Préparation' }).waitFor();
+    await page.getByTestId('db-ident').filter({ hasText: /J\+\d+ depuis la notification/ }).waitFor();
+    await page.locator('[data-kpi="prep"]').filter({ hasText: /J-\d+/ }).waitFor();
+    // Jalon attendu daté depuis le tableau de bord → il disparaît de la liste.
+    const expected = page.getByTestId('db-expected');
+    await expected.locator('li[data-expected="INIT_SUBMITTED"]').waitFor();
+    await expected.locator('#db-ev-INIT_SUBMITTED').fill(iso(shift(-1)));
+    await expected.locator('li[data-expected="INIT_SUBMITTED"]').waitFor({ state: 'detached' });
+    await expected.locator('li[data-expected="INIT_VALIDATED"]').waitFor(); // son successeur devient attendu
+    // Frise et conformité par étape (préparation comprise) avec accès direct à la checklist.
+    assert.equal(await page.getByTestId('db-timeline').locator('li[data-phase="preparation"]').getAttribute('data-status'), 'in_progress');
+    await page.getByTestId('db-compliance').locator('tr[data-step="standing"]').waitFor();
+    await page.getByTestId('db-compliance').locator('tr[data-step="preparation"]').getByRole('button').click();
+    await page.getByTestId('obligations').locator('article[data-item="RTS-9.2"]').waitFor();
+    // Ancrage du journal.
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.getByRole('button', { name: 'Ancrer le journal' }).click();
+    await page.getByTestId('anchor-text').filter({ hasText: /^HERON · #\d+ · [0-9a-f]{64} · / }).waitFor();
+    await page.getByTestId('db-ident').filter({ hasText: 'Dernier ancrage' }).waitFor();
+    // Remise à zéro des dates pour la suite du scénario.
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.locator('#ev-TESTING_START').fill('');
+    await page.locator('#ev-INIT_SUBMITTED').fill('');
   });
 
   await step('saisie de N0 → D-01 et D-02 calculées', async () => {
+    await page.locator('#ev-N0').fill('');
     assert.equal(await page.locator('tr[data-deadline="D-01"]').getAttribute('data-state'), 'waiting_anchor');
     await page.locator('#ev-N0').fill('2026-10-01');
     await page.locator('tr[data-deadline="D-01"] time[datetime="2027-01-01"]').waitFor();
@@ -70,7 +111,7 @@ async function runOne(name) {
     const obl = page.getByTestId('obligations');
     const bp = page.getByTestId('practices');
     // Vue par défaut : socle permanent, séparé des étapes datées.
-    await page.getByRole('tab', { name: /Socle permanent/ }).waitFor();
+    await page.getByRole('tab', { name: /Socle permanent/ }).click();
     await obl.locator('article[data-item="RTS-4.1"]').waitFor();
     assert.equal(await obl.locator('article[data-item="RTS-9.2"]').count(), 0, 'pas d\'étape datée dans le socle');
     await obl.locator('h4[data-theme="th_providers"]').waitFor();
@@ -187,6 +228,7 @@ async function runOne(name) {
     await page.getByLabel('Passphrase').fill(PASS);
     await page.getByRole('button', { name: 'Ouvrir', exact: true }).click();
     await page.getByTestId('codename').filter({ hasText: 'HERON' }).waitFor({ timeout: 60_000 });
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
     assert.equal(await page.locator('#ev-N0').inputValue(), '2026-10-01');
     await page.locator('tr[data-deadline="D-15"] time[datetime="2026-11-02"]').waitFor();
     assert.match(await page.locator('.bar .help').innerText(), /Dominique \(CTL\)/);

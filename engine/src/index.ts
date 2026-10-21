@@ -12,4 +12,5 @@ export * from './exercise.ts';
 export * from './checklist.ts';
 export * from './registers.ts';
 export * from './migrations.ts';
+export * from './dashboard.ts';
 // Adaptateur SQLite WASM (dépendance d'exécution) : import explicite './sqlite-wasm.ts'.

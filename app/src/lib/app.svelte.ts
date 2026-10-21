@@ -12,6 +12,7 @@ import { t, type MsgKey } from './i18n.svelte.ts';
 import { REF_VERSION, TOOL_VERSION, core } from './ref.ts';
 
 export type Screen = 'home' | 'new' | 'open' | 'exercise';
+export type Tab = 'dashboard' | 'deadlines' | 'checklists' | 'deliverables' | 'registers';
 
 export const ui = $state({
   screen: 'home' as Screen,
@@ -25,7 +26,14 @@ export const ui = $state({
   fileName: '',
   integrityBrokenAt: 0,
   kdfUpgraded: false,
+  /** Navigation dans l'exercice (partagée : le tableau de bord ouvre directement une checklist d'étape). */
+  tab: 'dashboard' as Tab,
+  checklistView: 'standing' as string,
+  /** Dernier ancrage produit dans cette session (à recopier dans un PV). */
+  lastAnchorText: '' as string,
 });
+
+export function openChecklist(step: string): void { ui.checklistView = step; ui.tab = 'checklists'; }
 
 let factory: SqlDbFactory | null = null;
 let exercise: Exercise | null = null;
@@ -115,6 +123,9 @@ function replaceCurrent(ex: Exercise, s: Session, h: FsHandle | null, name: stri
   ui.fileVersion = s.fileVersion;
   ui.integrityBrokenAt = 0;
   ui.kdfUpgraded = false;
+  ui.tab = 'dashboard';
+  ui.checklistView = 'standing';
+  ui.lastAnchorText = '';
   ui.rev++;
   ui.screen = 'exercise';
 }
