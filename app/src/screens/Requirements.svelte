@@ -2,7 +2,7 @@
   import { factValueLabel, formatDate, i18n, loc, t, type MsgKey } from '../lib/i18n.svelte.ts';
   import { act, currentExercise, loadState, openChecklist, todayISO, ui } from '../lib/app.svelte.ts';
   import { REF_VERSION, actorsById, core, deliverablesById, packs, phasesById, phasesOrdered, themesOrdered } from '../lib/ref.ts';
-  import { downloadText } from '../lib/files.ts';
+  import { downloadBlob } from '../lib/files.ts';
   import {
     buildRequirements, computeDeadlines, effectiveFacts, filterRequirements, formatSource, toCsv,
     type Condition, type Count, type Family, type RequirementFilter, type RequirementRow, type RequirementStatus,
@@ -71,7 +71,7 @@
     ]);
     const ok = await act((ex) => ex.recordExport('requirements_csv', { rows: rows.length, ref_version: REF_VERSION }));
     if (!ok) return;
-    downloadText(`${data.meta.codename ?? 'exercice'}-exigences-${todayISO()}.csv`, '﻿' + toCsv(header, rows));
+    downloadBlob(`${data.meta.codename ?? 'exercice'}-exigences-${todayISO()}.csv`, new Blob(['\uFEFF' + toCsv(header, rows)], { type: 'text/csv;charset=utf-8' }));
     notice = t('rq.csv.done', { n: rows.length });
   }
 

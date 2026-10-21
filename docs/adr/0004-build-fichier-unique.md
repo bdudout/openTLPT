@@ -92,3 +92,5 @@ Fichier unique de 2,73 Mo sans fichier annexe, **build reproductible** (SHA-256 
 Une simulation `--jitless` (sans WebAssembly) fait échouer SQLite et Argon2. Parades : détecter l'absence de WASM et afficher un message explicite ;
 tester dans la CI Windows avec Edge en StrictMode ; décider si besoin d'un repli PBKDF2 natif (amendement de l'ADR-0003).
 Il reste à faire tester un compte standard sur un vrai poste avec ses GPO, par un bêta-testeur.
+
+**Suivi de la taille** : le fichier fait 3,3 Mo avec PptxGenJS (export PowerPoint, environ 0,6 Mo), pour un budget de 8 Mo. Ses imports réservés à Node (`node:fs`, `node:https`) ne s'exécutent que sous Node et ne sont jamais appelés dans le navigateur. Le test de bout en bout vérifie qu'aucune requête réseau n'est émise.

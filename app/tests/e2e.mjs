@@ -4,6 +4,7 @@
 import { chromium, firefox, webkit } from 'playwright';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import JSZip from 'jszip';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -235,6 +236,34 @@ async function runOne(name) {
     await d1.getByRole('alert').waitFor({ state: 'detached' });
     await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
     await page.locator('tr[data-deadline="D-07"][data-state="recurring_ok"]').waitFor();
+  });
+
+  await step('supports de comité PowerPoint : 3 trames, confidentialité, export journalisé', async () => {
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    const decks = page.getByTestId('db-decks');
+    const expect = { control_team: 10, management: 6, authority: 6 };
+    for (const [kind, minSlides] of Object.entries(expect)) {
+      const [dl] = await Promise.all([page.waitForEvent('download'), decks.locator(`button[data-deck="${kind}"]`).click()]);
+      assert.match(dl.suggestedFilename(), /^HERON-.+-\d{4}-\d{2}-\d{2}\.pptx$/);
+      const path = join(dir, `${kind}.pptx`);
+      await dl.saveAs(path);
+      const zip = await JSZip.loadAsync(readFileSync(path));
+      const slides = Object.keys(zip.files).filter((f) => /^ppt\/slides\/slide\d+\.xml$/.test(f));
+      assert.ok(slides.length >= minSlides, `${kind} : ${slides.length} diapositives`);
+      // PptxGenJS découpe le texte des tableaux en un fragment par mot : on reconstitue le texte visible.
+      const textOf = (x) => [...x.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map((m) => m[1]).join('').replace(/\s+/g, ' ');
+      const xml = textOf((await Promise.all(slides.map((f) => zip.file(f).async('string')))).join('\n'));
+      const master = (await Promise.all(Object.keys(zip.files).filter((f) => /^ppt\/(slideLayouts|slideMasters)\/[^/]+\.xml$/.test(f)).map((f) => zip.file(f).async('string')))).join('\n');
+      assert.ok(xml.includes('TLPT HERON'), `${kind} : nom de code`);
+      assert.ok((xml + textOf(master)).includes('CONFIDENTIEL — TLPT HERON'), `${kind} : pied de page de confidentialité`);
+      if (kind === 'management') {
+        assert.ok(!xml.includes('Alerte EDR'), 'direction : pas de détail des détections');
+        assert.ok(!xml.includes('Explication du blocage'), 'direction : pas de détail des leg-ups');
+      } else {
+        assert.ok(xml.includes('Alerte EDR'), `${kind} : détections détaillées`);
+      }
+      await decks.getByRole('status').filter({ hasText: 'généré' }).waitFor();
+    }
   });
 
   let saved;

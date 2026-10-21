@@ -4,6 +4,7 @@ Interface Svelte 5 + TypeScript (ADR-0001), construite en **un seul fichier** `d
 On l'ouvre par double-clic, sans installation, sans réseau et sans droits admin (ENF-11).
 
 Fonctions de cette première version :
+- **supports de comité PowerPoint** : Control Team, organe de direction (agrégats uniquement), test managers. Générés sur le poste avec PptxGenJS, ils ne portent que le nom de code et chaque génération est journalisée ;
 - **tableau de bord** (accueil d'un exercice) : bandeau d'identité, KPI du TLPT, actions de la semaine, actions à préparer en amont et jalons à dater, frise des phases, conformité par étape avec accès direct aux checklists, alertes, ancrage du journal ;
 - **création** d'un exercice : nom de code, rôle, auteur, passphrase d'au moins 14 caractères, avec confirmation explicite qu'aucune récupération n'est possible ;
 - **ouverture** d'un fichier `.tlpt`. L'intégrité du journal est vérifiée, une rupture déclenche une alerte, et un fichier PBKDF2 sera réécrit en Argon2id ;

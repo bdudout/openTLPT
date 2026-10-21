@@ -1,6 +1,10 @@
 <script lang="ts">
   import { factValueLabel, formatDate, loc, t, type MsgKey } from '../lib/i18n.svelte.ts';
   import { act, currentExercise, loadState, mutate, openChecklist, todayISO, ui } from '../lib/app.svelte.ts';
+  import { downloadBlob } from '../lib/files.ts';
+  import { snapshot } from '../lib/snapshot.ts';
+  import { buildDeck, type CommitteeKind } from '../lib/deck.ts';
+  import { deckToPptx } from '../lib/pptx.ts';
   import { REF_VERSION, actorsById, core, eventsById, itemsById, packs, phasesById } from '../lib/ref.ts';
   import {
     buildChecklist, buildDashboard, checkEventOrder, computeDeadlines, deadlinePhases, deliverableRows, effectiveFacts,
@@ -38,6 +42,26 @@
   const carriers = (id: string) => (defs[id]?.carriers ?? []).map((c) => loc(actorsById[c]?.label) || c).join(', ');
   const stepLabel = (s: string) => (s === 'standing' ? t('db.step.standing') : loc(phasesById[s]?.label));
 
+  const COMMITTEES: CommitteeKind[] = ['control_team', 'management', 'authority'];
+  let deckNotice = $state('');
+  let generating = $state<CommitteeKind | null>(null);
+
+  async function generateDeck(kind: CommitteeKind) {
+    generating = kind;
+    deckNotice = '';
+    try {
+      const ex = currentExercise();
+      const deck = buildDeck(kind, snapshot(ex, loadState()));
+      const { blob, slides } = await deckToPptx(deck, ex.author);
+      const ok = await act((e) => e.recordExport('committee_pptx', { deck: kind, slides }));
+      if (!ok) return;
+      downloadBlob(`${deck.fileTitle}.pptx`, blob);
+      deckNotice = t('pp.done', { k: t(`pp.kind.${kind}` as MsgKey), n: slides });
+    } finally {
+      generating = null;
+    }
+  }
+
   function setEvent(id: string, value: string) { if (value) void mutate((ex) => ex.setEventDate(id, value)); }
   async function anchor() {
     let text = '';
@@ -67,6 +91,22 @@
     <button type="button" class="ghost small" onclick={anchor}>{t('db.anchor.do')}</button>
     {#if ui.lastAnchorText}<p class="help">{t('db.anchor.text')}</p><code data-testid="anchor-text">{ui.lastAnchorText}</code>{/if}
   </div>
+</section>
+
+<!-- Supports de comité -->
+<section class="card decks" aria-labelledby="h-decks" data-testid="db-decks">
+  <h2 id="h-decks">{t('pp.title')}</h2>
+  <p class="help">{t('pp.help')}</p>
+  <ul>
+    {#each COMMITTEES as c (c)}
+      <li>
+        <div><strong>{t(`pp.kind.${c}` as MsgKey)}</strong><span class="meta">{t(`pp.desc.${c}` as MsgKey)}</span></div>
+        <button type="button" class="ghost small" disabled={generating !== null} onclick={() => generateDeck(c)} data-deck={c}
+          aria-label={`${t('pp.generate')} — ${t(`pp.kind.${c}` as MsgKey)}`}>{generating === c ? '…' : `${t('pp.generate')} .pptx`}</button>
+      </li>
+    {/each}
+  </ul>
+  {#if deckNotice}<p class="deck-notice" role="status">{deckNotice}</p>{/if}
 </section>
 
 <!-- Indicateurs -->
@@ -290,5 +330,9 @@
   .alerts li { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--border); color: var(--warn); }
   .alerts li.help { color: var(--muted); }
   .small { padding: 4px 10px; font-size: .85rem; }
+  .decks { margin-bottom: 12px; }
+  .decks ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; }
+  .decks li { display: flex; justify-content: space-between; gap: 10px; align-items: center; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .deck-notice { margin: 8px 0 0; color: var(--ok); font-weight: 600; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 </style>

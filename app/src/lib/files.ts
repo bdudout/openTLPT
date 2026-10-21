@@ -71,8 +71,12 @@ export async function writeHandle(handle: FsHandle, text: string): Promise<void>
 
 /** Repli sans FSA : téléchargement (le navigateur choisit le dossier ; l'utilisateur remplace l'ancien fichier). */
 export function downloadText(name: string, text: string): void {
+  downloadBlob(name, new Blob([text], { type: 'application/json' }));
+}
+
+export function downloadBlob(name: string, blob: Blob): void {
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  a.href = URL.createObjectURL(blob);
   a.download = name;
   document.body.append(a);
   a.click();
