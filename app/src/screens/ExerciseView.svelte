@@ -7,6 +7,7 @@
   import Deliverables from './Deliverables.svelte';
   import Registers from './Registers.svelte';
   import Dashboard from './Dashboard.svelte';
+  import Requirements from './Requirements.svelte';
   import {
     checkEventOrder, computeDeadlines, effectiveFacts, type DeadlineResult, type FactValue,
   } from '../../../engine/src/index.ts';
@@ -70,6 +71,7 @@
 
 <nav class="tabs" aria-label="openTLPT">
   <button type="button" class="tab" aria-pressed={ui.tab === 'dashboard'} onclick={() => (ui.tab = 'dashboard')}>{t('tab.dashboard')}</button>
+  <button type="button" class="tab" aria-pressed={ui.tab === 'requirements'} onclick={() => (ui.tab = 'requirements')}>{t('tab.requirements')}</button>
   <button type="button" class="tab" aria-pressed={ui.tab === 'deadlines'} onclick={() => (ui.tab = 'deadlines')}>{t('tab.deadlines')}</button>
   <button type="button" class="tab" aria-pressed={ui.tab === 'checklists'} onclick={() => (ui.tab = 'checklists')}>{t('tab.checklists')}</button>
   <button type="button" class="tab" aria-pressed={ui.tab === 'deliverables'} onclick={() => (ui.tab = 'deliverables')}>{t('tab.deliverables')}</button>
@@ -78,6 +80,8 @@
 
 {#if ui.tab === 'dashboard'}
 <Dashboard />
+{:else if ui.tab === 'requirements'}
+<Requirements />
 {:else if ui.tab === 'deadlines'}
 <section class="card block" aria-labelledby="h-deadlines">
   <div class="head">

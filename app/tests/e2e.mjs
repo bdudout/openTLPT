@@ -2,7 +2,7 @@
 // La File System Access API est retirée pour tester le chemin universel (téléchargement + <input type=file>) :
 // le sélecteur natif de la FSA n'est pas automatisable.
 import { chromium, firefox, webkit } from 'playwright';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
@@ -145,6 +145,34 @@ async function runOne(name) {
     await page.getByRole('tab', { name: /Préparation/ }).click();
     await page.getByTestId('practices').locator('article[data-item="FR-01"]').waitFor();
     await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+  });
+
+  await step('exigences : conformité globale, recherche, filtres, hors périmètre, export CSV journalisé', async () => {
+    await page.getByRole('button', { name: 'Exigences' }).click();
+    await page.getByTestId('rq-overall').filter({ hasText: /3 sur \d+ applicables/ }).waitFor();
+    const table = page.getByTestId('rq-table');
+    await table.locator('tr[data-req="RTS-9.2"][data-status="done"]').waitFor();
+    assert.equal(await table.locator('tr[data-req^="EU-"], tr[data-req^="FR-"]').count(), 0, 'aucune bonne pratique dans la matrice');
+    await page.getByTestId('rq-q').fill('9(7)');
+    await page.getByTestId('rq-count').filter({ hasText: '1 exigence(s)' }).waitFor();
+    await table.locator('tr[data-req="RTS-9.7"]').filter({ hasText: 'Une seule FCI concernée' }).waitFor();
+    await page.getByRole('button', { name: 'Réinitialiser' }).click();
+    await page.getByTestId('rq-status').selectOption('handled');
+    await page.getByTestId('rq-count').filter({ hasText: '3 exigence(s)' }).waitFor();
+    await page.getByTestId('rq-excluded').locator('summary').click();
+    await page.getByTestId('rq-excluded').locator('li[data-excluded="RTS-15.1"]').filter({ hasText: 'Condition non remplie' }).waitFor();
+    const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Exporter la matrice (CSV)' }).click()]);
+    assert.match(dl.suggestedFilename(), /^HERON-exigences-\d{4}-\d{2}-\d{2}\.csv$/);
+    const csvPath = join(dir, 'matrice.csv');
+    await dl.saveAs(csvPath);
+    const csv = readFileSync(csvPath, 'utf8');
+    assert.ok(csv.startsWith('\uFEFFID;Référence;Exigence'), 'BOM + en-tête');
+    assert.equal(csv.trim().split('\r\n').length, 93, 'en-tête + 92 obligations');
+    assert.match(csv, /RTS-9\.2;RTS 2025\/1190, art\. 9\(2\);[^\r]*;Oui;Traité;/);
+    assert.match(csv, /RTS-15\.1;[^\r]*;Non — Condition non remplie/);
+    await page.getByRole('status').filter({ hasText: 'Matrice exportée (92 lignes)' }).waitFor();
+    await table.locator('tr[data-req="RTS-9.7"]').getByRole('button', { name: /Ouvrir dans la checklist/ }).click();
+    await page.getByTestId('obligations').locator('article[data-item="RTS-9.7"]').waitFor();
   });
 
   await step('livrables : suivi, empreinte SHA-256 locale, vérification conforme / différente', async () => {

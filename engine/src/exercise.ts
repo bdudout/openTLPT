@@ -353,6 +353,26 @@ export class Exercise {
 
   verify(): Promise<ChainCheck> { return verifyChain(this.db); }
 
+  /** Dernière réponse journalisée pour chaque item de checklist (date et auteur). */
+  lastAnswers(): Record<string, { ts: string; author: string }> {
+    const out: Record<string, { ts: string; author: string }> = {};
+    const rows = this.db.all<{ entity_id: string; ts: string; author: string }>(
+      "SELECT entity_id, ts, author FROM journal WHERE entity = 'checklist' ORDER BY seq");
+    for (const r of rows) out[r.entity_id] = { ts: r.ts, author: r.author };
+    return out;
+  }
+
+  /** Journalise un export (CSV, impression…) : qui a extrait quoi, et quand. */
+  recordExport(kind: string, detail: Record<string, string | number>): Promise<void> {
+    return this.#serial(async () => {
+      const entry = await prepareEntry(this.db, {
+        ts: this.#clock(), session_id: this.sessionId, author: this.author, action: 'export',
+        entity: null, entity_id: kind, before: null, after: { kind, ...detail },
+      });
+      this.db.transaction(() => insertEntry(this.db, entry));
+    });
+  }
+
   /** Statistiques du journal pour le tableau de bord : nombre d'entrées, dernier ancrage. */
   journalStats(): { entries: number; lastAnchor?: { seq: number; ts: string } } {
     const n = this.db.get<{ n: number }>('SELECT count(*) AS n FROM journal')?.n ?? 0;

@@ -12,7 +12,7 @@ import { t, type MsgKey } from './i18n.svelte.ts';
 import { REF_VERSION, TOOL_VERSION, core } from './ref.ts';
 
 export type Screen = 'home' | 'new' | 'open' | 'exercise';
-export type Tab = 'dashboard' | 'deadlines' | 'checklists' | 'deliverables' | 'registers';
+export type Tab = 'dashboard' | 'requirements' | 'deadlines' | 'checklists' | 'deliverables' | 'registers';
 
 export const ui = $state({
   screen: 'home' as Screen,
