@@ -2,7 +2,7 @@
   "$schema": "../schema/pack.schema.json",
   "pack_id": "core",
   "framework": "core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "title": {
     "fr": "Noyau openTLPT : profils, acteurs, phases, événements, livrables, délais",
     "en": "openTLPT core: profiles, actors, phases, events, deliverables, deadlines"
@@ -739,7 +739,8 @@
       "label": {
         "fr": "Informations d'initiation (charte projet)",
         "en": "TLPT initiation information (project charter)"
-      }
+      },
+      "lead_weeks": 6
     },
     {
       "id": "DLV-RISK",
@@ -757,7 +758,8 @@
       "label": {
         "fr": "Analyse de risques et mesures de maîtrise",
         "en": "Risk assessment and risk management measures"
-      }
+      },
+      "lead_weeks": 6
     },
     {
       "id": "DLV-SSD",
@@ -779,7 +781,8 @@
       "label": {
         "fr": "Document de spécification du périmètre",
         "en": "Scope specification document"
-      }
+      },
+      "lead_weeks": 10
     },
     {
       "id": "DLV-PROVIDER-EVIDENCE",
@@ -800,7 +803,8 @@
       "label": {
         "fr": "Preuves de conformité des prestataires (DORA 27, RTS 7(1))",
         "en": "Provider compliance evidence (DORA 27, RTS 7(1))"
-      }
+      },
+      "lead_weeks": 8
     },
     {
       "id": "DLV-IT-POLICY",
@@ -825,7 +829,8 @@
       "label": {
         "fr": "Politique de gestion des testeurs internes",
         "en": "Internal testers management policy"
-      }
+      },
+      "lead_weeks": 8
     },
     {
       "id": "DLV-TTIR",
@@ -849,7 +854,8 @@
       "label": {
         "fr": "Rapport de threat intelligence ciblée",
         "en": "Targeted threat intelligence report"
-      }
+      },
+      "lead_weeks": 4
     },
     {
       "id": "DLV-RTTP",
@@ -875,7 +881,8 @@
       "label": {
         "fr": "Plan de test red team",
         "en": "Red team test plan"
-      }
+      },
+      "lead_weeks": 3
     },
     {
       "id": "DLV-WEEKLY",
@@ -936,7 +943,8 @@
       "label": {
         "fr": "Rapport de test red team",
         "en": "Red team test report"
-      }
+      },
+      "lead_weeks": 4
     },
     {
       "id": "DLV-BTTR",
@@ -958,7 +966,8 @@
       "label": {
         "fr": "Rapport de test blue team",
         "en": "Blue team test report"
-      }
+      },
+      "lead_weeks": 6
     },
     {
       "id": "DLV-REPLAY-PT",
@@ -973,7 +982,8 @@
       "label": {
         "fr": "Compte rendu replay et purple teaming",
         "en": "Replay and purple teaming minutes"
-      }
+      },
+      "lead_weeks": 4
     },
     {
       "id": "DLV-FEEDBACK",
@@ -1013,7 +1023,8 @@
       "label": {
         "fr": "Rapport de synthèse du test",
         "en": "Test summary report"
-      }
+      },
+      "lead_weeks": 6
     },
     {
       "id": "DLV-REMEDIATION",
@@ -1031,7 +1042,8 @@
       "label": {
         "fr": "Plan de remédiation",
         "en": "Remediation plan"
-      }
+      },
+      "lead_weeks": 6
     },
     {
       "id": "DLV-ATTESTATION",
@@ -1390,6 +1402,13 @@
       "text": {
         "fr": "Le RTS ne fixe aucun délai à l'autorité pour ses validations. Ces événements sont des jalons d'attente.",
         "en": "The RTS sets no deadline for authority validations; those events are waiting milestones."
+      }
+    },
+    {
+      "id": "NOTE-LEAD-WEEKS",
+      "text": {
+        "fr": "Les délais de préparation des livrables (lead_weeks) sont des repères de planification proposés par openTLPT, et non des obligations. Ils servent à signaler à temps qu'une préparation doit commencer, par exemple 10 semaines avant la remise du SSD.",
+        "en": "Deliverable preparation lead times (lead_weeks) are openTLPT planning aids, not obligations: they flag in time that a preparation must start (e.g. 10 weeks before the SSD)."
       }
     }
   ]

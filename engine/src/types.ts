@@ -60,8 +60,10 @@ export interface DeadlineOverride {
 export interface ExerciseState {
   /** Date du jour (injectée : le moteur n'appelle jamais l'horloge). */
   today: ISODate;
-  /** Dates des événements saisis (event_dates). */
+  /** Dates réelles des événements saisis (event_dates). */
   events: Partial<Record<string, ISODate>>;
+  /** Dates prévues (event_plans) : servent d'ancre prévisionnelle tant que la date réelle manque. */
+  planned?: Partial<Record<string, ISODate>>;
   /** Faits d'applicabilité saisis (facts) ; les absents prennent leur valeur par défaut. */
   facts?: Partial<Record<string, FactValue>>;
   /** Surcharges justifiées (deadline_overrides). */
@@ -104,6 +106,10 @@ export interface DeadlineResult {
   /** Événement manquant quand state = waiting_anchor. */
   missingEvent?: string;
   overridden?: { justification: string };
+  /** Échéance calculée sur une date prévue (l'événement de départ n'a pas encore eu lieu). */
+  forecast?: boolean;
+  /** Durée minimale : la fin prévue est antérieure à la fin au plus tôt. */
+  planShort?: boolean;
   /** Échéance d'un autre acteur que le profil courant (affichée en information). */
   otherActor?: boolean;
   /** Surcharge présente mais refusée (délai non surchargeable ou justification vide). */

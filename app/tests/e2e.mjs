@@ -85,6 +85,28 @@ async function runOne(name) {
     await page.locator('#ev-INIT_SUBMITTED').fill('');
   });
 
+  await step('planification : préparations à lancer, prévisionnel, horizon, glissement, référence figée', async () => {
+    // N0 à J-100 : le SSD (D-02, N0 + 6 mois) est hors horizon mais demande 10 semaines → « à lancer ».
+    await page.locator('#ev-N0').fill(iso(shift(-100)));
+    await page.locator('#plan-TESTING_START').fill(iso(shift(30)));
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.getByTestId('db-tostart').locator('li[data-action="D-02"]').filter({ hasText: '10 sem. de préparation' }).waitFor();
+    await page.getByTestId('db-upstream').locator('li[data-action="D-04"]').filter({ hasText: 'prévisionnel' }).waitFor();
+    await page.getByTestId('db-horizon').selectOption('12');
+    await page.getByTestId('db-upstream').locator('li[data-action="D-02"]').waitFor();
+    await page.getByTestId('db-horizon').selectOption('6');
+    // Replanification : glissement mesuré par rapport à la première date prévue, puis nouvelle référence.
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.locator('#plan-TESTING_START').fill(iso(shift(40)));
+    await page.locator('[data-event="TESTING_START"] .slip[data-slip="10"]').waitFor();
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.locator('[data-kpi="planning"]').filter({ hasText: '1/1' }).waitFor();
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.getByRole('button', { name: 'Figer le planning de référence' }).click();
+    await page.locator('[data-event="TESTING_START"] .slip').waitFor({ state: 'detached' });
+    await page.locator('#plan-TESTING_START').fill('');
+  });
+
   await step('saisie de N0 → D-01 et D-02 calculées', async () => {
     await page.locator('#ev-N0').fill('');
     assert.equal(await page.locator('tr[data-deadline="D-01"]').getAttribute('data-state'), 'waiting_anchor');

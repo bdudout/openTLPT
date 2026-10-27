@@ -19,6 +19,11 @@ export interface DashboardInput {
   /** Phase de rattachement de chaque échéance (via l'obligation source). */
   deadlinePhase: Record<string, string>;
   eventDates: Partial<Record<string, ISODate>>;
+  /** Dates prévues et de référence des jalons (planning). */
+  plannedDates?: Partial<Record<string, ISODate>>;
+  baselineDates?: Partial<Record<string, ISODate>>;
+  /** Délai de préparation indicatif de chaque livrable, en semaines (core.deliverables[].lead_weeks). */
+  leadWeeks?: Partial<Record<string, number>>;
   checklist: ChecklistResult;
   weeklyReports?: ISODate[];
   legups?: LegUpRecord[];
@@ -49,6 +54,13 @@ export interface ActionItem {
   phase?: string;
   /** Pour une échéance « avant X » : l'événement X. */
   beforeEvent?: string;
+  /** Calculée sur une date prévue. */
+  forecast?: boolean;
+  /** Livrable cible et délai de préparation indicatif. */
+  deliverable?: string;
+  leadWeeks?: number;
+  /** Date à laquelle lancer la préparation (échéance − délai de préparation). */
+  startBy?: ISODate;
 }
 
 export interface ExpectedEvent {
@@ -56,6 +68,8 @@ export interface ExpectedEvent {
   phase: string;
   /** À obtenir de l'autorité (validation, approbation) plutôt qu'à réaliser. */
   byAuthority?: boolean;
+  /** Date prévue, si elle est planifiée. */
+  planned?: ISODate;
 }
 
 export type PhaseStatus = 'not_started' | 'in_progress' | 'done' | 'permanent';
@@ -65,7 +79,7 @@ export interface TimelinePhase {
   status: PhaseStatus;
   start?: ISODate;
   end?: ISODate;
-  events: { event: string; date?: ISODate; past: boolean }[];
+  events: { event: string; date?: ISODate; planned?: ISODate; baseline?: ISODate; past: boolean; /** Glissement en jours (réel ou prévu − référence). */ slipDays?: number }[];
 }
 
 export interface StepCompliance {
@@ -112,12 +126,16 @@ export interface Kpis {
   deliverables?: { expected: number; submitted: number; approved: number; fingerprinted: number };
   /** Échéances ouvertes en retard (toutes phases). */
   overdueDeadlines: number;
+  /** Planning : jalons ayant une référence, dont en glissement, glissement maximal (jours). */
+  slippage?: { tracked: number; slipped: number; maxDays: number };
 }
 
 export interface Dashboard {
   kpis: Kpis;
   thisWeek: ActionItem[];
   upcoming: ActionItem[];
+  /** Préparations de livrables à lancer d'ici l'horizon (échéance au-delà de l'horizon, délai de préparation inclus). */
+  toStart: ActionItem[];
   expectedEvents: ExpectedEvent[];
   timeline: TimelinePhase[];
   currentPhase?: string;
@@ -138,6 +156,7 @@ export function buildDashboard(input: DashboardInput): Dashboard {
   // 1. Actions datées : échéances ouvertes, à faire cette semaine (retards compris) ou en amont.
   const thisWeek: ActionItem[] = [];
   const upcoming: ActionItem[] = [];
+  const toStart: ActionItem[] = [];
   for (const r of input.deadlines) {
     if (r.display !== 'check' || !r.due) continue;
     const def = defs.get(r.id);
@@ -151,14 +170,21 @@ export function buildDashboard(input: DashboardInput): Dashboard {
       continue;
     }
     if (!OPEN_STATES.has(r.state)) continue;
+    const deliverable = def?.target?.deliverable;
+    const lead = deliverable ? input.leadWeeks?.[deliverable] : undefined;
     const item: ActionItem = { ...base, kind: 'deadline', overdue: r.state === 'overdue',
-      ...(r.kind === 'before' && def ? { beforeEvent: def.anchor } : {}) };
+      ...(r.kind === 'before' && def ? { beforeEvent: def.anchor } : {}),
+      ...(r.forecast ? { forecast: true } : {}),
+      ...(deliverable ? { deliverable } : {}),
+      ...(lead ? { leadWeeks: lead, startBy: addDays(r.due, -7 * lead) } : {}) };
     if (item.daysLeft <= week) thisWeek.push(item);
     else if (item.daysLeft <= horizon) upcoming.push(item);
+    else if (item.startBy && diffDays(today, item.startBy) <= horizon) toStart.push(item);
   }
   const byDue = (a: ActionItem, b: ActionItem) => (a.overdue === b.overdue ? diffDays(b.due, a.due) : a.overdue ? -1 : 1);
   thisWeek.sort(byDue);
   upcoming.sort(byDue);
+  toStart.sort((a, b) => diffDays(b.startBy as ISODate, a.startBy as ISODate));
 
   // 2. Prochains jalons attendus : événements non datés dont tous les prérequis sont datés.
   //    Un événement qui ne sert qu'à des échéances non applicables est ignoré (ex. autorités d'accueil hors transfrontière).
@@ -174,7 +200,8 @@ export function buildDashboard(input: DashboardInput): Dashboard {
     if (input.eventDates[e.id] || irrelevant(e.id) || !(e.after ?? []).every((p) => !!input.eventDates[p])) continue;
     const sc = input.visibleProfiles ? eventScope(e, input.deadlineDefs, input.visibleProfiles) : undefined;
     if (sc && !sc.relevant) continue;
-    expectedEvents.push({ event: e.id, phase: e.phase, ...(sc?.byAuthority ? { byAuthority: true } : {}) });
+    const planned = input.plannedDates?.[e.id];
+    expectedEvents.push({ event: e.id, phase: e.phase, ...(sc?.byAuthority ? { byAuthority: true } : {}), ...(planned ? { planned } : {}) });
   }
 
   // 3. Jalons : statut de chaque phase d'après ses événements de début et de fin.
@@ -186,7 +213,11 @@ export function buildDashboard(input: DashboardInput): Dashboard {
     const status: PhaseStatus = !p.starts_at ? 'permanent' : reached(end) ? 'done' : reached(start) ? 'in_progress' : 'not_started';
     const events = input.events.filter((e) => e.phase === p.id).map((e) => {
       const date = input.eventDates[e.id];
-      return { event: e.id, ...(date ? { date } : {}), past: reached(date) };
+      const planned = input.plannedDates?.[e.id];
+      const baseline = input.baselineDates?.[e.id];
+      const ref = date ?? planned;
+      return { event: e.id, ...(date ? { date } : {}), ...(planned ? { planned } : {}), ...(baseline ? { baseline } : {}),
+        past: reached(date), ...(baseline && ref ? { slipDays: diffDays(baseline, ref) } : {}) };
     });
     return { phase: p.id, status, ...(start ? { start } : {}), ...(end ? { end } : {}), events };
   });
@@ -249,6 +280,8 @@ export function buildDashboard(input: DashboardInput): Dashboard {
   if (ev.R0 && ev.R1) kpis.activeDurationDays = diffDays(ev.R0, ev.R1);
   const d10 = res.get('D-10');
   if (ev.R1 && d10?.due && !d10.state.startsWith('done')) kpis.closureDaysLeft = diffDays(today, d10.due);
+  const slips = timeline.flatMap((t) => t.events).filter((e) => e.slipDays !== undefined).map((e) => e.slipDays as number);
+  if (slips.length) kpis.slippage = { tracked: slips.length, slipped: slips.filter((x) => x > 0).length, maxDays: Math.max(0, ...slips) };
   const d07 = res.get('D-07');
   if (d07?.periods && ev.R0) kpis.weekly = { covered: d07.periods.filter((p) => p.covered).length, total: d07.periods.length };
   if (input.expectedDeliverables) {
@@ -264,7 +297,7 @@ export function buildDashboard(input: DashboardInput): Dashboard {
 
   return {
     kpis,
-    thisWeek, upcoming, expectedEvents, timeline,
+    thisWeek, upcoming, toStart, expectedEvents, timeline,
     ...(currentPhase ? { currentPhase } : {}), ...(nextMilestone ? { nextMilestone } : {}),
     compliance,
     overall: { standing: input.checklist.standing.progress, stepwise: stepwiseProgress(input.checklist), total: totalProgress(input.checklist) },

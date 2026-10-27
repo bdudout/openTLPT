@@ -35,6 +35,7 @@ function kpis(s: Snapshot, detail: boolean): Block {
   if (k.activeWeek !== undefined) items.push({ label: t('kpi.active'), value: `${t('kpi.active.value', { n: k.activeWeek })} / 12+`, ...(k.activeMinEnd ? { sub: t('kpi.active.sub', { d: formatDate(k.activeMinEnd) }) } : {}) });
   else if (k.activeDurationDays !== undefined) items.push({ label: t('kpi.active'), value: t('kpi.active.done', { w: Math.floor(k.activeDurationDays / 7), d: k.activeDurationDays }), tone: k.activeDurationDays < 84 ? 'bad' : 'ok' });
   if (k.closureDaysLeft !== undefined) items.push({ label: t('kpi.closure'), value: k.closureDaysLeft >= 0 ? t('kpi.days', { n: k.closureDaysLeft }) : t('kpi.days.late', { n: -k.closureDaysLeft }), sub: t('kpi.closure.sub'), tone: k.closureDaysLeft < 0 ? 'bad' : undefined });
+  if (k.slippage) items.push({ label: t('kpi.planning'), value: `${k.slippage.slipped}/${k.slippage.tracked}`, sub: t('kpi.planning.sub', { n: k.slippage.maxDays }), tone: k.slippage.slipped ? 'warn' : 'ok' });
   if (k.deliverables) items.push({ label: t('kpi.deliverables'), value: `${k.deliverables.submitted}/${k.deliverables.expected}`, sub: t('kpi.deliverables.sub', { a: k.deliverables.approved, h: k.deliverables.fingerprinted }) });
   if (detail) {
     if (k.weekly) items.push({ label: t('kpi.weekly'), value: `${k.weekly.covered}/${k.weekly.total}`, sub: t('kpi.weekly.sub'), tone: k.weekly.covered < k.weekly.total ? 'warn' : 'ok' });
@@ -58,9 +59,11 @@ function context(s: Snapshot): Block {
 function actionsTable(s: Snapshot): Block {
   const rows: string[][] = [];
   const tones: Tone[] = [];
-  for (const [list, horizon] of [[s.dash.thisWeek, t('pp.h.week')], [s.dash.upcoming, t('pp.h.upstream')]] as const) {
+  for (const [list, horizon] of [[s.dash.thisWeek, t('pp.h.week')], [s.dash.upcoming, t('pp.h.upstream')], [s.dash.toStart, t('pp.h.tostart')]] as const) {
     for (const a of list) {
-      rows.push([a.kind === 'weekly_report' ? t('db.weekly.item', { d: formatDate(a.due) }) : dl(a.id), a.id, carriers(a.id), formatDate(a.due), when(a), horizon]);
+      const label = a.kind === 'weekly_report' ? t('db.weekly.item', { d: formatDate(a.due) }) : dl(a.id);
+      const extra = a.startBy ? `\n${t('pp.startBy', { d: formatDate(a.startBy) })}` : a.forecast ? ` (${t('dl.forecast')})` : '';
+      rows.push([label + extra, a.id, carriers(a.id), formatDate(a.due), when(a), horizon]);
       tones.push(a.overdue ? 'bad' : horizon === t('pp.h.week') ? 'warn' : undefined);
     }
   }
@@ -69,9 +72,10 @@ function actionsTable(s: Snapshot): Block {
 
 function milestonesTable(s: Snapshot): Block {
   const rows = s.dash.timeline.map((p) => {
-    const dated = p.events.filter((e) => e.date);
+    const dated = p.events.filter((e) => e.date || e.planned);
+    const slip = (n?: number) => (n ? ` [${n > 0 ? t('ev.slip.late', { n }) : t('ev.slip.early', { n: -n })}]` : '');
     return [phase(p.phase), t(`ps.${p.status}` as MsgKey), p.start ? formatDate(p.start) : '—', p.end ? formatDate(p.end) : '—',
-      dated.map((e) => `${formatDate(e.date)} : ${ev(e.event)}`).join('\n') || '—'];
+      dated.map((e) => `${formatDate(e.date ?? e.planned)}${e.date ? '' : ` (${t('ev.planned.short')})`} : ${ev(e.event)}${slip(e.slipDays)}`).join('\n') || '—'];
   });
   const tones: Tone[] = s.dash.timeline.map((p) => (p.status === 'done' ? 'ok' : p.status === 'in_progress' ? 'info' : undefined));
   return { kind: 'table', head: [t('pp.col.phase'), t('rq.col.status'), t('pp.col.start'), t('pp.col.end'), t('pp.col.events')], rows, tones, widths: [2.3, 1.3, 1.5, 1.5, 5.7], empty: '' };

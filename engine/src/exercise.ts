@@ -19,6 +19,7 @@ const KEYED_TABLES = {
   meta: 'key',
   facts: 'fact_ref',
   event_dates: 'event_ref',
+  event_plans: 'event_ref',
   deadline_overrides: 'deadline_ref',
   deadline_status: 'deadline_ref',
   checklist: 'item_ref',
@@ -226,6 +227,27 @@ export class Exercise {
     return this.#write('event_dates', eventRef, date === null ? null : { date, note });
   }
 
+  /** Date prévue d'un jalon. La première date prévue devient la date de référence (glissement mesuré par rapport à elle). */
+  async setEventPlan(eventRef: string, date: ISODate | null, note: string | null = null): Promise<boolean> {
+    if (date !== null && !isValidISODate(date)) throw new ExerciseError(`Date invalide : ${date}`);
+    if (date === null) return this.#write('event_plans', eventRef, null);
+    const cur = this.db.get<{ baseline_date: string | null }>('SELECT baseline_date FROM event_plans WHERE event_ref = ?', [eventRef]);
+    return this.#write('event_plans', eventRef, { planned_date: date, baseline_date: cur?.baseline_date ?? date, note });
+  }
+
+  /** Fige le planning : la date prévue courante de chaque jalon devient sa date de référence (une entrée de journal par jalon). */
+  async rebaseline(): Promise<number> {
+    let n = 0;
+    for (const r of this.listEventPlans()) {
+      if (r.baseline_date !== r.planned_date && await this.#write('event_plans', r.event_ref, { planned_date: r.planned_date, baseline_date: r.planned_date, note: r.note })) n++;
+    }
+    return n;
+  }
+
+  listEventPlans(): { event_ref: string; planned_date: string; baseline_date: string | null; note: string | null }[] {
+    return this.db.all('SELECT event_ref, planned_date, baseline_date, note FROM event_plans ORDER BY event_ref');
+  }
+
   async setFact(factRef: string, value: FactValue | null): Promise<boolean> {
     return this.#write('facts', factRef, value === null ? null : { value: JSON.stringify(value) });
   }
@@ -346,7 +368,9 @@ export class Exercise {
       };
     }
     const occurrences = { 'D-07': this.db.all<{ report_date: string }>('SELECT report_date FROM weekly_reports ORDER BY report_date').map((r) => r.report_date) };
-    return { today, events, facts, done, overrides, occurrences };
+    const planned: Record<string, ISODate> = {};
+    for (const r of this.listEventPlans()) planned[r.event_ref] = r.planned_date;
+    return { today, events, planned, facts, done, overrides, occurrences };
   }
 
   // --- Intégrité et export ------------------------------------------------------

@@ -24,7 +24,7 @@ before(async () => { factory = await createSqliteWasm(); });
 const info = (author = 'Camille (PMO)') => ({ author, toolVersion: 't', refVersion: 'R1' });
 const create = () => Exercise.create(factory, schemaSql, { ...info(), codename: 'HERON', profile: 'entity' });
 
-test('migration v1 → v2 sur une base v1 réelle', async () => {
+test('migration v1 → v3 (via v2) sur une base v1 réelle', async () => {
   // Base v1 : schéma v1, métadonnées posées par le moteur, puis version déclarée 1 et journal vierge
   // (équivalent d'un fichier v1 dont on n'a gardé que les données : la chaîne vide est valide).
   const db = factory.open();
@@ -42,13 +42,13 @@ test('migration v1 → v2 sur une base v1 réelle', async () => {
 
   const ex = await Exercise.open(factory, bytes, info('Dominique (CTL)'));
   assert.equal(ex.integrityAtOpen.ok, true);
-  assert.equal(ex.meta().schema_version, '2');
+  assert.equal(ex.meta().schema_version, '3');
+  assert.equal(ex.db.get<{ n: number }>("SELECT count(*) AS n FROM sqlite_master WHERE name = 'event_plans'")?.n, 1);
   assert.equal(ex.db.get<{ n: number }>("SELECT count(*) AS n FROM sqlite_master WHERE name = 'weekly_reports'")?.n, 1);
   const cols = ex.db.all<{ name: string }>('PRAGMA table_info(deliverables)').map((c) => c.name);
   assert.ok(cols.includes('file_name') && cols.includes('file_size'));
-  const mig = ex.db.get<{ before: string; after: string }>("SELECT before, after FROM journal WHERE entity = 'meta' AND entity_id = 'schema_version' ORDER BY seq DESC LIMIT 1");
-  assert.equal(mig?.before, '{"value":"1"}');
-  assert.equal(mig?.after, '{"value":"2"}');
+  const migs = ex.db.all<{ before: string; after: string }>("SELECT before, after FROM journal WHERE entity = 'meta' AND entity_id = 'schema_version' AND action = 'update' ORDER BY seq");
+  assert.deepEqual(migs.map((m) => `${m.before}->${m.after}`), ['{"value":"1"}->{"value":"2"}', '{"value":"2"}->{"value":"3"}']);
   assert.equal((await ex.verify()).ok, true);
   await ex.saveWeeklyReport(null, { report_date: '2027-05-07' });
   ex.close();

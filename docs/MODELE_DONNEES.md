@@ -158,7 +158,8 @@ DDL complet : [`schema/tlpt.sql`](../schema/tlpt.sql). Vue d'ensemble :
 ```
 meta ─────────────── clé/valeur : schema_version, codename, profile, ref_version, created_at, entity_name (facultatif)
 facts ────────────── valeurs des faits d'applicabilité (internal_testers, pooled…)
-event_dates ──────── date saisie pour chaque événement du core (N0, R0, R1, N2…)
+event_dates ──────── date réelle de chaque événement du core (N0, R0, R1, N2…)
+event_plans ──────── date prévue de chaque événement + date de référence (baseline) : échéances prévisionnelles, glissement (schéma v3)
 deadline_overrides ─ échéance ou délai surchargé + justification
 checklist ────────── réponse par item du référentiel : statut, justification, décideur
 parties ──────────── annuaire (rôle = acteur du core, organisation, contact)
@@ -173,7 +174,9 @@ sessions ─────────── ouvertures de session (auteur déclar
 journal ──────────── journal chaîné append-only (cf. 2.3)
 ```
 
-**Version de schéma** : 2 (`meta.schema_version`). Les fichiers v1 sont migrés à l'ouverture ([`engine/src/migrations.ts`](../engine/src/migrations.ts)). La migration est faite dans une transaction et journalisée (`meta.schema_version` 1 → 2). Une version inconnue est refusée.
+**Version de schéma** : 3 (`meta.schema_version`). Les fichiers v1 et v2 sont migrés à l'ouverture ([`engine/src/migrations.ts`](../engine/src/migrations.ts)), étape par étape (1 → 2 : `weekly_reports` ; 2 → 3 : `event_plans`). Chaque migration est faite dans une transaction et journalisée.
+
+**Planification** (`event_plans`) : la date prévue d'un événement sert d'ancre **prévisionnelle** tant que la date réelle n'est pas saisie (les échéances récurrentes exigent une date réelle). La première date prévue devient la date de référence ; « Figer le planning de référence » la remplace par les dates prévues actuelles. Le glissement est calculé à la volée : date réelle (ou prévue) − date de référence. Les délais de préparation des livrables (`lead_weeks` dans le pack `core`) alimentent la liste « Préparations à lancer ». Une version inconnue est refusée.
 
 **Règle d'écriture** : toute écriture dans une table métier passe par une **fonction unique** du moteur. Elle
 écrit la ligne **et** l'entrée de journal correspondante dans **la même transaction**. Des déclencheurs SQLite interdisent

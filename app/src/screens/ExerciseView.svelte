@@ -9,7 +9,7 @@
   import Dashboard from './Dashboard.svelte';
   import Requirements from './Requirements.svelte';
   import {
-    checkEventOrder, computeDeadlinesForProfile, effectiveFacts, factIssues, type DeadlineResult, type FactValue,
+    checkEventOrder, computeDeadlinesForProfile, diffDays, effectiveFacts, factIssues, type DeadlineResult, type FactValue,
   } from '../../../engine/src/index.ts';
 
   const meta = $derived.by(() => { void ui.rev; return currentExercise().meta(); });
@@ -42,6 +42,11 @@
   const canMarkDone = (r: DeadlineResult) => r.display === 'check' && (r.kind === 'max' || r.kind === 'before') && r.state !== 'not_applicable';
 
   function setEvent(id: string, value: string) { void mutate((ex) => ex.setEventDate(id, value || null)); }
+  function setPlan(id: string, value: string) { void mutate((ex) => ex.setEventPlan(id, value || null)); }
+  const plans = $derived.by(() => { void ui.rev; return Object.fromEntries(currentExercise().listEventPlans().map((p) => [p.event_ref, p])); });
+  const slip = (id: string) => { const p = plans[id]; const ref = exState.events[id] ?? p?.planned_date; return p?.baseline_date && ref ? diffDays(p.baseline_date, ref) : undefined; };
+  let rebaselined = $state('');
+  async function rebaseline() { let n = 0; await mutate(async (ex) => { n = await ex.rebaseline(); return n > 0; }); rebaselined = t('ev.rebaselined', { n }); }
   function setDone(id: string, value: string) { void mutate((ex) => ex.setDeadlineDone(id, value || null)); }
   function setFact(id: string, value: FactValue) { void mutate((ex) => ex.setFact(id, value)); }
 
@@ -125,6 +130,8 @@
                 {:else if r.due}
                   <time datetime={r.due}>{formatDate(r.due)}</time>
                   {#if r.kind === 'min'}<span class="hint">{t('dl.min.earliest')}</span>{/if}
+                  {#if r.forecast}<span class="hint forecast">{t('dl.forecast')}</span>{/if}
+                  {#if r.planShort}<span class="hint bad-hint">{t('dl.planShort')}</span>{/if}
                   <span class="days">{daysText(r)}</span>
                 {/if}
                 </div>
@@ -146,17 +153,26 @@
 
 <div class="cols">
   <section class="card block" aria-labelledby="h-events">
-    <h2 id="h-events">{t('sec.events')}</h2>
-    <p class="help">{t('sec.events.help')}</p>
+    <div class="head">
+      <h2 id="h-events">{t('sec.events')}</h2>
+      <button type="button" class="ghost small" onclick={rebaseline} title={t('ev.rebaseline.help')}>{t('ev.rebaseline')}</button>
+    </div>
+    <p class="help">{t('sec.events.help')} {t('ev.plan.help')}</p>
+    {#if rebaselined}<p class="help" role="status">{rebaselined}</p>{/if}
+    <div class="ev ev-head" aria-hidden="true"><span></span><span>{t('ev.actual')}</span><span>{t('ev.planned')}</span></div>
     {#each phasesOrdered as ph (ph.id)}
       {@const evs = core.events.filter((e) => e.phase === ph.id)}
       {#if evs.length}
         <fieldset>
           <legend>{loc(ph.label)}</legend>
           {#each evs as ev (ev.id)}
-            <div class="ev">
-              <label for={`ev-${ev.id}`}>{loc(ev.label)}</label>
-              <input id={`ev-${ev.id}`} type="date" value={exState.events[ev.id] ?? ''} onchange={(e) => setEvent(ev.id, e.currentTarget.value)} />
+            {@const s = slip(ev.id)}
+            <div class="ev" data-event={ev.id}>
+              <label for={`ev-${ev.id}`}>{loc(ev.label)}
+                {#if s !== undefined && s !== 0}<span class="slip" class:late={s > 0} data-slip={s}>{s > 0 ? t('ev.slip.late', { n: s }) : t('ev.slip.early', { n: -s })}</span>{/if}
+              </label>
+              <input id={`ev-${ev.id}`} type="date" value={exState.events[ev.id] ?? ''} onchange={(e) => setEvent(ev.id, e.currentTarget.value)} aria-label={`${loc(ev.label)} — ${t('ev.actual')}`} />
+              <input id={`plan-${ev.id}`} type="date" class="plan" value={plans[ev.id]?.planned_date ?? ''} onchange={(e) => setPlan(ev.id, e.currentTarget.value)} aria-label={`${loc(ev.label)} — ${t('ev.planned')}`} />
             </div>
           {/each}
         </fieldset>
@@ -245,7 +261,16 @@
   fieldset { border: 1px solid var(--border); border-radius: 8px; margin: 12px 0 0; padding: 8px 12px 10px; }
   legend { font-weight: 600; padding: 0 4px; }
   .ev { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 5px 0; }
+  .ev { display: grid; grid-template-columns: 1fr 9.5rem 9.5rem; }
   .ev label { flex: 1; }
+  .ev-head { font-size: .75rem; color: var(--muted); text-transform: uppercase; padding: 8px 0 0; }
+  .ev input.plan { border-style: dashed; }
+  .slip { margin-left: 6px; font-size: .75rem; font-weight: 700; color: var(--ok); }
+  .slip.late { color: var(--bad); }
+  .forecast { font-style: italic; }
+  .bad-hint { color: var(--bad); font-weight: 600; }
+  .small { padding: 4px 10px; font-size: .85rem; }
+  @media (max-width: 560px) { .ev { grid-template-columns: 1fr 1fr; } .ev label { grid-column: 1 / -1; } .ev-head span:first-child { display: none; } .ev-head { grid-template-columns: 1fr 1fr; } }
   .fact { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
   .fact.flagged { border-left: 3px solid var(--warn); padding-left: 8px; }
   .fact-issue { margin: 8px 0 0; padding: 8px 10px; border-radius: 8px; font-size: .9rem; background: var(--warn-bg); color: var(--warn); }

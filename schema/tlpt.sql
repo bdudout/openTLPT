@@ -1,7 +1,7 @@
 -- openTLPT — schéma de la base d'exercice (contenu chiffré d'un fichier .tlpt)
 -- Voir docs/MODELE_DONNEES.md §2. Les identifiants *_ref désignent des éléments du référentiel (packs JSON) ;
 -- leur existence est vérifiée par le moteur, pas par SQLite (le référentiel n'est pas dans la base).
--- Version de schéma : 2 (meta.schema_version). Migrations : engine/src/migrations.ts.
+-- Version de schéma : 3 (meta.schema_version). Migrations : engine/src/migrations.ts.
 -- Dates : TEXT ISO 8601 (YYYY-MM-DD pour les dates, YYYY-MM-DDTHH:MM:SSZ pour les horodatages UTC).
 
 PRAGMA foreign_keys = ON;
@@ -27,6 +27,14 @@ CREATE TABLE event_dates (
   event_ref TEXT PRIMARY KEY,
   date      TEXT NOT NULL CHECK (date(date) IS NOT NULL),
   note      TEXT
+) STRICT;
+
+-- Planning : date prévue courante et date de référence (premier plan, ou plan figé) — glissement = prévue − référence
+CREATE TABLE event_plans (
+  event_ref     TEXT PRIMARY KEY,
+  planned_date  TEXT NOT NULL CHECK (date(planned_date) IS NOT NULL),
+  baseline_date TEXT CHECK (baseline_date IS NULL OR date(baseline_date) IS NOT NULL),
+  note          TEXT
 ) STRICT;
 
 -- Surcharges justifiées d'échéances (ex. D-13 modulé par l'autorité)

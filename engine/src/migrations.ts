@@ -1,7 +1,7 @@
 // Migrations du schéma de la base d'exercice. Chaque entrée fait passer de la version clé à la version suivante.
 // Elles sont appliquées à l'ouverture, dans une transaction, et journalisées (meta.schema_version).
 
-export const CURRENT_SCHEMA_VERSION = '2';
+export const CURRENT_SCHEMA_VERSION = '3';
 
 export const MIGRATIONS: Record<string, { to: string; sql: string[] }> = {
   '1': {
@@ -16,6 +16,17 @@ export const MIGRATIONS: Record<string, { to: string; sql: string[] }> = {
       ) STRICT`,
       'ALTER TABLE deliverables ADD COLUMN file_name TEXT',
       'ALTER TABLE deliverables ADD COLUMN file_size INTEGER CHECK (file_size IS NULL OR file_size >= 0)',
+    ],
+  },
+  '2': {
+    to: '3',
+    sql: [
+      `CREATE TABLE event_plans (
+        event_ref     TEXT PRIMARY KEY,
+        planned_date  TEXT NOT NULL CHECK (date(planned_date) IS NOT NULL),
+        baseline_date TEXT CHECK (baseline_date IS NULL OR date(baseline_date) IS NOT NULL),
+        note          TEXT
+      ) STRICT`,
     ],
   },
 };

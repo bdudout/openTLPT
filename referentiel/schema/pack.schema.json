@@ -139,6 +139,7 @@
         "annex": { "type": "string", "description": "RTS annex defining minimum content" },
         "profiles": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Id" } },
         "sensitive": { "type": "boolean" },
+        "lead_weeks": { "type": "integer", "minimum": 1, "maximum": 52, "description": "Indicative preparation lead time (openTLPT planning aid, not an obligation)." },
         "applies_when": { "$ref": "#/$defs/Condition" }
       }
     },

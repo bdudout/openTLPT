@@ -2,10 +2,10 @@
   import { factValueLabel, formatDate, loc, t, type MsgKey } from '../lib/i18n.svelte.ts';
   import { act, currentExercise, loadState, mutate, openChecklist, todayISO, ui } from '../lib/app.svelte.ts';
   import { downloadBlob } from '../lib/files.ts';
-  import { snapshot } from '../lib/snapshot.ts';
+  import { leadWeeks, snapshot } from '../lib/snapshot.ts';
   import { buildDeck, type CommitteeKind } from '../lib/deck.ts';
   import { deckToPptx } from '../lib/pptx.ts';
-  import { REF_VERSION, actorsById, core, eventsById, itemsById, packs, phasesById } from '../lib/ref.ts';
+  import { REF_VERSION, actorsById, core, deliverablesById, eventsById, itemsById, packs, phasesById } from '../lib/ref.ts';
   import {
     buildChecklist, buildDashboard, checkEventOrder, computeDeadlinesForProfile, deadlinePhases, deliverableRows, effectiveFacts,
     expandProfile, factIssues,
@@ -32,6 +32,9 @@
       weeklyReports: ex.listWeeklyReports().map((r) => r.report_date), legups: ex.listLegUps(), detections: ex.listDetections(),
       orderIssues: checkEventOrder(core, st.events), expectedDeliverables: expected, deliverables,
       visibleProfiles: expandProfile(core.profiles, profile), factIssues: factIssues(facts),
+      plannedDates: st.planned ?? {}, baselineDates: Object.fromEntries(ex.listEventPlans().filter((p) => p.baseline_date).map((p) => [p.event_ref, p.baseline_date as string])),
+      leadWeeks,
+      horizonDays: ui.horizonWeeks * 7,
     });
     return { meta, facts, dash, journal: ex.journalStats() };
   });
@@ -53,7 +56,7 @@
     deckNotice = '';
     try {
       const ex = currentExercise();
-      const deck = buildDeck(kind, snapshot(ex, loadState()));
+      const deck = buildDeck(kind, snapshot(ex, loadState(), ui.horizonWeeks));
       const { blob, slides } = await deckToPptx(deck, ex.author);
       const ok = await act((e) => e.recordExport('committee_pptx', { deck: kind, slides }));
       if (!ok) return;
@@ -163,6 +166,13 @@
       <span class="k-sub">{t('kpi.deliverables.sub', { a: k.deliverables.approved, h: k.deliverables.fingerprinted })}</span>
     </div>
   {/if}
+  {#if k.slippage}
+    <div class="kpi" class:warn={k.slippage.slipped > 0} data-kpi="planning">
+      <span class="k-label">{t('kpi.planning')}</span>
+      <span class="k-value">{k.slippage.slipped}/{k.slippage.tracked}</span>
+      <span class="k-sub">{t('kpi.planning.sub', { n: k.slippage.maxDays })}</span>
+    </div>
+  {/if}
   <div class="kpi" class:warn={k.legups.flagged > 0} data-kpi="legups">
     <span class="k-label">{t('kpi.legups')}</span>
     <span class="k-value">{k.legups.total}</span>
@@ -186,7 +196,8 @@
       <li class:late={a.overdue} data-action={a.id}>
         <div>
           <strong>{a.kind === 'weekly_report' ? t('db.weekly.item', { d: formatDate(a.due) }) : loc(defs[a.id]?.label)}</strong>
-          <span class="meta">{a.id} · {carriers(a.id)}{a.beforeEvent ? ` · ${t('db.before', { e: evLabel(a.beforeEvent) })}` : ''}</span>
+          <span class="meta">{a.id} · {carriers(a.id)}{a.beforeEvent ? ` · ${t('db.before', { e: evLabel(a.beforeEvent) })}` : ''}{a.forecast ? ` · ${t('dl.forecast')}` : ''}</span>
+          {#if a.startBy && testid === 'db-tostart'}<span class="meta start">{t('db.startBy', { d: formatDate(a.startBy), w: a.leadWeeks ?? 0, l: loc(deliverablesById[a.deliverable ?? '']?.label) })}</span>{/if}
         </div>
         <div class="when">
           <time datetime={a.due}>{formatDate(a.due)}</time>
@@ -203,15 +214,27 @@
     {@render actions(data.dash.thisWeek, t('db.week.empty'), 'db-week')}
   </section>
   <section class="card" aria-labelledby="h-up">
-    <h2 id="h-up">{t('db.upstream')}</h2>
+    <div class="up-head">
+      <h2 id="h-up">{t('db.upstream.title')}</h2>
+      <label class="horizon">{t('db.horizon')}
+        <select bind:value={ui.horizonWeeks} data-testid="db-horizon">
+          {#each [4, 6, 8, 12] as w (w)}<option value={w}>{t('db.weeks', { n: w })}</option>{/each}
+        </select>
+      </label>
+    </div>
     {@render actions(data.dash.upcoming, t('db.upstream.empty'), 'db-upstream')}
+    {#if data.dash.toStart.length}
+      <h3>{t('db.tostart')}</h3>
+      <p class="help">{t('db.tostart.help')}</p>
+      {@render actions(data.dash.toStart, '', 'db-tostart')}
+    {/if}
     {#if data.dash.expectedEvents.length}
       <h3>{t('db.expected')}</h3>
       <p class="help">{t('db.expected.help')}</p>
       <ul class="expected" data-testid="db-expected">
         {#each data.dash.expectedEvents as e (e.event)}
           <li data-expected={e.event}>
-            <label for={`db-ev-${e.event}`}>{evLabel(e.event)} <span class="meta">· {loc(phasesById[e.phase]?.label)}{e.byAuthority ? ` · ${t('db.byAuthority')}` : ''}</span></label>
+            <label for={`db-ev-${e.event}`}>{evLabel(e.event)} <span class="meta">· {loc(phasesById[e.phase]?.label)}{e.byAuthority ? ` · ${t('db.byAuthority')}` : ''}{e.planned ? ` · ${t('ev.planned.short')} ${formatDate(e.planned)}` : ''}</span></label>
             <input id={`db-ev-${e.event}`} type="date" onchange={(ev) => setEvent(e.event, ev.currentTarget.value)} />
           </li>
         {/each}
@@ -233,8 +256,11 @@
           <p class="meta">{ph.start ? formatDate(ph.start) : '…'} → {ph.end ? formatDate(ph.end) : '…'}</p>
         {/if}
         <ul class="tl-events">
-          {#each ph.events.filter((e) => e.date) as e (e.event)}
-            <li class:past={e.past}><span aria-hidden="true">{e.past ? '●' : '○'}</span> {formatDate(e.date)} — {evLabel(e.event)}</li>
+          {#each ph.events.filter((e) => e.date || e.planned) as e (e.event)}
+            <li class:past={e.past} class:planned={!e.date}>
+              <span aria-hidden="true">{e.past ? '●' : '○'}</span> {formatDate(e.date ?? e.planned)}{e.date ? '' : ` (${t('ev.planned.short')})`} — {evLabel(e.event)}
+              {#if e.slipDays}<span class="slip" class:late={e.slipDays > 0}>{e.slipDays > 0 ? t('ev.slip.late', { n: e.slipDays }) : t('ev.slip.early', { n: -e.slipDays })}</span>{/if}
+            </li>
           {/each}
         </ul>
       </li>
@@ -336,6 +362,12 @@
   .small { padding: 4px 10px; font-size: .85rem; }
   .muted-txt { color: var(--muted); }
   .bad-txt { color: var(--bad); font-weight: 600; }
+  .up-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .horizon { font-size: .82rem; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .start { color: var(--accent); font-weight: 600; }
+  .tl-events li.planned { font-style: italic; }
+  .slip { margin-left: 4px; font-weight: 700; color: var(--ok); font-style: normal; }
+  .slip.late { color: var(--bad); }
   .decks { margin-bottom: 12px; }
   .decks ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; }
   .decks li { display: flex; justify-content: space-between; gap: 10px; align-items: center; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }

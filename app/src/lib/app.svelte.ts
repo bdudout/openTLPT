@@ -31,6 +31,8 @@ export const ui = $state({
   checklistView: 'standing' as string,
   /** Dernier ancrage produit dans cette session (à recopier dans un PV). */
   lastAnchorText: '' as string,
+  /** Horizon « à préparer en amont », en semaines (réglable dans le tableau de bord). */
+  horizonWeeks: 6,
 });
 
 export function openChecklist(step: string): void { ui.checklistView = step; ui.tab = 'checklists'; }

@@ -43,7 +43,11 @@ export function computeDeadline(
   if (override) res.overridden = { justification: override.justification };
   if (ignored) res.overrideIgnored = true;
 
-  const anchor = st.events[def.anchor];
+  // Ancre : date réelle, sinon date prévue (échéance prévisionnelle). Le récurrent ne se prévoit pas.
+  const actual = st.events[def.anchor];
+  const planned = def.kind === 'recurring' ? undefined : st.planned?.[def.anchor];
+  const anchor = actual ?? planned;
+  if (!actual && planned) res.forecast = true;
   const doneOn = st.done?.[def.id];
   if (doneOn) res.doneOn = doneOn;
 
@@ -72,7 +76,9 @@ export function computeDeadline(
       if (!endEvent) throw new Error(`${def.id} : 'end_event' manquant pour kind=min`);
       const end = st.events[endEvent];
       if (end) return { ...res, state: diffDays(earliestEnd, end) >= 0 ? 'min_met' : 'min_violated', daysLeft: diffDays(end, earliestEnd) };
-      return { ...res, state: 'running', daysLeft: diffDays(st.today, earliestEnd) };
+      const plannedEnd = st.planned?.[endEvent];
+      if (plannedEnd && diffDays(earliestEnd, plannedEnd) < 0) res.planShort = true;
+      return { ...res, state: actual ? 'running' : 'upcoming', daysLeft: diffDays(st.today, earliestEnd) };
     }
 
     case 'recurring': {
