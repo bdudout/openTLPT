@@ -1,7 +1,7 @@
 -- openTLPT — schéma de la base d'exercice (contenu chiffré d'un fichier .tlpt)
 -- Voir docs/MODELE_DONNEES.md §2. Les identifiants *_ref désignent des éléments du référentiel (packs JSON) ;
 -- leur existence est vérifiée par le moteur, pas par SQLite (le référentiel n'est pas dans la base).
--- Version de schéma : 3 (meta.schema_version). Migrations : engine/src/migrations.ts.
+-- Version de schéma : 4 (meta.schema_version). Migrations : engine/src/migrations.ts.
 -- Dates : TEXT ISO 8601 (YYYY-MM-DD pour les dates, YYYY-MM-DDTHH:MM:SSZ pour les horodatages UTC).
 
 PRAGMA foreign_keys = ON;
@@ -114,6 +114,18 @@ CREATE TABLE scenarios (
   cif_label    TEXT,
   includes_tpp INTEGER NOT NULL DEFAULT 0 CHECK (includes_tpp IN (0,1)),
   selected     INTEGER NOT NULL DEFAULT 0 CHECK (selected IN (0,1))
+) STRICT;
+
+-- Flags par scénario et chemins d'attaque (RTS 11(1) annexe IV, rapport RT annexe V) — schéma v4
+CREATE TABLE flags (
+  id          INTEGER PRIMARY KEY,
+  scenario_id INTEGER REFERENCES scenarios(id),
+  label       TEXT NOT NULL,              -- libellé neutre, sans détail sensible
+  cia         TEXT CHECK (cia IN ('C','I','A','Au') OR cia IS NULL),
+  status      TEXT NOT NULL DEFAULT 'planned' CHECK (status IN ('planned','in_progress','reached','not_reached')),
+  reached_at  TEXT CHECK (reached_at IS NULL OR date(reached_at) IS NOT NULL),
+  attack_path TEXT,                       -- chemin d'attaque résumé (annexe V : réussi ou non)
+  ttps        TEXT                        -- techniques MITRE ATT&CK (ex. T1566, T1078)
 ) STRICT;
 
 -- Registre des leg-ups (RTS 11(8))

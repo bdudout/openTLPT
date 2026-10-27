@@ -260,6 +260,37 @@ async function runOne(name) {
     await page.locator('tr[data-deadline="D-07"][data-state="recurring_ok"]').waitFor();
   });
 
+  await step('scénarios et flags : 3 scénarios au moins, flag par scénario, résultat daté', async () => {
+    await page.getByRole('button', { name: 'Registres' }).click();
+    const sc = page.getByTestId('scenarios');
+    const add = sc.getByTestId('sc-add');
+    for (const [i, label] of ['Fraude au paiement', 'Exfiltration de données clients'].entries()) {
+      await add.getByLabel('Scénario').fill(label);
+      await add.getByRole('button', { name: 'Ajouter' }).click();
+      await sc.locator(`article[data-scenario="${i + 1}"]`).getByLabel('Retenu').check();
+    }
+    await sc.locator('[data-issue="scenarios_too_few"]').waitFor();
+    await add.getByLabel('Scénario').fill('Indisponibilité des paiements');
+    await add.getByRole('button', { name: 'Ajouter' }).click();
+    await sc.locator('article[data-scenario="3"]').getByLabel('Retenu').check();
+    await sc.locator('[data-issue="scenarios_too_few"]').waitFor({ state: 'detached' });
+    // Phase active commencée : chaque scénario retenu doit porter un flag.
+    await sc.locator('article[data-scenario="1"]').filter({ hasText: 'sans flag' }).waitFor();
+    const fadd = sc.getByTestId('flag-add');
+    await fadd.getByLabel('Flag').fill('Ordre de virement modifié');
+    await fadd.getByLabel('Scénario').selectOption({ label: 'Fraude au paiement' });
+    await fadd.getByRole('button', { name: 'Ajouter' }).click();
+    await sc.locator('article[data-scenario="1"]').filter({ hasText: 'sans flag' }).waitFor({ state: 'detached' });
+    const f = sc.locator('article[data-flag="1"]');
+    await f.getByLabel('Statut').selectOption('reached');
+    await f.filter({ hasText: 'Flag atteint sans date' }).waitFor();
+    await f.getByLabel('Atteint le').fill('2026-01-20');
+    await f.filter({ hasText: 'Flag atteint sans date' }).waitFor({ state: 'detached' });
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.locator('[data-kpi="flags"]').filter({ hasText: '1/1' }).waitFor();
+    await page.getByTestId('db-alerts').filter({ hasText: 'Scénario retenu sans flag' }).waitFor();
+  });
+
   await step('supports de comité PowerPoint : 3 trames, confidentialité, export journalisé', async () => {
     await page.getByRole('button', { name: 'Tableau de bord' }).click();
     const decks = page.getByTestId('db-decks');

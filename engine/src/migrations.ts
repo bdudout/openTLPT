@@ -1,7 +1,7 @@
 // Migrations du schéma de la base d'exercice. Chaque entrée fait passer de la version clé à la version suivante.
 // Elles sont appliquées à l'ouverture, dans une transaction, et journalisées (meta.schema_version).
 
-export const CURRENT_SCHEMA_VERSION = '3';
+export const CURRENT_SCHEMA_VERSION = '4';
 
 export const MIGRATIONS: Record<string, { to: string; sql: string[] }> = {
   '1': {
@@ -27,6 +27,21 @@ export const MIGRATIONS: Record<string, { to: string; sql: string[] }> = {
         baseline_date TEXT CHECK (baseline_date IS NULL OR date(baseline_date) IS NOT NULL),
         note          TEXT
       ) STRICT`,
+    ],
+  },
+  '3': {
+    to: '4',
+    sql: [
+      `CREATE TABLE flags (
+  id          INTEGER PRIMARY KEY,
+  scenario_id INTEGER REFERENCES scenarios(id),
+  label       TEXT NOT NULL,              -- libellé neutre, sans détail sensible
+  cia         TEXT CHECK (cia IN ('C','I','A','Au') OR cia IS NULL),
+  status      TEXT NOT NULL DEFAULT 'planned' CHECK (status IN ('planned','in_progress','reached','not_reached')),
+  reached_at  TEXT CHECK (reached_at IS NULL OR date(reached_at) IS NOT NULL),
+  attack_path TEXT,                       -- chemin d'attaque résumé (annexe V : réussi ou non)
+  ttps        TEXT                        -- techniques MITRE ATT&CK (ex. T1566, T1078)
+) STRICT`,
     ],
   },
 };

@@ -1,7 +1,8 @@
 // Tableau de bord : ce qui est à faire cette semaine, à préparer en amont, les jalons et la conformité par étape.
 // Fonction pure : tout est dérivé de la date du jour, du référentiel et de l'état de l'exercice.
 import { addDays, diffDays } from './dates.ts';
-import { detectionIssues, legUpIssues, type DetectionRecord, type Issue, type LegUpRecord } from './registers.ts';
+import { detectionIssues, legUpIssues, scenarioIssues, type DetectionRecord, type FlagRecord, type Issue, type LegUpRecord, type ScenarioRecord } from './registers.ts';
+import type { Facts } from './applicability.ts';
 import { stepwiseProgress, totalProgress, type ChecklistResult, type Progress } from './checklist.ts';
 import type { DeadlineDef, DeadlineResult, EventDef, EventOrderIssue, ISODate } from './types.ts';
 import type { DeliverableRecord } from './registers.ts';
@@ -28,6 +29,10 @@ export interface DashboardInput {
   weeklyReports?: ISODate[];
   legups?: LegUpRecord[];
   detections?: DetectionRecord[];
+  scenarios?: ScenarioRecord[];
+  flags?: FlagRecord[];
+  /** Faits effectifs, pour les contrôles des scénarios (TLPT mutualisé ou commun). */
+  facts?: Facts;
   orderIssues?: EventOrderIssue[];
   /** Profils visibles (profil courant et ceux qu'il inclut) : filtre les jalons attendus. Absent = tout afficher. */
   visibleProfiles?: Set<string>;
@@ -91,7 +96,7 @@ export interface StepCompliance {
 }
 
 export interface Alert {
-  kind: 'legup' | 'detection' | 'order' | 'facts';
+  kind: 'legup' | 'detection' | 'order' | 'facts' | 'scenario';
   severity?: 'error' | 'warning';
   recordId?: number;
   code: string;
@@ -122,6 +127,8 @@ export interface Kpis {
   /** Registres. */
   legups: { total: number; unplanned: number; flagged: number };
   detections: { total: number; unvalidated: number };
+  /** Flags du plan RT : atteints / non atteints / total (rapport RT, annexe V). */
+  flags?: { total: number; reached: number; notReached: number; scenarios: number };
   /** Livrables : attendus, remis (ou approuvés), approuvés, avec empreinte. */
   deliverables?: { expected: number; submitted: number; approved: number; fingerprinted: number };
   /** Échéances ouvertes en retard (toutes phases). */
@@ -246,6 +253,10 @@ export function buildDashboard(input: DashboardInput): Dashboard {
   };
   for (const l of input.legups ?? []) push('legup', l.id, l.description, legUpIssues(l));
   for (const d of input.detections ?? []) push('detection', d.id, d.description, detectionIssues(d));
+  for (const i of scenarioIssues(input.scenarios ?? [], input.flags ?? [], input.facts ?? {}, !!input.eventDates.R0 && diffDays(input.eventDates.R0, today) >= 0)) {
+    const label = i.recordId === undefined ? '' : (i.code === 'flag_no_date' ? input.flags?.find((f) => f.id === i.recordId)?.label : input.scenarios?.find((s) => s.id === i.recordId)?.label) ?? '';
+    alerts.push({ kind: 'scenario', code: i.code, source: i.source, label, ...(i.recordId !== undefined ? { recordId: i.recordId } : {}) });
+  }
   for (const f of input.factIssues ?? []) alerts.push({ kind: 'facts', code: f.code, source: f.source, severity: f.severity, label: f.facts.join(', ') });
   for (const o of input.orderIssues ?? []) alerts.push({ kind: 'order', code: 'event_order', label: `${o.event}<${o.mustFollow}` });
 
@@ -268,6 +279,8 @@ export function buildDashboard(input: DashboardInput): Dashboard {
     },
     overdueDeadlines: input.deadlines.filter((r) => r.state === 'overdue' && r.display === 'check').length,
   };
+  const flags = input.flags ?? [];
+  if (flags.length) kpis.flags = { total: flags.length, reached: flags.filter((f) => f.status === 'reached').length, notReached: flags.filter((f) => f.status === 'not_reached').length, scenarios: (input.scenarios ?? []).filter((x) => x.selected).length };
   if (ev.N0) kpis.dayOfTlpt = diffDays(ev.N0, today);
   const d02 = res.get('D-02');
   const testingStarted = !!ev.TESTING_START && diffDays(ev.TESTING_START, today) >= 0; // une date future est seulement planifiée

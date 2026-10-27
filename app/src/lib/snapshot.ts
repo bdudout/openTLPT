@@ -26,10 +26,12 @@ export function snapshot(ex: Exercise, st: ReturnType<Exercise['loadState']>, ho
   const legups = ex.listLegUps();
   const detections = ex.listDetections();
   const reports = ex.listWeeklyReports();
+  const scenarios = ex.listScenarios();
+  const flags = ex.listFlags();
   const dash = buildDashboard({
     today: st.today, phases: core.phases as unknown as DashboardPhaseDef[], events: core.events, deadlineDefs: core.deadlines,
     deadlines, deadlinePhase: phaseOf, eventDates: st.events, checklist,
-    weeklyReports: reports.map((r) => r.report_date), legups, detections,
+    weeklyReports: reports.map((r) => r.report_date), legups, detections, scenarios, flags, facts,
     orderIssues: checkEventOrder(core, st.events), visibleProfiles: expandProfile(core.profiles, profile), factIssues: issues,
     plannedDates: st.planned ?? {}, baselineDates: Object.fromEntries(plans.filter((p) => p.baseline_date).map((p) => [p.event_ref, p.baseline_date as string])),
     leadWeeks, horizonDays: horizonWeeks * 7, expectedDeliverables: dRows.rows.map((r) => r.def.id), deliverables,
@@ -37,7 +39,7 @@ export function snapshot(ex: Exercise, st: ReturnType<Exercise['loadState']>, ho
   const req = buildRequirements({
     packs, profiles: core.profiles, profile, facts, responses, refVersion: REF_VERSION, deadlines, deliverables, lastAnswers: ex.lastAnswers(),
   });
-  return { meta, st, facts, issues, deadlines, checklist, dash, req, deliverables, dRows, legups, detections, reports, plans, journal: ex.journalStats(), author: ex.author, phaseOf };
+  return { meta, st, facts, issues, deadlines, checklist, dash, req, deliverables, dRows, legups, detections, reports, scenarios, flags, plans, journal: ex.journalStats(), author: ex.author, phaseOf };
 }
 
 export type Snapshot = ReturnType<typeof snapshot>;

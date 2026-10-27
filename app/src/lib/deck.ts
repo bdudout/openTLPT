@@ -46,6 +46,7 @@ function kpis(s: Snapshot, detail: boolean): Block {
   if (k.deliverables) items.push({ label: t('kpi.deliverables'), value: `${k.deliverables.submitted}/${k.deliverables.expected}`, sub: t('kpi.deliverables.sub', { a: k.deliverables.approved, h: k.deliverables.fingerprinted }) });
   if (detail) {
     if (k.weekly) items.push({ label: t('kpi.weekly'), value: `${k.weekly.covered}/${k.weekly.total}`, sub: t('kpi.weekly.sub'), tone: k.weekly.covered < k.weekly.total ? 'warn' : 'ok' });
+    if (k.flags) items.push({ label: t('kpi.flags'), value: `${k.flags.reached}/${k.flags.total}`, sub: t('kpi.flags.sub', { n: k.flags.notReached, s: k.flags.scenarios }) });
     items.push({ label: t('kpi.legups'), value: String(k.legups.total), sub: t('kpi.legups.sub', { u: k.legups.unplanned, f: k.legups.flagged }), tone: k.legups.flagged ? 'warn' : undefined });
     items.push({ label: t('kpi.detections'), value: String(k.detections.total), sub: t('kpi.detections.sub', { u: k.detections.unvalidated }), tone: k.detections.unvalidated ? 'warn' : undefined });
   }
@@ -140,7 +141,7 @@ function alertsBullets(s: Snapshot, aggregated: boolean): Block {
   const items = s.dash.alerts.map((a) => a.kind === 'order'
     ? t('is.event_order', { source: a.label.split('<').map((x) => ev(x)).join(' < ') })
     : a.kind === 'facts' ? `${t(`is.${a.code}` as MsgKey)} (${a.source})`
-    : `${t(`is.${a.code}` as MsgKey, { source: (a.source ?? '').replace(/^RTS-(\d+)\.(\d+)$/, 'RTS $1($2)') })} — ${a.label}`);
+    : `${t(`is.${a.code}` as MsgKey, { source: (a.source ?? '').replace(/^RTS-(\d+)\.(\d+)$/, 'RTS $1($2)') })}${a.label ? ` — ${a.label}` : ''}`);
   return { kind: 'bullets', title: t('db.alerts'), items, empty: t('db.alerts.empty') };
 }
 
@@ -199,6 +200,23 @@ function reportsTable(s: Snapshot): Block {
   return { kind: 'table', head: [t('rg.date'), t('rg.summary'), 'SHA-256'], rows, widths: [1.6, 7.4, 2.4], empty: t('rg.empty') };
 }
 
+function flagsTable(s: Snapshot): Block {
+  const scen = new Map(s.scenarios.map((x) => [x.id, x]));
+  const rows: string[][] = []; const tones: Tone[] = [];
+  for (const x of s.scenarios.filter((y) => y.selected)) {
+    const fs = s.flags.filter((f) => f.scenario_id === x.id);
+    for (const f of fs.length ? fs : [undefined]) {
+      rows.push([`${x.label}${x.threat_led ? '' : ' (X)'}`, f?.label ?? '—', f?.cia ?? x.cia ?? '—', f ? t(`fs.${f.status}` as MsgKey) : '—', f?.reached_at ? formatDate(f.reached_at) : '—', f?.attack_path ?? '—']);
+      tones.push(f?.status === 'reached' ? 'ok' : f?.status === 'not_reached' ? 'bad' : f?.status === 'in_progress' ? 'info' : undefined);
+    }
+  }
+  for (const f of s.flags.filter((y) => y.scenario_id === null || !scen.get(y.scenario_id)?.selected)) {
+    rows.push(['—', f.label, f.cia ?? '—', t(`fs.${f.status}` as MsgKey), f.reached_at ? formatDate(f.reached_at) : '—', f.attack_path ?? '—']);
+    tones.push(undefined);
+  }
+  return { kind: 'table', head: [t('sc.scenario'), t('sc.flag'), 'C/I/A', t('rq.col.status'), t('sc.reached'), t('sc.path')], rows, tones, widths: [2.6, 2.6, 0.9, 1.4, 1.4, 2.5], empty: t('rg.empty') };
+}
+
 function regulatoryTable(s: Snapshot): Block {
   const list = s.deadlines.filter((d) => d.display === 'check' && d.state !== 'not_applicable');
   const rows = list.map((d) => [d.id, dl(d.id), core.deadlines.find((x) => x.id === d.id)?.sources.join(', ') ?? '', d.due ? formatDate(d.due) : '—', state(d), d.doneOn ? formatDate(d.doneOn) : '—']);
@@ -219,6 +237,7 @@ export function buildDeck(kind: CommitteeKind, s: Snapshot): Deck {
       { title: t('db.timeline'), blocks: [milestonesTable(s)] },
       { title: t('db.compliance'), blocks: [complianceTable(s)] },
       { title: t('tab.deliverables'), blocks: [deliverablesTable(s, true)] },
+      ...(s.scenarios.length || s.flags.length ? [{ title: t('sc.title'), blocks: [flagsTable(s)] }] : []),
       { title: t('rg.legups'), blocks: [legupsTable(s)] },
       { title: t('pp.s.detections'), blocks: [detectionsTable(s)] },
       { title: t('pp.s.alerts'), blocks: [alertsBullets(s, false), decisionsBullets(s, false)] },
@@ -236,6 +255,7 @@ export function buildDeck(kind: CommitteeKind, s: Snapshot): Deck {
     slides = [
       { title: t('pp.s.week'), blocks: [kpis(s, true), context(s)] },
       { title: t('pp.wk.activities'), blocks: [weekBullets(s)] },
+      { title: t('sc.title'), blocks: [flagsTable(s)] },
       { title: t('rg.legups'), blocks: [legupsTable(s)] },
       { title: t('pp.s.detections'), blocks: [detectionsTable(s)] },
       { title: t('pp.wk.blockers'), blocks: [blockersBullets(s)] },

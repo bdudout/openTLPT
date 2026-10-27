@@ -55,7 +55,54 @@ export interface WeeklyReportRecord {
   file_name: string | null;
 }
 
+export type Cia = 'C' | 'I' | 'A' | 'Au';
+export type FlagStatus = 'planned' | 'in_progress' | 'reached' | 'not_reached';
+
+export interface ScenarioRecord {
+  id: number;
+  label: string;
+  /** Fondé sur la menace ; sinon scénario prospectif (« X »), au plus un (RTS 10(4)). */
+  threat_led: boolean;
+  cia: Cia | null;
+  cif_label: string | null;
+  /** Inclut les systèmes d'un prestataire TIC tiers (RTS 10(4) al. 2-3). */
+  includes_tpp: boolean;
+  /** Retenu par le CTL (RTS 10(3)). */
+  selected: boolean;
+}
+
+export interface FlagRecord {
+  id: number;
+  scenario_id: number | null;
+  label: string;
+  cia: Cia | null;
+  status: FlagStatus;
+  reached_at: ISODate | null;
+  attack_path: string | null;
+  ttps: string | null;
+}
+
 export interface Issue { code: string; source: string }
+
+/**
+ * Scénarios et flags (RTS 10(3), 10(4) ; plan de test RT, RTS 11(1) et annexe IV). Les contrôles d'ensemble ne s'appliquent qu'une fois un
+ * scénario retenu ; l'absence de flag n'est signalée qu'à partir de la phase active.
+ */
+export function scenarioIssues(scenarios: ScenarioRecord[], flags: FlagRecord[], facts: Facts, activeStarted: boolean): (Issue & { recordId?: number })[] {
+  const sel = scenarios.filter((s) => s.selected);
+  if (!sel.length) return [];
+  const issues: (Issue & { recordId?: number })[] = [];
+  if (sel.length < 3) issues.push({ code: 'scenarios_too_few', source: 'RTS-10.3' });
+  if (sel.filter((s) => !s.threat_led).length > 1) issues.push({ code: 'scenarios_x_max', source: 'RTS-10.4' });
+  if ((facts.pooled === true || (facts.joint === true && facts.ict_tpp_in_scope === true)) && !sel.some((s) => s.includes_tpp)) {
+    issues.push({ code: 'scenarios_tpp_missing', source: 'RTS-10.4' });
+  }
+  if (activeStarted) {
+    for (const s of sel) if (!flags.some((f) => f.scenario_id === s.id)) issues.push({ code: 'scenario_no_flag', source: 'RTS-11.1', recordId: s.id });
+  }
+  for (const f of flags) if (f.status === 'reached' && !f.reached_at) issues.push({ code: 'flag_no_date', source: 'RTS-11.1', recordId: f.id });
+  return issues;
+}
 
 /** RTS 11(8) : un leg-up ajouté ou adapté (non prévu au plan) doit être approuvé par le CT et les TM avant d'être fourni. */
 export function legUpIssues(l: LegUpRecord): Issue[] {

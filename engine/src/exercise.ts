@@ -6,7 +6,7 @@ import { insertEntry, journalHead, prepareEntry, verifyChain, type Anchor, type 
 import { isValidISODate } from './dates.ts';
 import type { ChecklistStatus, Response } from './checklist.ts';
 import { CURRENT_SCHEMA_VERSION, MIGRATIONS, isSupportedSchema } from './migrations.ts';
-import type { DeliverableRecord, DetectionRecord, LegUpRecord, WeeklyReportRecord } from './registers.ts';
+import type { DeliverableRecord, DetectionRecord, FlagRecord, LegUpRecord, ScenarioRecord, WeeklyReportRecord } from './registers.ts';
 import type { Row, SqlDb, SqlDbFactory, SqlValue } from './db.ts';
 import type { DeadlineOverride, ExerciseState, FactValue, ISODate, OffsetUnit } from './types.ts';
 
@@ -27,7 +27,7 @@ const KEYED_TABLES = {
 type KeyedTable = keyof typeof KEYED_TABLES;
 
 /** Tables à identifiant entier (registres, livrables) : `id` attribué par le moteur, de façon séquentielle. */
-const ROW_TABLES = ['deliverables', 'leg_ups', 'detections', 'weekly_reports'] as const;
+const ROW_TABLES = ['deliverables', 'leg_ups', 'detections', 'weekly_reports', 'scenarios', 'flags'] as const;
 type RowTable = (typeof ROW_TABLES)[number];
 
 const SHA256_RE = /^[0-9a-f]{64}$/;
@@ -330,6 +330,42 @@ export class Exercise {
 
   listWeeklyReports(): WeeklyReportRecord[] {
     return this.db.all<WeeklyReportRecord & Row>('SELECT * FROM weekly_reports ORDER BY report_date, id');
+  }
+
+  // --- Scénarios et flags (RTS 10, plan et rapport RT) ------------------------------------
+
+  async saveScenario(id: number | null, s: Partial<Omit<ScenarioRecord, 'id'>>): Promise<number> {
+    if (id === null && !s.label?.trim()) throw new ExerciseError('Libellé obligatoire pour un scénario.');
+    const after = pick(s, ['label', 'threat_led', 'cia', 'cif_label', 'includes_tpp', 'selected']);
+    for (const k of ['threat_led', 'includes_tpp', 'selected'] as const) if (k in after) after[k] = s[k] ? 1 : 0;
+    if (id === null && !('threat_led' in after)) after.threat_led = 1;
+    return this.#writeRow('scenarios', id, after);
+  }
+
+  /** Refusée tant que des flags ou des leg-ups y sont rattachés : la traçabilité du rapport RT en dépend. */
+  async deleteScenario(id: number): Promise<void> {
+    const used = this.db.get<{ n: number }>('SELECT (SELECT count(*) FROM flags WHERE scenario_id = ?) + (SELECT count(*) FROM leg_ups WHERE scenario_id = ?) AS n', [id, id]);
+    if (used && used.n > 0) throw new ExerciseError('Scénario utilisé par des flags ou des leg-ups : détachez-les d\'abord.');
+    await this.#writeRow('scenarios', id, null);
+  }
+
+  listScenarios(): ScenarioRecord[] {
+    return this.db.all<Row>('SELECT * FROM scenarios ORDER BY id')
+      .map((r) => ({ ...(r as unknown as ScenarioRecord), threat_led: r.threat_led === 1, includes_tpp: r.includes_tpp === 1, selected: r.selected === 1 }));
+  }
+
+  async saveFlag(id: number | null, f: Partial<Omit<FlagRecord, 'id'>>): Promise<number> {
+    if (id === null && !f.label?.trim()) throw new ExerciseError('Libellé obligatoire pour un flag.');
+    checkDates(f, ['reached_at']);
+    const after = pick(f, ['scenario_id', 'label', 'cia', 'status', 'reached_at', 'attack_path', 'ttps']);
+    if (id === null && !after.status) after.status = 'planned';
+    return this.#writeRow('flags', id, after);
+  }
+
+  async deleteFlag(id: number): Promise<void> { await this.#writeRow('flags', id, null); }
+
+  listFlags(): FlagRecord[] {
+    return this.db.all<FlagRecord & Row>('SELECT * FROM flags ORDER BY scenario_id, id');
   }
 
   // --- Lecture ---------------------------------------------------------------

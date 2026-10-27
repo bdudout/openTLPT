@@ -31,7 +31,7 @@ test('création : schéma, session et métadonnées journalisés, chaîne valide
   const meta = ex.meta();
   assert.equal(meta.codename, 'HERON');
   assert.equal(meta.profile, 'entity');
-  assert.equal(meta.schema_version, '3');
+  assert.equal(meta.schema_version, '4');
   const actions = ex.db.all<{ action: string; entity: string | null }>('SELECT action, entity FROM journal ORDER BY seq');
   assert.equal(actions[0]?.action, 'session_open');
   assert.ok(actions.slice(1).every((a) => a.action === 'create' && a.entity === 'meta'));

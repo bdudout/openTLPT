@@ -166,6 +166,7 @@ parties ──────────── annuaire (rôle = acteur du core, o
 deliverables ─────── livrables suivis : réf. au core ou libre, version, statut, sha256, emplacement
 provider_checks ──── évaluation des prestataires (items P-xx) par partie, avec empreinte de la preuve
 scenarios ────────── scénarios proposés / retenus (threat-led ou X, C/I/A, FCI)
+flags ────────────── flags par scénario : C/I/A, statut (prévu, en cours, atteint, non atteint), date, chemin d'attaque, TTP (schéma v4)
 leg_ups ──────────── registre des leg-ups (type, scénario, approbations CT/TM, date)
 detections ───────── registre des détections et des mesures validées
 plan_changes ─────── changements au plan de test RT (approbations CTL + TM)
@@ -174,7 +175,7 @@ sessions ─────────── ouvertures de session (auteur déclar
 journal ──────────── journal chaîné append-only (cf. 2.3)
 ```
 
-**Version de schéma** : 3 (`meta.schema_version`). Les fichiers v1 et v2 sont migrés à l'ouverture ([`engine/src/migrations.ts`](../engine/src/migrations.ts)), étape par étape (1 → 2 : `weekly_reports` ; 2 → 3 : `event_plans`). Chaque migration est faite dans une transaction et journalisée.
+**Version de schéma** : 4 (`meta.schema_version`). Les fichiers v1 à v3 sont migrés à l'ouverture ([`engine/src/migrations.ts`](../engine/src/migrations.ts)), étape par étape (1 → 2 : `weekly_reports` ; 2 → 3 : `event_plans` ; 3 → 4 : `flags`). Chaque migration est faite dans une transaction et journalisée.
 
 **Planification** (`event_plans`) : la date prévue d'un événement sert d'ancre **prévisionnelle** tant que la date réelle n'est pas saisie (les échéances récurrentes exigent une date réelle). La première date prévue devient la date de référence ; « Figer le planning de référence » la remplace par les dates prévues actuelles. Le glissement est calculé à la volée : date réelle (ou prévue) − date de référence. Les délais de préparation des livrables (`lead_weeks` dans le pack `core`) alimentent la liste « Préparations à lancer ». Une version inconnue est refusée.
 
