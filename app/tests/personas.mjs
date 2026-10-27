@@ -74,13 +74,16 @@ async function collect(p, persona) {
       practices: await p.getByTestId('practices').locator('article[data-item]').evaluateAll((a) => a.map((x) => x.getAttribute('data-item'))),
     };
   }
+  await tab(p, 'Parties prenantes');
+  await p.screenshot({ path: join(out, `${persona}-parties.png`), fullPage: true });
   await tab(p, 'Livrables');
   r.deliverables = await p.locator('article[data-deliverable]').evaluateAll((a) => a.map((x) => x.getAttribute('data-deliverable')));
   await p.screenshot({ path: join(out, `${persona}-deliverables.png`), fullPage: false });
   // Supports de comité
   await tab(p, 'Tableau de bord');
   r.decks = {};
-  for (const kind of ['control_team', 'management', 'authority']) {
+  const kinds = await p.locator('button[data-deck]').evaluateAll((bs) => bs.map((x) => x.dataset.deck));
+  for (const kind of kinds) {
     const [dl] = await Promise.all([p.waitForEvent('download'), p.locator(`button[data-deck="${kind}"]`).click()]);
     const path = join(out, `${persona}-${kind}.pptx`);
     await dl.saveAs(path);

@@ -75,6 +75,18 @@ Aucune erreur technique n'est apparue (console vide, aucune requête réseau). L
 
 Les tests correspondants se trouvent dans `engine/test/scope.test.ts` (7 tests) et `engine/test/planning.test.ts` (5 tests), `engine/test/scenarios.test.ts` (4 tests), `engine/test/providers.test.ts` (2 tests), et dans les scénarios « planification », « scénarios et flags », « parties prenantes » et « profils et cohérence » de `app/tests/e2e.mjs`.
 
+## Rejeu des parcours après corrections (2026-10-27)
+
+Les trois parcours ont été rejoués sur le build final (`app/tests/personas.mjs`, qui génère désormais les supports proposés au profil) :
+
+| Rôle | Résultat |
+|---|---|
+| PMO white team | À J+100, le SSD (D-02, dans 84 jours) figure dans **« Préparations à lancer »** : à lancer au plus tard le 10 novembre (10 semaines de préparation), alors qu'il reste hors de l'horizon de 6 semaines (P1). Les jalons se saisissent en date réelle ou prévue (P2) ; les validations de l'autorité sont signalées « à obtenir » (P3). La carte des supports est sous les KPI (P5). Nouvel onglet **Parties prenantes** (P4). |
+| Prestataire red team | 0 échéance en retard ; seul le rapport hebdomadaire de la semaine (D-07) est à faire ; supports proposés : **point hebdomadaire RT** (9 diapositives) et **point client** (7), plus de trame « organe de direction » (R1, R2, R3). Registre des scénarios et flags disponible (R4). |
+| Banque « significant » | Erreur sur les testeurs mixtes (DORA 26(8) al. 2) et avertissement TIBER-FR / BCE (B1, B2). D-13 en retard de 4 jours, sans surcharge possible : écart assumé (DEC-6, B4). |
+
+Restent ouverts : R5 (livrables produits ou reçus non distingués), T2 (rappel à l'ouverture), et ceux écartés par DEC-6 (B3, B4, B5, T1).
+
 ## Pistes d'amélioration priorisées
 
 | Priorité | Piste | Constats traités | Effort |
