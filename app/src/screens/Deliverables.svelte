@@ -4,7 +4,7 @@
   import { actorsById, core, phasesById } from '../lib/ref.ts';
   import { fingerprint, pickAnyFile } from '../lib/files.ts';
   import {
-    computeDeadlines, deliverableRows, effectiveFacts, type DeliverableRecord, type DeliverableStatus,
+    computeDeadlinesForProfile, deliverableRows, effectiveFacts, type DeliverableRecord, type DeliverableStatus,
   } from '../../../engine/src/index.ts';
 
   interface UiDeliverable { id: string; label: Record<string, string>; phase: string; producers: string[]; recipients?: string[]; annex?: string; sensitive?: boolean; profiles?: string[] }
@@ -15,7 +15,7 @@
     const ex = currentExercise();
     const st = loadState();
     return deliverableRows(core.deliverables as unknown as UiDeliverable[], ex.listDeliverables(), core.deadlines,
-      computeDeadlines(core, st), core.profiles, ex.meta().profile ?? 'entity', effectiveFacts(core.facts, st.facts));
+      computeDeadlinesForProfile(core, st, core.profiles, ex.meta().profile ?? 'entity'), core.profiles, ex.meta().profile ?? 'entity', effectiveFacts(core.facts, st.facts));
   });
   let verifyResult = $state<Record<string, { ok: boolean; msg: string }>>({});
   let newTitle = $state('');

@@ -5,6 +5,8 @@ import { detectionIssues, legUpIssues, type DetectionRecord, type Issue, type Le
 import { stepwiseProgress, totalProgress, type ChecklistResult, type Progress } from './checklist.ts';
 import type { DeadlineDef, DeadlineResult, EventDef, EventOrderIssue, ISODate } from './types.ts';
 import type { DeliverableRecord } from './registers.ts';
+import { eventScope } from './scope.ts';
+import type { FactIssue } from './consistency.ts';
 
 export interface DashboardPhaseDef { id: string; order: number; starts_at?: string; ends_at?: string }
 
@@ -22,6 +24,10 @@ export interface DashboardInput {
   legups?: LegUpRecord[];
   detections?: DetectionRecord[];
   orderIssues?: EventOrderIssue[];
+  /** Profils visibles (profil courant et ceux qu'il inclut) : filtre les jalons attendus. Absent = tout afficher. */
+  visibleProfiles?: Set<string>;
+  /** Incohérences des caractéristiques de l'exercice (ajoutées aux alertes). */
+  factIssues?: FactIssue[];
   /** Livrables attendus (identifiants) et suivis, pour les indicateurs de livrables. */
   expectedDeliverables?: string[];
   deliverables?: DeliverableRecord[];
@@ -45,7 +51,12 @@ export interface ActionItem {
   beforeEvent?: string;
 }
 
-export interface ExpectedEvent { event: string; phase: string }
+export interface ExpectedEvent {
+  event: string;
+  phase: string;
+  /** À obtenir de l'autorité (validation, approbation) plutôt qu'à réaliser. */
+  byAuthority?: boolean;
+}
 
 export type PhaseStatus = 'not_started' | 'in_progress' | 'done' | 'permanent';
 
@@ -66,7 +77,8 @@ export interface StepCompliance {
 }
 
 export interface Alert {
-  kind: 'legup' | 'detection' | 'order';
+  kind: 'legup' | 'detection' | 'order' | 'facts';
+  severity?: 'error' | 'warning';
   recordId?: number;
   code: string;
   source?: string;
@@ -157,9 +169,13 @@ export function buildDashboard(input: DashboardInput): Dashboard {
     for (const ev of [d.anchor, d.end_event, d.until]) if (ev) anchorsOf.set(ev, [...(anchorsOf.get(ev) ?? []), r]);
   }
   const irrelevant = (ev: string) => { const rs = anchorsOf.get(ev); return !!rs && rs.every((r) => r.state === 'not_applicable'); };
-  const expectedEvents = input.events
-    .filter((e) => !input.eventDates[e.id] && !irrelevant(e.id) && (e.after ?? []).every((p) => !!input.eventDates[p]))
-    .map((e) => ({ event: e.id, phase: e.phase }));
+  const expectedEvents: ExpectedEvent[] = [];
+  for (const e of input.events) {
+    if (input.eventDates[e.id] || irrelevant(e.id) || !(e.after ?? []).every((p) => !!input.eventDates[p])) continue;
+    const sc = input.visibleProfiles ? eventScope(e, input.deadlineDefs, input.visibleProfiles) : undefined;
+    if (sc && !sc.relevant) continue;
+    expectedEvents.push({ event: e.id, phase: e.phase, ...(sc?.byAuthority ? { byAuthority: true } : {}) });
+  }
 
   // 3. Jalons : statut de chaque phase d'après ses événements de début et de fin.
   const phases = [...input.phases].sort((a, b) => a.order - b.order);
@@ -199,6 +215,7 @@ export function buildDashboard(input: DashboardInput): Dashboard {
   };
   for (const l of input.legups ?? []) push('legup', l.id, l.description, legUpIssues(l));
   for (const d of input.detections ?? []) push('detection', d.id, d.description, detectionIssues(d));
+  for (const f of input.factIssues ?? []) alerts.push({ kind: 'facts', code: f.code, source: f.source, severity: f.severity, label: f.facts.join(', ') });
   for (const o of input.orderIssues ?? []) alerts.push({ kind: 'order', code: 'event_order', label: `${o.event}<${o.mustFollow}` });
 
   // 6. Indicateurs.

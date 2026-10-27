@@ -122,11 +122,13 @@ function alertsBullets(s: Snapshot, aggregated: boolean): Block {
     return { kind: 'bullets', title: t('db.alerts'), items: [
       ...(k.legups.flagged ? [t('pp.agg.legups', { n: k.legups.flagged })] : []),
       ...(k.detections.unvalidated ? [t('pp.agg.detections', { n: k.detections.unvalidated })] : []),
+      ...(s.dash.alerts.some((a) => a.kind === 'facts') ? [t('pp.agg.facts', { n: s.dash.alerts.filter((a) => a.kind === 'facts').length })] : []),
       ...(s.dash.alerts.some((a) => a.kind === 'order') ? [t('pp.agg.order')] : []),
     ], empty: t('db.alerts.empty') };
   }
   const items = s.dash.alerts.map((a) => a.kind === 'order'
     ? t('is.event_order', { source: a.label.split('<').map((x) => ev(x)).join(' < ') })
+    : a.kind === 'facts' ? `${t(`is.${a.code}` as MsgKey)} (${a.source})`
     : `${t(`is.${a.code}` as MsgKey, { source: (a.source ?? '').replace(/^RTS-(\d+)\.(\d+)$/, 'RTS $1($2)') })} — ${a.label}`);
   return { kind: 'bullets', title: t('db.alerts'), items, empty: t('db.alerts.empty') };
 }

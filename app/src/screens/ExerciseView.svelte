@@ -9,12 +9,14 @@
   import Dashboard from './Dashboard.svelte';
   import Requirements from './Requirements.svelte';
   import {
-    checkEventOrder, computeDeadlines, effectiveFacts, type DeadlineResult, type FactValue,
+    checkEventOrder, computeDeadlinesForProfile, effectiveFacts, factIssues, type DeadlineResult, type FactValue,
   } from '../../../engine/src/index.ts';
 
   const meta = $derived.by(() => { void ui.rev; return currentExercise().meta(); });
   const exState = $derived(loadState());
-  const results = $derived(computeDeadlines(core, exState));
+  const results = $derived(computeDeadlinesForProfile(core, exState, core.profiles, meta.profile ?? 'entity'));
+  const issues = $derived(factIssues(effectiveFacts(core.facts, exState.facts)));
+  const issueFacts = $derived(new Set(issues.flatMap((i) => i.facts)));
   const facts = $derived(effectiveFacts(core.facts, exState.facts));
   const orderIssues = $derived(checkEventOrder(core, exState.events));
   const defs = Object.fromEntries(core.deadlines.map((d) => [d.id, d])) as Record<string, UiDeadlineDef>;
@@ -108,7 +110,7 @@
               <td>
                 <span class="badge oblig">{t('dl.badge.obligation')}</span>
                 <span class="dl-label">{loc(d.label)}</span>
-                <span class="src">{d.id} · {d.sources.join(', ')}{r.display === 'info' ? ` · ${t('dl.info')}` : ''}</span>
+                <span class="src">{d.id} · {d.sources.join(', ')}{r.otherActor ? ` · ${t('dl.other')}` : r.display === 'info' ? ` · ${t('dl.info')}` : ''}</span>
                 {#if r.overridden}<span class="src">{t('dl.overridden', { why: r.overridden.justification })}</span>{/if}
               </td>
               <td class="carriers" data-label={t('dl.col.carriers')}>{carriers(d)}</td>
@@ -165,8 +167,11 @@
   <section class="card block" aria-labelledby="h-facts">
     <h2 id="h-facts">{t('sec.facts')}</h2>
     <p class="help">{t('sec.facts.help')}</p>
+    {#each issues as i (i.code)}
+      <p class="fact-issue {i.severity}" role="alert" data-issue={i.code}>{i.severity === 'error' ? '⛔' : '⚠'} {t(`is.${i.code}` as MsgKey)} <span class="src">({i.source})</span></p>
+    {/each}
     {#each core.facts as f (f.id)}
-      <div class="fact">
+      <div class="fact" class:flagged={issueFacts.has(f.id)}>
         {#if f.type === 'boolean'}
           <label class="check">
             <input type="checkbox" checked={facts[f.id] === true} onchange={(e) => setFact(f.id, e.currentTarget.checked)} />
@@ -242,5 +247,8 @@
   .ev { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 5px 0; }
   .ev label { flex: 1; }
   .fact { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+  .fact.flagged { border-left: 3px solid var(--warn); padding-left: 8px; }
+  .fact-issue { margin: 8px 0 0; padding: 8px 10px; border-radius: 8px; font-size: .9rem; background: var(--warn-bg); color: var(--warn); }
+  .fact-issue.error { background: var(--bad-bg); color: var(--bad); font-weight: 600; }
   .check { display: flex; gap: 8px; align-items: center; }
 </style>

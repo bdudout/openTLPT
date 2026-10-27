@@ -12,6 +12,8 @@ Il n'appelle jamais l'horloge système et ne fait aucune E/S : la date du jour, 
 | `registers.ts` | Livrables et registres (leg-ups, détections, rapports hebdomadaires). Contrôles RTS 11(8), 11(9) et 11(10). Rapprochement livrables / échéances, la date de remise valant réalisation | aucune |
 | `dashboard.ts` | Tableau de bord : actions de la semaine (retards en tête, rapport hebdomadaire de la semaine en cours), actions à préparer en amont, prochains jalons à dater, statut des phases, conformité par étape, alertes et KPI du TLPT | aucune |
 | `requirements.ts` | Matrice de conformité : toutes les obligations, applicables ou exclues avec leur raison, liées à leurs échéances et livrables ; synthèses par famille, statut et texte ; filtres (accents ignorés) ; CSV au format RFC 4180 | aucune |
+| `scope.ts` | Portée par profil : échéances et jalons qui concernent le profil (l'entité suit tout, sauf l'autorité ; un prestataire suit les siens), les autres étant affichés en information | aucune |
+| `consistency.ts` | Contrôles de cohérence des caractéristiques (DORA 26(8) al. 2, 26(4), RTS 1(18), champ de TIBER-FR) | aucune |
 | `migrations.ts` | Migrations de schéma (v1 → v2), appliquées et journalisées à l'ouverture | aucune |
 | `jcs.ts`, `bytes.ts` | JSON canonique (RFC 8785), base64, SHA-256 (WebCrypto) | aucune |
 | `db.ts` | **Contrat** d'accès SQLite (`SqlDb`, `SqlDbFactory`) | aucune |

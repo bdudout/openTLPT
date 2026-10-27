@@ -60,12 +60,21 @@ Aucune erreur technique n'est apparue (console vide, aucune requête réseau). L
 | T1 | **Pas d'export calendrier** : les échéances ne peuvent pas être poussées dans l'agenda (Outlook). Un fichier `.ics` téléchargé, sans réseau, suffirait. | Moyenne |
 | T2 | Pas de rappel à l'ouverture des actions de la semaine (« depuis votre dernière session : 2 échéances dépassées »). | Faible |
 
+## Suivi des corrections
+
+| Date | Piste | Constats corrigés | Vérification |
+|---|---|---|---|
+| 2026-10-27 | **1. Portée par profil** (`engine/src/scope.ts`) | R1, R2, R6, P3 | Le profil **Entité** suit toutes les échéances, sauf celles portées par la seule autorité. Il reste en effet responsable de la conformité, y compris des livrables des prestataires (DORA 26(3)). Un **prestataire** ne suit que les siennes : les autres passent en « information — autre acteur », sans retard et sans saisie possible. Les jalons attendus sont filtrés de la même façon, et les validations de l'autorité sont signalées « à obtenir de l'autorité ». Une étape sans obligation affiche « — ». Parcours RT rejoué : **0** échéance en retard au lieu de **4**. |
+| 2026-10-27 | **2. Cohérence des caractéristiques** (`engine/src/consistency.ts`) | B1, B2 | Règles contrôlées : « significant » + testeurs internes ou mixtes (DORA 26(8) al. 2, **erreur**) ; « significant » sans la BCE comme autorité ; TIBER-FR avec la BCE ou un « significant » ; test mutualisé sans prestataire TIC tiers (DORA 26(4)) ; mutualisé et commun cochés ensemble (RTS 1(18)) ; *flags* SIIV hors TIBER-FR. Les alertes apparaissent près des caractéristiques, dans le tableau de bord et dans les supports de comité (agrégées pour la direction). Parcours banque rejoué : erreur et avertissement affichés. |
+
+Les tests correspondants se trouvent dans `engine/test/scope.test.ts`, avec 7 tests, et dans le scénario « profils et cohérence » de `app/tests/e2e.mjs`.
+
 ## Pistes d'amélioration priorisées
 
 | Priorité | Piste | Constats traités | Effort |
 |---|---|---|---|
-| **1** | **Filtrer échéances, jalons et KPI par profil** : rattacher chaque échéance et chaque événement aux profils de leurs porteurs (CT / entité / organe de direction → entité ; TIP → TI ; RTT → RT). Pour un prestataire, afficher les jalons de l'entité en information, sans retard. | R1, R2, R6 | S |
-| **2** | **Contrôles de cohérence des caractéristiques**, avec des alertes motivées : « significant » + testeurs internes ou mixtes (DORA 26(8) al. 2) ; TIBER-FR + BCE ou « significant » (guide non applicable) ; test mutualisé sans prestataire TIC tiers ; testeurs internes sur deux tests de suite. | B1, B2 | S |
+| ✅ **1** | **Filtrer échéances, jalons et KPI par profil** : rattacher chaque échéance et chaque événement aux profils de leurs porteurs (CT / entité / organe de direction → entité ; TIP → TI ; RTT → RT). Pour un prestataire, afficher les jalons de l'entité en information, sans retard. | R1, R2, R6 | S |
+| ✅ **2** | **Contrôles de cohérence des caractéristiques**, avec des alertes motivées : « significant » + testeurs internes ou mixtes (DORA 26(8) al. 2) ; TIBER-FR + BCE ou « significant » (guide non applicable) ; test mutualisé sans prestataire TIC tiers ; testeurs internes sur deux tests de suite. | B1, B2 | S |
 | **3** | **Planification** : date prévue et date réelle pour chaque jalon, glissement affiché, et **délais de préparation par livrable** (par ex. SSD : commencer 10 semaines avant D-02) pour l'alimentation « en amont ». Option : horizon réglable (4, 6, 8 ou 12 semaines). | P1, P2, P3 | M |
 | **4** | **Registre des scénarios et des *flags*** : scénarios (fondé sur la menace ou X, C/I/A, FCI), *flags*, avancement, chemins d'attaque, leg-ups rattachés. Il alimente le rapport RT et le rapport de synthèse. | R4 | M |
 | **5** | **Supports par profil** : trame **hebdomadaire RT → CT / TM** (activités de la semaine, *flags*, blocages, leg-ups demandés, plan de la semaine suivante), trame prestataire → client à la place de « organe de direction ». La carte de supports passe sous les KPI. | R3, P5 | S |

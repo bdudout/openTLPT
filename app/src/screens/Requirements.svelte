@@ -4,7 +4,7 @@
   import { REF_VERSION, actorsById, core, deliverablesById, packs, phasesById, phasesOrdered, themesOrdered } from '../lib/ref.ts';
   import { downloadBlob } from '../lib/files.ts';
   import {
-    buildRequirements, computeDeadlines, effectiveFacts, filterRequirements, formatSource, toCsv,
+    buildRequirements, computeDeadlinesForProfile, effectiveFacts, filterRequirements, formatSource, toCsv,
     type Condition, type Count, type Family, type RequirementFilter, type RequirementRow, type RequirementStatus,
   } from '../../../engine/src/index.ts';
 
@@ -18,7 +18,7 @@
       journal: ex.journalStats(),
       res: buildRequirements({
         packs, profiles: core.profiles, profile: meta.profile ?? 'entity', facts: effectiveFacts(core.facts, st.facts),
-        responses: ex.checklistResponses(), refVersion: REF_VERSION, deadlines: computeDeadlines(core, st),
+        responses: ex.checklistResponses(), refVersion: REF_VERSION, deadlines: computeDeadlinesForProfile(core, st, core.profiles, meta.profile ?? 'entity'),
         deliverables: ex.listDeliverables(), lastAnswers: ex.lastAnswers(),
       }),
     };

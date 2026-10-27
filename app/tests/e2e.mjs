@@ -328,9 +328,71 @@ async function runOne(name) {
   await browser.close();
 }
 
+// Portée par profil et contrôles de cohérence (revue des parcours, pistes 1 et 2).
+async function runScopes(name) {
+  const browser = await engines[name].launch(name === 'msedge' ? { channel: 'msedge' } : {});
+  const context = await browser.newContext({ acceptDownloads: true, locale: 'fr-FR' });
+  await context.addInitScript(() => { delete window.showOpenFilePicker; delete window.showSaveFilePicker; });
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('dialog', (d) => d.accept());
+  const step = async (label, fn) => { const t0 = Date.now(); await fn(); console.log(`  ✔ ${label} (${Date.now() - t0} ms)`); };
+  const create = async (codename, role) => {
+    await page.goto(url);
+    await page.getByRole('button', { name: 'Nouvel exercice' }).click();
+    await page.getByLabel('Nom de code').fill(codename);
+    await page.getByLabel('Votre rôle').selectOption({ label: role });
+    await page.getByLabel('Votre nom').fill('Testeur');
+    await page.getByLabel('Passphrase').first().fill(PASS);
+    await page.getByLabel('Confirmer la passphrase').fill(PASS);
+    await page.getByRole('checkbox').check();
+    await page.getByRole('button', { name: 'Créer l\'exercice' }).click();
+    await page.getByTestId('codename').filter({ hasText: codename }).waitFor({ timeout: 60_000 });
+  };
+  console.log(`\n=== ${name} — profils et cohérence ===`);
+
+  await step('prestataire RT : échéances de l\'entité en information, aucun faux retard', async () => {
+    await create('PIVERT', 'Prestataire Red Team');
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    for (const [k, v] of [['N0', iso(shift(-200))], ['TESTING_START', iso(shift(-80))], ['TTIR_APPROVED', iso(shift(-45))], ['R0', iso(shift(-32))]]) await page.locator(`#ev-${k}`).fill(v);
+    await page.locator('tr[data-deadline="D-01"]').filter({ hasText: 'information — autre acteur' }).waitFor();
+    assert.equal(await page.locator('tr[data-deadline="D-01"] input[type=date]').count(), 0, 'pas de date de réalisation pour une échéance d\'un autre acteur');
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.locator('[data-kpi="overdue"]').filter({ hasText: /^\s*Échéances en retard\s*0\s*$/i }).waitFor();
+    assert.equal(await page.getByTestId('db-week').locator('li[data-action="D-01"], li[data-action="D-02"]').count(), 0);
+    await page.getByTestId('db-week').locator('li[data-action="D-07"]').waitFor();
+    assert.equal(await page.getByTestId('db-expected').locator('li[data-expected="SSD_SUBMITTED"]').count(), 0, 'jalons de l\'entité masqués');
+    await page.getByTestId('db-expected').locator('li[data-expected="R1"]').waitFor();
+  });
+
+  await step('banque « significant » : testeurs mixtes refusés, TIBER-FR signalé', async () => {
+    await page.getByRole('button', { name: 'Verrouiller' }).click();
+    await create('GRUE', 'Entité financière');
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.getByLabel('Établissement de crédit « significant » (MSU)').check();
+    await page.locator('[data-issue="ssm_authority_ecb"]').waitFor();
+    await page.getByLabel('Autorité TLPT').selectOption('ecb');
+    await page.locator('[data-issue="ssm_authority_ecb"]').waitFor({ state: 'detached' });
+    await page.getByLabel('Testeurs utilisés').selectOption('mixed');
+    await page.locator('[data-issue="ssm_external_only"]').filter({ hasText: 'DORA-26.8.2' }).waitFor();
+    await page.getByLabel('Déclinaison nationale TIBER').selectOption('TIBER-FR');
+    await page.locator('[data-issue="tiberfr_not_applicable"]').waitFor();
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.getByTestId('db-alerts').locator('li').filter({ hasText: '⛔' }).filter({ hasText: 'testeurs externes' }).waitFor();
+    await page.getByRole('button', { name: 'Échéances et chronologie' }).click();
+    await page.getByLabel('Testeurs utilisés').selectOption('external');
+    await page.locator('[data-issue="ssm_external_only"]').waitFor({ state: 'detached' });
+  });
+
+  assert.deepEqual(errors, [], `erreurs : ${errors.join(' | ')}`);
+  await browser.close();
+}
+
 let failed = 0;
 for (const n of names) {
   try { await runOne(n); } catch (e) { failed++; console.error(`  ✖ ${n} : ${e.message}`); }
+  try { await runScopes(n); } catch (e) { failed++; console.error(`  ✖ ${n} (profils) : ${e.message}`); }
 }
 console.log(failed ? `\n${failed} moteur(s) en échec` : '\nE2E OK sur tous les moteurs');
 process.exit(failed ? 1 : 0);

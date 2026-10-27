@@ -14,4 +14,6 @@ export * from './registers.ts';
 export * from './migrations.ts';
 export * from './dashboard.ts';
 export * from './requirements.ts';
+export * from './scope.ts';
+export * from './consistency.ts';
 // Adaptateur SQLite WASM (dépendance d'exécution) : import explicite './sqlite-wasm.ts'.

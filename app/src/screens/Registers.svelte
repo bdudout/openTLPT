@@ -4,7 +4,7 @@
   import { core } from '../lib/ref.ts';
   import { fingerprint, pickAnyFile, type FileFingerprint } from '../lib/files.ts';
   import {
-    computeDeadlines, detectionIssues, legUpIssues, reportsOutsideActivePhase,
+    computeDeadlinesForProfile, detectionIssues, legUpIssues, reportsOutsideActivePhase,
     type DetectionKind, type DetectionRecord, type Issue, type LegUpKind, type LegUpRecord,
   } from '../../../engine/src/index.ts';
 
@@ -15,7 +15,7 @@
     void ui.rev;
     const ex = currentExercise();
     const st = loadState();
-    const d07 = computeDeadlines(core, st).find((d) => d.id === 'D-07');
+    const d07 = computeDeadlinesForProfile(core, st, core.profiles, ex.meta().profile ?? 'entity').find((d) => d.id === 'D-07');
     const reports = ex.listWeeklyReports();
     return {
       reports, legups: ex.listLegUps(), detections: ex.listDetections(), d07,

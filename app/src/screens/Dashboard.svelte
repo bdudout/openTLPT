@@ -7,7 +7,8 @@
   import { deckToPptx } from '../lib/pptx.ts';
   import { REF_VERSION, actorsById, core, eventsById, itemsById, packs, phasesById } from '../lib/ref.ts';
   import {
-    buildChecklist, buildDashboard, checkEventOrder, computeDeadlines, deadlinePhases, deliverableRows, effectiveFacts,
+    buildChecklist, buildDashboard, checkEventOrder, computeDeadlinesForProfile, deadlinePhases, deliverableRows, effectiveFacts,
+    expandProfile, factIssues,
     type ActionItem, type DashboardPhaseDef, type Progress,
   } from '../../../engine/src/index.ts';
 
@@ -21,7 +22,7 @@
     const profile = meta.profile ?? 'entity';
     const st = loadState();
     const facts = effectiveFacts(core.facts, st.facts);
-    const deadlines = computeDeadlines(core, st);
+    const deadlines = computeDeadlinesForProfile(core, st, core.profiles, profile);
     const checklist = buildChecklist({ packs, profiles: core.profiles, profile, facts, responses: ex.checklistResponses(), refVersion: REF_VERSION });
     const deliverables = ex.listDeliverables();
     const expected = deliverableRows(core.deliverables as never, deliverables, core.deadlines, deadlines, core.profiles, profile, facts).rows.map((r) => r.def.id);
@@ -30,6 +31,7 @@
       deadlines, deadlinePhase: phaseOf, eventDates: st.events, checklist,
       weeklyReports: ex.listWeeklyReports().map((r) => r.report_date), legups: ex.listLegUps(), detections: ex.listDetections(),
       orderIssues: checkEventOrder(core, st.events), expectedDeliverables: expected, deliverables,
+      visibleProfiles: expandProfile(core.profiles, profile), factIssues: factIssues(facts),
     });
     return { meta, facts, dash, journal: ex.journalStats() };
   });
@@ -209,7 +211,7 @@
       <ul class="expected" data-testid="db-expected">
         {#each data.dash.expectedEvents as e (e.event)}
           <li data-expected={e.event}>
-            <label for={`db-ev-${e.event}`}>{evLabel(e.event)} <span class="meta">· {loc(phasesById[e.phase]?.label)}</span></label>
+            <label for={`db-ev-${e.event}`}>{evLabel(e.event)} <span class="meta">· {loc(phasesById[e.phase]?.label)}{e.byAuthority ? ` · ${t('db.byAuthority')}` : ''}</span></label>
             <input id={`db-ev-${e.event}`} type="date" onchange={(ev) => setEvent(e.event, ev.currentTarget.value)} />
           </li>
         {/each}
@@ -251,8 +253,10 @@
           <tr data-step={c.step}>
             <th scope="row">{stepLabel(c.step)}</th>
             <td>
-              <div class="bar-wrap" aria-hidden="true"><div class="bar" style:width={`${pct(c.progress)}%`}></div></div>
-              <span class="frac">{frac(c.progress)}</span>
+              {#if c.progress.total}
+                <div class="bar-wrap" aria-hidden="true"><div class="bar" style:width={`${pct(c.progress)}%`}></div></div>
+                <span class="frac">{frac(c.progress)}</span>
+              {:else}<span class="frac muted-txt" title={t('db.step.none')}>—</span>{/if}
             </td>
             <td class:late-txt={c.overdue > 0}>{c.overdue}</td>
             <td class:warn-txt={c.dueSoon > 0}>{c.dueSoon}</td>
@@ -267,8 +271,8 @@
     <ul class="alerts" data-testid="db-alerts">
       {#each data.dash.alerts as a, i (i)}
         <li>
-          <span>{a.kind === 'order' ? t('is.event_order', { source: a.label.split('<').map((x) => evLabel(x)).join(' < ') }) : `${t(`is.${a.code}` as MsgKey, { source: (a.source ?? '').replace(/^RTS-(\d+)\.(\d+)$/, 'RTS $1($2)') })} — ${a.label}`}</span>
-          <button type="button" class="ghost small" onclick={() => (ui.tab = a.kind === 'order' ? 'deadlines' : 'registers')}>{t('db.see')}</button>
+          <span class:bad-txt={a.severity === 'error'}>{a.kind === 'order' ? t('is.event_order', { source: a.label.split('<').map((x) => evLabel(x)).join(' < ') }) : a.kind === 'facts' ? `${a.severity === 'error' ? '⛔ ' : '⚠ '}${t(`is.${a.code}` as MsgKey)} (${a.source})` : `${t(`is.${a.code}` as MsgKey, { source: (a.source ?? '').replace(/^RTS-(\d+)\.(\d+)$/, 'RTS $1($2)') })} — ${a.label}`}</span>
+          <button type="button" class="ghost small" onclick={() => (ui.tab = a.kind === 'order' || a.kind === 'facts' ? 'deadlines' : 'registers')}>{t('db.see')}</button>
         </li>
       {:else}<li class="help">{t('db.alerts.empty')}</li>{/each}
     </ul>
@@ -330,6 +334,8 @@
   .alerts li { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--border); color: var(--warn); }
   .alerts li.help { color: var(--muted); }
   .small { padding: 4px 10px; font-size: .85rem; }
+  .muted-txt { color: var(--muted); }
+  .bad-txt { color: var(--bad); font-weight: 600; }
   .decks { margin-bottom: 12px; }
   .decks ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; }
   .decks li { display: flex; justify-content: space-between; gap: 10px; align-items: center; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }

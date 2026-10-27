@@ -104,6 +104,8 @@ export interface DeadlineResult {
   /** Événement manquant quand state = waiting_anchor. */
   missingEvent?: string;
   overridden?: { justification: string };
+  /** Échéance d'un autre acteur que le profil courant (affichée en information). */
+  otherActor?: boolean;
   /** Surcharge présente mais refusée (délai non surchargeable ou justification vide). */
   overrideIgnored?: boolean;
   /** Récurrent : périodes écoulées et leur couverture. */
