@@ -386,6 +386,18 @@ async function runScopes(name) {
     await page.getByTestId('db-week').locator('li[data-action="D-07"]').waitFor();
     assert.equal(await page.getByTestId('db-expected').locator('li[data-expected="SSD_SUBMITTED"]').count(), 0, 'jalons de l\'entité masqués');
     await page.getByTestId('db-expected').locator('li[data-expected="R1"]').waitFor();
+    // Supports du prestataire : point hebdomadaire RT et point client, pas de trame « organe de direction ».
+    const decks = page.getByTestId('db-decks');
+    assert.deepEqual(await decks.locator('button[data-deck]').evaluateAll((bs) => bs.map((b) => b.dataset.deck)), ['rt_weekly', 'provider_client']);
+    assert.ok(await page.evaluate(() => !!(document.querySelector('.kpis').compareDocumentPosition(document.querySelector('[data-testid="db-decks"]')) & Node.DOCUMENT_POSITION_FOLLOWING)), 'supports sous les KPI');
+    const [dl] = await Promise.all([page.waitForEvent('download'), decks.locator('button[data-deck="rt_weekly"]').click()]);
+    assert.match(dl.suggestedFilename(), /^PIVERT-point-hebdo-rt-/);
+    const path = join(mkdtempSync(join(tmpdir(), 'otlpt-rt-')), 'rt.pptx');
+    await dl.saveAs(path);
+    const zip = await JSZip.loadAsync(readFileSync(path));
+    const xml = (await Promise.all(Object.keys(zip.files).filter((f) => /^ppt\/slides\/slide\d+\.xml$/.test(f)).map((f) => zip.file(f).async('string')))).join('');
+    const text = [...xml.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map((m) => m[1]).join('');
+    for (const s of ['Point hebdomadaire red team', 'Plan de la semaine suivante', 'Blocages et décisions attendues']) assert.ok(text.includes(s), s);
   });
 
   await step('banque « significant » : testeurs mixtes refusés, TIBER-FR signalé', async () => {

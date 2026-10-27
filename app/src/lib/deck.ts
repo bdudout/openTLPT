@@ -3,9 +3,16 @@
 import { formatDate, loc, t, type MsgKey } from './i18n.svelte.ts';
 import { actorsById, core, eventsById, phasesById } from './ref.ts';
 import type { Snapshot } from './snapshot.ts';
-import type { ActionItem, Count, DeadlineResult, Progress } from '../../../engine/src/index.ts';
+import { diffDays, type ActionItem, type Count, type DeadlineResult, type Progress } from '../../../engine/src/index.ts';
 
-export type CommitteeKind = 'control_team' | 'management' | 'authority';
+export type CommitteeKind = 'control_team' | 'management' | 'authority' | 'rt_weekly' | 'provider_client';
+
+/** Supports proposés selon le profil : l'entité pilote les comités ; un prestataire rend compte à son client (CT) et, pour la RT, chaque semaine au CT et aux TM (RTS 11(7)). */
+export function committeesFor(profile: string): CommitteeKind[] {
+  if (profile === 'rt' || profile === 'ti_rt') return ['rt_weekly', 'provider_client'];
+  if (profile === 'ti') return ['provider_client'];
+  return ['control_team', 'management', 'authority'];
+}
 export type Tone = 'ok' | 'warn' | 'bad' | 'info' | undefined;
 
 export type Block =
@@ -156,6 +163,42 @@ function nextBullets(s: Snapshot): Block {
   return { kind: 'bullets', title: t('db.expected'), items: s.dash.expectedEvents.map((e) => `${ev(e.event)} (${phase(e.phase)})`), empty: '—' };
 }
 
+const inWeek = (d: string | null | undefined, s: Snapshot) => !!d && d <= s.st.today && diffDays(d, s.st.today) < 7;
+
+function weekBullets(s: Snapshot): Block {
+  const last = [...s.reports].sort((a, b) => b.report_date.localeCompare(a.report_date))[0];
+  const items = [
+    ...(last ? [t('pp.wk.lastReport', { d: formatDate(last.report_date), s: last.summary ?? '—' })] : [t('pp.wk.noReport')]),
+    ...s.legups.filter((l) => inWeek(l.requested_at ?? l.provided_at, s)).map((l) => t('pp.wk.legup', { d: l.description })),
+    ...s.detections.filter((d) => inWeek(d.detected_at, s)).map((d) => `${t(`dk.${d.kind}` as MsgKey)} : ${d.description}`),
+    t('pp.wk.fill'),
+  ];
+  return { kind: 'bullets', title: t('pp.wk.activities'), items };
+}
+
+function blockersBullets(s: Snapshot): Block {
+  const items = [
+    ...s.legups.filter((l) => !l.provided_at && (!l.approved_ct || !l.approved_tm)).map((l) => t('pp.wk.legup.pending', { d: l.description, ct: l.approved_ct ? '✓' : '…', tm: l.approved_tm ? '✓' : '…' })),
+    ...s.detections.filter((d) => !d.validated_by_tm_at).map((d) => t('pp.wk.det.pending', { d: d.description })),
+    ...s.dash.alerts.filter((a) => a.kind === 'legup' || a.kind === 'detection').map((a) => t(`is.${a.code}` as MsgKey, { source: (a.source ?? '').replace(/^RTS-(\d+)\.(\d+)$/, 'RTS $1($2)') })),
+  ];
+  return { kind: 'bullets', title: t('pp.wk.blockers'), items, empty: t('pp.wk.blockers.none') };
+}
+
+function nextWeekBullets(s: Snapshot): Block {
+  const items = [
+    ...[...s.dash.thisWeek, ...s.dash.upcoming].filter((a) => a.daysLeft <= 14).map((a) => `${a.kind === 'weekly_report' ? t('db.weekly.item', { d: formatDate(a.due) }) : `${a.id} — ${dl(a.id)}`} (${formatDate(a.due)})`),
+    ...s.dash.expectedEvents.map((e) => ev(e.event)),
+    t('pp.wk.fill'),
+  ];
+  return { kind: 'bullets', title: t('pp.wk.next'), items };
+}
+
+function reportsTable(s: Snapshot): Block {
+  const rows = [...s.reports].sort((a, b) => b.report_date.localeCompare(a.report_date)).map((r) => [formatDate(r.report_date), r.summary ?? '—', r.sha256 ? `${r.sha256.slice(0, 16)}…` : '—']);
+  return { kind: 'table', head: [t('rg.date'), t('rg.summary'), 'SHA-256'], rows, widths: [1.6, 7.4, 2.4], empty: t('rg.empty') };
+}
+
 function regulatoryTable(s: Snapshot): Block {
   const list = s.deadlines.filter((d) => d.display === 'check' && d.state !== 'not_applicable');
   const rows = list.map((d) => [d.id, dl(d.id), core.deadlines.find((x) => x.id === d.id)?.sources.join(', ') ?? '', d.due ? formatDate(d.due) : '—', state(d), d.doneOn ? formatDate(d.doneOn) : '—']);
@@ -188,6 +231,25 @@ export function buildDeck(kind: CommitteeKind, s: Snapshot): Deck {
       { title: t('db.compliance'), blocks: [complianceTable(s)] },
       { title: t('pp.s.deliverables.key'), blocks: [deliverablesTable(s, false)] },
       { title: t('pp.s.attention'), blocks: [decisionsBullets(s, true), alertsBullets(s, true)] },
+    ];
+  } else if (kind === 'rt_weekly') {
+    slides = [
+      { title: t('pp.s.week'), blocks: [kpis(s, true), context(s)] },
+      { title: t('pp.wk.activities'), blocks: [weekBullets(s)] },
+      { title: t('rg.legups'), blocks: [legupsTable(s)] },
+      { title: t('pp.s.detections'), blocks: [detectionsTable(s)] },
+      { title: t('pp.wk.blockers'), blocks: [blockersBullets(s)] },
+      { title: t('pp.wk.next'), blocks: [nextWeekBullets(s)] },
+      { title: t('rg.weekly'), blocks: [reportsTable(s)] },
+    ];
+  } else if (kind === 'provider_client') {
+    slides = [
+      { title: t('pp.s.summary'), blocks: [kpis(s, false), context(s)] },
+      { title: t('pp.s.ownDeadlines'), blocks: [regulatoryTable(s)] },
+      { title: t('pp.s.ownDeliverables'), blocks: [deliverablesTable(s, true)] },
+      { title: t('db.compliance'), blocks: [complianceTable(s)] },
+      { title: t('pp.s.attention'), blocks: [decisionsBullets(s, false), alertsBullets(s, false)] },
+      { title: t('pp.s.next'), blocks: [nextBullets(s), actionsTable(s)] },
     ];
   } else {
     slides = [

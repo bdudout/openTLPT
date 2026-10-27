@@ -3,7 +3,7 @@
   import { act, currentExercise, loadState, mutate, openChecklist, todayISO, ui } from '../lib/app.svelte.ts';
   import { downloadBlob } from '../lib/files.ts';
   import { leadWeeks, snapshot } from '../lib/snapshot.ts';
-  import { buildDeck, type CommitteeKind } from '../lib/deck.ts';
+  import { buildDeck, committeesFor, type CommitteeKind } from '../lib/deck.ts';
   import { deckToPptx } from '../lib/pptx.ts';
   import { REF_VERSION, actorsById, core, deliverablesById, eventsById, itemsById, packs, phasesById } from '../lib/ref.ts';
   import {
@@ -47,7 +47,7 @@
   const carriers = (id: string) => (defs[id]?.carriers ?? []).map((c) => loc(actorsById[c]?.label) || c).join(', ');
   const stepLabel = (s: string) => (s === 'standing' ? t('db.step.standing') : loc(phasesById[s]?.label));
 
-  const COMMITTEES: CommitteeKind[] = ['control_team', 'management', 'authority'];
+  const COMMITTEES = $derived(committeesFor(currentExercise().meta().profile ?? 'entity'));
   let deckNotice = $state('');
   let generating = $state<CommitteeKind | null>(null);
 
@@ -96,22 +96,6 @@
     <button type="button" class="ghost small" onclick={anchor}>{t('db.anchor.do')}</button>
     {#if ui.lastAnchorText}<p class="help">{t('db.anchor.text')}</p><code data-testid="anchor-text">{ui.lastAnchorText}</code>{/if}
   </div>
-</section>
-
-<!-- Supports de comité -->
-<section class="card decks" aria-labelledby="h-decks" data-testid="db-decks">
-  <h2 id="h-decks">{t('pp.title')}</h2>
-  <p class="help">{t('pp.help')}</p>
-  <ul>
-    {#each COMMITTEES as c (c)}
-      <li>
-        <div><strong>{t(`pp.kind.${c}` as MsgKey)}</strong><span class="meta">{t(`pp.desc.${c}` as MsgKey)}</span></div>
-        <button type="button" class="ghost small" disabled={generating !== null} onclick={() => generateDeck(c)} data-deck={c}
-          aria-label={`${t('pp.generate')} — ${t(`pp.kind.${c}` as MsgKey)}`}>{generating === c ? '…' : `${t('pp.generate')} .pptx`}</button>
-      </li>
-    {/each}
-  </ul>
-  {#if deckNotice}<p class="deck-notice" role="status">{deckNotice}</p>{/if}
 </section>
 
 <!-- Indicateurs -->
@@ -189,6 +173,23 @@
     <span class="k-sub">{t('kpi.answers.sub', { n: k.notApplicable, s: k.staleAnswers })}</span>
   </div>
 </section>
+
+<!-- Supports de comité -->
+<section class="card decks" aria-labelledby="h-decks" data-testid="db-decks">
+  <h2 id="h-decks">{t('pp.title')}</h2>
+  <p class="help">{t('pp.help')}</p>
+  <ul>
+    {#each COMMITTEES as c (c)}
+      <li>
+        <div><strong>{t(`pp.kind.${c}` as MsgKey)}</strong><span class="meta">{t(`pp.desc.${c}` as MsgKey)}</span></div>
+        <button type="button" class="ghost small" disabled={generating !== null} onclick={() => generateDeck(c)} data-deck={c}
+          aria-label={`${t('pp.generate')} — ${t(`pp.kind.${c}` as MsgKey)}`}>{generating === c ? '…' : `${t('pp.generate')} .pptx`}</button>
+      </li>
+    {/each}
+  </ul>
+  {#if deckNotice}<p class="deck-notice" role="status">{deckNotice}</p>{/if}
+</section>
+
 
 {#snippet actions(list: ActionItem[], empty: string, testid: string)}
   <ul class="actions" data-testid={testid}>
