@@ -13,6 +13,7 @@ jobs:
   referentiel:
     name: Référentiel (schéma + règles croisées)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,6 +27,7 @@ jobs:
   engine:
     name: Moteur (tests + typage)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: engine
@@ -41,6 +43,7 @@ jobs:
   app:
     name: Application file:// — ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -90,6 +93,7 @@ jobs:
   spike:
     name: Spike file:// — ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -123,6 +127,7 @@ jobs:
   edge-strict:
     name: Spike file:// — Edge « sécurité renforcée » (StrictMode)
     runs-on: windows-latest
+    timeout-minutes: 20
     # Informatif : on mesure l'impact de la politique EnhanceSecurityMode (JIT désactivé, WASM interprété).
     continue-on-error: true
     defaults:

@@ -200,6 +200,14 @@ function reportsTable(s: Snapshot): Block {
   return { kind: 'table', head: [t('rg.date'), t('rg.summary'), 'SHA-256'], rows, widths: [1.6, 7.4, 2.4], empty: t('rg.empty') };
 }
 
+function providersTable(s: Snapshot): Block {
+  const rows = s.providers.map((p) => [loc(actorsById[p.party.actor_ref]?.label) || p.party.actor_ref, p.party.organisation ?? p.party.person ?? '—',
+    p.ready ? t('pa.ready') : t('pa.notReady', { n: p.counts.open + p.counts.non_compliant }),
+    `${p.counts.compliant}/${p.rows.length}`, String(p.counts.derogation), String(p.rows.filter((r) => r.check?.evidence_sha256).length)]);
+  const tones: Tone[] = s.providers.map((p) => (p.ready ? 'ok' : p.issues.some((i) => i.code === 'provider_contracted_not_ready') ? 'bad' : 'warn'));
+  return { kind: 'table', head: [t('pa.role'), t('pa.organisation'), t('rq.col.status'), t('pc.compliant'), t('pc.derogation'), t('pa.evidence')], rows, tones, widths: [2.6, 2.8, 2, 1.3, 1.3, 1.3], empty: t('pa.eval.empty') };
+}
+
 function flagsTable(s: Snapshot): Block {
   const scen = new Map(s.scenarios.map((x) => [x.id, x]));
   const rows: string[][] = []; const tones: Tone[] = [];
@@ -237,6 +245,7 @@ export function buildDeck(kind: CommitteeKind, s: Snapshot): Deck {
       { title: t('db.timeline'), blocks: [milestonesTable(s)] },
       { title: t('db.compliance'), blocks: [complianceTable(s)] },
       { title: t('tab.deliverables'), blocks: [deliverablesTable(s, true)] },
+      ...(s.providers.length ? [{ title: t('pa.eval'), blocks: [providersTable(s)] }] : []),
       ...(s.scenarios.length || s.flags.length ? [{ title: t('sc.title'), blocks: [flagsTable(s)] }] : []),
       { title: t('rg.legups'), blocks: [legupsTable(s)] },
       { title: t('pp.s.detections'), blocks: [detectionsTable(s)] },
@@ -275,6 +284,7 @@ export function buildDeck(kind: CommitteeKind, s: Snapshot): Deck {
     slides = [
       { title: t('pp.s.regulatory'), blocks: [regulatoryTable(s)] },
       { title: t('pp.s.deliverables.sent'), blocks: [deliverablesTable(s, true)] },
+      ...(s.providers.length ? [{ title: t('pa.eval'), blocks: [providersTable(s)] }] : []),
       { title: t('rg.legups'), blocks: [legupsTable(s)] },
       { title: t('pp.s.detections'), blocks: [detectionsTable(s)] },
       { title: t('pp.s.next'), blocks: [nextBullets(s), actionsTable(s)] },

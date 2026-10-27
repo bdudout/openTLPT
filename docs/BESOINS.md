@@ -40,6 +40,7 @@ prenantes suivies**, pas des utilisateurs.
 - **Un seul TLPT par base** : un fichier = un exercice.
 - **Phases couvertes** : Préparation → Test (TI puis RT) → Clôture.
 - Hors v1 : vue multi-TLPT, suivi du cycle triennal, rotation des testeurs entre exercices, consolidation groupe.
+- **Écartés par choix de simplicité (DEC-6)** : gestion multi-entités des TLPT communs ou mutualisés, export calendrier `.ics`, surcharge de D-13 dans l'interface, reprise des réponses d'un exercice précédent.
 
 ## 5. Exigences fonctionnelles
 
@@ -122,6 +123,7 @@ Taille cible : extraits DORA art. 26-27 et RTS en 24 langues, soit environ 2–4
 | DEC-2 | Mise à jour du référentiel | Référentiel **embarqué dans chaque release** du HTML, avec un **numéro de version affiché**. Un pack importable signé sera envisagé dans une version ultérieure. | EF-1, ENF-9 |
 | DEC-3 | Identité de l'auteur | Nom déclaratif **demandé à chaque ouverture**, **affiché en permanence** dans l'interface et **inscrit dans le journal** à l'ouverture de chaque session. | EF-6 |
 | DEC-4 | Échanges entre l'entité et les prestataires | **Chaque acteur tient son propre `.tlpt`.** Plus tard : export partiel **en lecture seule**, limité aux jalons et aux livrables. | EF-9 (v2) |
+| DEC-6 | Simplicité (décision du 2026-10-27, revue des parcours) | **Pistes 7 et 8 écartées** : pas de gestion des entités participantes d'un TLPT commun ou mutualisé (chaque entité tient son propre fichier, cf. DEC-4, et coche les obligations RTS 8 dans le socle), pas d'export `.ics`, pas de surcharge de D-13 dans l'interface (la modulation de fréquence par l'autorité reste une justification sur l'item correspondant), pas de reprise d'un exercice précédent. L'outil reste centré sur un exercice et un acteur. | — |
 | DEC-5 | Nom de code | **Obligatoire à la création** de l'exercice. Il est utilisé partout dans l'interface et dans le nom du fichier, et le vrai nom de l'entité n'apparaît jamais dans le nom du fichier. Base réglementaire : RTS 4(2)(f) et 9(2)(e). | EF-2, ENF-10 |
 
 ### Exigences ajoutées par ces décisions

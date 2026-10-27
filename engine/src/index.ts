@@ -11,6 +11,7 @@ export * from './envelope.ts';
 export * from './exercise.ts';
 export * from './checklist.ts';
 export * from './registers.ts';
+export * from './providers.ts';
 export * from './migrations.ts';
 export * from './dashboard.ts';
 export * from './requirements.ts';

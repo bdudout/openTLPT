@@ -36,6 +36,8 @@ export const packs = [doraRtsJson, tiberEuJson, tiberFrJson] as unknown as PackD
 export const REF_VERSION = [core as unknown as PackDef, ...packs].map((p) => `${p.pack_id}@${p.version}`).join('+');
 
 export const itemsById: Record<string, ItemDef> = Object.fromEntries(packs.flatMap((p) => p.items ?? []).map((i) => [i.id, i]));
+/** Items réglementaires (DORA / RTS) : source de la grille d'évaluation des prestataires. */
+export const regulatoryItems = (packs[0]?.items ?? []) as unknown as (ItemDef & { theme?: string | null; carriers: string[] })[];
 export const TOOL_VERSION = '0.1.0';
 
 const index = <T extends { id: string }>(xs: T[]) => Object.fromEntries(xs.map((x) => [x.id, x])) as Record<string, T>;

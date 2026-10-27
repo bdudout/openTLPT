@@ -291,6 +291,37 @@ async function runOne(name) {
     await page.getByTestId('db-alerts').filter({ hasText: 'Scénario retenu sans flag' }).waitFor();
   });
 
+  await step('parties prenantes : annuaire, évaluation du prestataire TI, preuves, dérogation motivée', async () => {
+    await page.getByRole('button', { name: 'Parties prenantes' }).click();
+    const directory = page.getByTestId('directory');
+    await directory.getByLabel('Rôle').selectOption('TIP');
+    await directory.locator('form').getByLabel('Organisation').fill('Intel Conseil');
+    await directory.getByRole('button', { name: 'Ajouter' }).click();
+    const ev = page.getByTestId('evaluation').locator('article[data-provider="1"]');
+    await ev.filter({ hasText: 'critère(s) à lever' }).waitFor();
+    const crit = await ev.locator('tr[data-criterion]').evaluateAll((rs) => rs.map((r) => r.dataset.criterion));
+    assert.ok(crit.includes('RTS-7.1.c') && !crit.includes('RTS-7.1.d'), 'grille TI : 3 références, pas 5');
+    const evidence = join(dir, 'preuve.txt');
+    writeFileSync(evidence, 'preuve de conformité');
+    for (const c of crit) {
+      const row = ev.locator(`tr[data-criterion="${c}"]`);
+      if (c === 'RTS-7.1.c') {
+        await row.getByLabel(`${c} — Statut`).selectOption('derogation');
+        await row.filter({ hasText: 'Dérogation sans motif' }).waitFor();
+        await row.getByLabel(`${c} — Note ou motif`).fill('Deux références, expérience compensée');
+        await row.getByLabel(`${c} — Note ou motif`).press('Tab');
+        continue;
+      }
+      await row.getByLabel(`${c} — Statut`).selectOption('compliant');
+      const [chooser] = await Promise.all([page.waitForEvent('filechooser'), row.getByRole('button', { name: 'Empreinte…' }).click()]);
+      await chooser.setFiles(evidence);
+      await row.locator('code').waitFor();
+    }
+    await page.getByTestId('evaluation').locator('article[data-provider="1"][data-ready="true"]').waitFor();
+    await page.getByRole('button', { name: 'Tableau de bord' }).click();
+    await page.locator('[data-kpi="providers"]').filter({ hasText: '1/1' }).waitFor();
+  });
+
   await step('supports de comité PowerPoint : 3 trames, confidentialité, export journalisé', async () => {
     await page.getByRole('button', { name: 'Tableau de bord' }).click();
     const decks = page.getByTestId('db-decks');

@@ -6,6 +6,7 @@ import { insertEntry, journalHead, prepareEntry, verifyChain, type Anchor, type 
 import { isValidISODate } from './dates.ts';
 import type { ChecklistStatus, Response } from './checklist.ts';
 import { CURRENT_SCHEMA_VERSION, MIGRATIONS, isSupportedSchema } from './migrations.ts';
+import type { PartyRecord, ProviderCheckRecord } from './providers.ts';
 import type { DeliverableRecord, DetectionRecord, FlagRecord, LegUpRecord, ScenarioRecord, WeeklyReportRecord } from './registers.ts';
 import type { Row, SqlDb, SqlDbFactory, SqlValue } from './db.ts';
 import type { DeadlineOverride, ExerciseState, FactValue, ISODate, OffsetUnit } from './types.ts';
@@ -27,7 +28,7 @@ const KEYED_TABLES = {
 type KeyedTable = keyof typeof KEYED_TABLES;
 
 /** Tables à identifiant entier (registres, livrables) : `id` attribué par le moteur, de façon séquentielle. */
-const ROW_TABLES = ['deliverables', 'leg_ups', 'detections', 'weekly_reports', 'scenarios', 'flags'] as const;
+const ROW_TABLES = ['deliverables', 'leg_ups', 'detections', 'weekly_reports', 'scenarios', 'flags', 'parties'] as const;
 type RowTable = (typeof ROW_TABLES)[number];
 
 const SHA256_RE = /^[0-9a-f]{64}$/;
@@ -366,6 +367,57 @@ export class Exercise {
 
   listFlags(): FlagRecord[] {
     return this.db.all<FlagRecord & Row>('SELECT * FROM flags ORDER BY scenario_id, id');
+  }
+
+  // --- Parties prenantes et évaluation des prestataires (DORA 27, RTS 7) --------------------
+
+  async saveParty(id: number | null, p: Partial<Omit<PartyRecord, 'id'>>): Promise<number> {
+    if (id === null && !p.actor_ref) throw new ExerciseError('Rôle obligatoire pour une partie prenante.');
+    const after = pick(p, ['actor_ref', 'organisation', 'person', 'contact', 'active']);
+    if ('active' in after) after.active = p.active ? 1 : 0;
+    return this.#writeRow('parties', id, after);
+  }
+
+  /** Refusée si la partie a une évaluation ou des livrables : on la désactive plutôt (traçabilité). */
+  async deleteParty(id: number): Promise<void> {
+    const used = this.db.get<{ n: number }>('SELECT (SELECT count(*) FROM provider_checks WHERE party_id = ?) + (SELECT count(*) FROM deliverables WHERE owner_party_id = ?) AS n', [id, id]);
+    if (used && used.n > 0) throw new ExerciseError('Partie évaluée ou propriétaire de livrables : désactivez-la plutôt.');
+    await this.#writeRow('parties', id, null);
+  }
+
+  listParties(): PartyRecord[] {
+    return this.db.all<Row>('SELECT * FROM parties ORDER BY actor_ref, id').map((r) => ({ ...(r as unknown as PartyRecord), active: r.active === 1 }));
+  }
+
+  /** Critère d'évaluation d'un prestataire (clé composite partie + item). `c = null` supprime. */
+  setProviderCheck(partyId: number, itemRef: string, c: Partial<Omit<ProviderCheckRecord, 'party_id' | 'item_ref'>> | null): Promise<boolean> {
+    if (c) checkHash(c.evidence_sha256);
+    return this.#serial(async () => {
+      if (!this.db.get('SELECT 1 FROM parties WHERE id = ?', [partyId])) throw new ExerciseError(`parties #${partyId} introuvable.`);
+      const before = this.db.get<Row>('SELECT status, evidence_sha256, evidence_label, note FROM provider_checks WHERE party_id = ? AND item_ref = ?', [partyId, itemRef]);
+      const merged = c ? { status: 'open', evidence_sha256: null, evidence_label: null, note: null, ...(before ?? {}), ...pick(c, ['status', 'evidence_sha256', 'evidence_label', 'note']) } as Record<string, SqlValue> : null;
+      if (canonicalize((before ?? null) as JsonValue) === canonicalize(merged as JsonValue)) return false;
+      const action: JournalAction = !before ? 'create' : merged ? 'update' : 'delete';
+      const entry = await prepareEntry(this.db, {
+        ts: this.#clock(), session_id: this.sessionId, author: this.author, action,
+        entity: 'provider_checks', entity_id: `${partyId}:${itemRef}`, before: (before ?? null) as JsonValue, after: merged as JsonValue,
+      });
+      this.db.transaction(() => {
+        if (merged) {
+          this.db.exec(`INSERT INTO provider_checks (party_id, item_ref, status, evidence_sha256, evidence_label, note) VALUES (?, ?, ?, ?, ?, ?)
+            ON CONFLICT(party_id, item_ref) DO UPDATE SET status = excluded.status, evidence_sha256 = excluded.evidence_sha256, evidence_label = excluded.evidence_label, note = excluded.note`,
+            [partyId, itemRef, merged.status ?? 'open', merged.evidence_sha256 ?? null, merged.evidence_label ?? null, merged.note ?? null]);
+        } else {
+          this.db.exec('DELETE FROM provider_checks WHERE party_id = ? AND item_ref = ?', [partyId, itemRef]);
+        }
+        insertEntry(this.db, entry);
+      });
+      return true;
+    });
+  }
+
+  listProviderChecks(): ProviderCheckRecord[] {
+    return this.db.all<ProviderCheckRecord & Row>('SELECT * FROM provider_checks ORDER BY party_id, item_ref');
   }
 
   // --- Lecture ---------------------------------------------------------------

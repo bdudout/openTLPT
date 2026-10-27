@@ -86,6 +86,7 @@ Une règle de droit national relayée par un guide est marquée « obligation na
 | **Échéances et chronologie** | Les 14 échéances réglementaires, **filtrées selon votre rôle** (un prestataire voit celles de l'entité en information, sans faux retard), avec des **alertes de cohérence** sur les caractéristiques (par ex. « significant » + testeurs internes, TIBER-FR avec la BCE), chacune avec son statut (à venir, bientôt, en retard, fait, fait en retard, en attente d'une date…) ; la chronologie de l'exercice par phase, avec une **date réelle et une date prévue** par jalon, le **glissement** par rapport au planning de référence (qu'on peut figer), des échéances **prévisionnelles** tant que le jalon n'a pas eu lieu, un signal si la fin prévue de la phase active ne respecte pas les 12 semaines, et une alerte en cas d'incohérence ; les caractéristiques de l'exercice qui rendent les items applicables ou non |
 | **Checklists** | Un onglet **Socle permanent**, qui regroupe les 47 points par thème avec leur propre progression, puis un onglet par phase pour les **points au fil du test**. Un résumé global indique « Socle x/y · Au fil du test x/y ». Dans chaque vue, deux colonnes séparées : *Obligations*, avec l'avancement, et *Bonnes pratiques*. Statuts : à traiter, en cours, traité, non applicable (justification obligatoire), écart accepté (justification et décideur obligatoires) |
 | **Livrables** | Livrables attendus et leurs échéances ; statut, version, emplacement, dates ; **empreinte SHA-256 calculée sur le poste**, sans copier le document, puis vérification « conforme » ou « différent ». La date de remise vaut réalisation de l'échéance |
+| **Parties prenantes** | **Annuaire** (control team, prestataires, test managers, blue team…) et **évaluation des prestataires TI et RT** (DORA 27, RTS 7) : grille tirée du référentiel, statut par critère, empreinte de chaque preuve, dérogation RTS 7(2) motivée, alerte si le contrat est signé avant une évaluation complète (RTS 9(11), D-05) |
 | **Registres** | **Scénarios, flags et chemins d'attaque** : scénarios retenus (au moins 3, au plus un prospectif « X », un scénario incluant le prestataire TIC tiers en TLPT mutualisé ou commun, RTS 10), flags par scénario avec statut, date, chemin d'attaque et TTP, pour alimenter le rapport RT (annexe V) et le rapport de synthèse ; les leg-ups se rattachent à un scénario. Rapports hebdomadaires, qui alimentent D-07 ; leg-ups, avec alerte RTS 11(8) ; détections, suspensions et purple teaming limité, avec alertes RTS 11(9) / 11(10) |
 
 Sont aussi proposés :
@@ -98,6 +99,10 @@ Sont aussi proposés :
 
 **À venir** : annuaire des parties prenantes et évaluation des prestataires (art. 27), scénarios, changements du plan de test, surcharges dans
 l'interface, verrouillage automatique, textes officiels dans les 24 langues de l'UE, autres déclinaisons nationales TIBER.
+
+## Ce que l'outil ne fait pas, par choix
+
+Pour rester simple (décision DEC-6 de [BESOINS.md](docs/BESOINS.md)) : un fichier suit **un exercice et un acteur**. Pas de gestion multi-entités des TLPT communs ou mutualisés (chaque entité tient son propre fichier), pas d'export calendrier `.ics`, pas de surcharge de l'échéance du prochain TLPT (D-13) dans l'interface, pas de reprise des réponses d'un exercice précédent.
 
 ## Utilisation
 

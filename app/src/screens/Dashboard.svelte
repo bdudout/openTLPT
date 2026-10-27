@@ -5,9 +5,9 @@
   import { leadWeeks, snapshot } from '../lib/snapshot.ts';
   import { buildDeck, committeesFor, type CommitteeKind } from '../lib/deck.ts';
   import { deckToPptx } from '../lib/pptx.ts';
-  import { REF_VERSION, actorsById, core, deliverablesById, eventsById, itemsById, packs, phasesById } from '../lib/ref.ts';
+  import { REF_VERSION, actorsById, core, deliverablesById, regulatoryItems, eventsById, itemsById, packs, phasesById } from '../lib/ref.ts';
   import {
-    buildChecklist, buildDashboard, checkEventOrder, computeDeadlinesForProfile, deadlinePhases, deliverableRows, effectiveFacts,
+    evaluateProviders, buildChecklist, buildDashboard, checkEventOrder, computeDeadlinesForProfile, deadlinePhases, deliverableRows, effectiveFacts,
     expandProfile, factIssues,
     type ActionItem, type DashboardPhaseDef, type Progress,
   } from '../../../engine/src/index.ts';
@@ -30,6 +30,7 @@
       today: st.today, phases: core.phases as unknown as DashboardPhaseDef[], events: core.events, deadlineDefs: core.deadlines,
       deadlines, deadlinePhase: phaseOf, eventDates: st.events, checklist,
       weeklyReports: ex.listWeeklyReports().map((r) => r.report_date), legups: ex.listLegUps(), detections: ex.listDetections(), scenarios: ex.listScenarios(), flags: ex.listFlags(), facts,
+      providers: evaluateProviders(regulatoryItems, ex.listParties(), ex.listProviderChecks(), st.events.PROVIDERS_CONTRACTED),
       orderIssues: checkEventOrder(core, st.events), expectedDeliverables: expected, deliverables,
       visibleProfiles: expandProfile(core.profiles, profile), factIssues: factIssues(facts),
       plannedDates: st.planned ?? {}, baselineDates: Object.fromEntries(ex.listEventPlans().filter((p) => p.baseline_date).map((p) => [p.event_ref, p.baseline_date as string])),
@@ -155,6 +156,13 @@
       <span class="k-label">{t('kpi.planning')}</span>
       <span class="k-value">{k.slippage.slipped}/{k.slippage.tracked}</span>
       <span class="k-sub">{t('kpi.planning.sub', { n: k.slippage.maxDays })}</span>
+    </div>
+  {/if}
+  {#if k.providers}
+    <div class="kpi" class:warn={k.providers.ready < k.providers.total} data-kpi="providers">
+      <span class="k-label">{t('kpi.providers')}</span>
+      <span class="k-value">{k.providers.ready}/{k.providers.total}</span>
+      <span class="k-sub">{t('kpi.providers.sub')}</span>
     </div>
   {/if}
   {#if k.flags}
@@ -306,7 +314,7 @@
       {#each data.dash.alerts as a, i (i)}
         <li>
           <span class:bad-txt={a.severity === 'error'}>{a.kind === 'order' ? t('is.event_order', { source: a.label.split('<').map((x) => evLabel(x)).join(' < ') }) : a.kind === 'facts' ? `${a.severity === 'error' ? '⛔ ' : '⚠ '}${t(`is.${a.code}` as MsgKey)} (${a.source})` : `${t(`is.${a.code}` as MsgKey, { source: (a.source ?? '').replace(/^RTS-(\d+)\.(\d+)$/, 'RTS $1($2)') })}${a.label ? ` — ${a.label}` : ''}`}</span>
-          <button type="button" class="ghost small" onclick={() => (ui.tab = a.kind === 'order' || a.kind === 'facts' ? 'deadlines' : 'registers')}>{t('db.see')}</button>
+          <button type="button" class="ghost small" onclick={() => (ui.tab = a.kind === 'order' || a.kind === 'facts' ? 'deadlines' : a.kind === 'provider' ? 'parties' : 'registers')}>{t('db.see')}</button>
         </li>
       {:else}<li class="help">{t('db.alerts.empty')}</li>{/each}
     </ul>

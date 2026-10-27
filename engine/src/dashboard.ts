@@ -3,6 +3,7 @@
 import { addDays, diffDays } from './dates.ts';
 import { detectionIssues, legUpIssues, scenarioIssues, type DetectionRecord, type FlagRecord, type Issue, type LegUpRecord, type ScenarioRecord } from './registers.ts';
 import type { Facts } from './applicability.ts';
+import type { ProviderEvaluation } from './providers.ts';
 import { stepwiseProgress, totalProgress, type ChecklistResult, type Progress } from './checklist.ts';
 import type { DeadlineDef, DeadlineResult, EventDef, EventOrderIssue, ISODate } from './types.ts';
 import type { DeliverableRecord } from './registers.ts';
@@ -31,6 +32,8 @@ export interface DashboardInput {
   detections?: DetectionRecord[];
   scenarios?: ScenarioRecord[];
   flags?: FlagRecord[];
+  /** Évaluations des prestataires (DORA 27, RTS 7), cf. `evaluateProviders`. */
+  providers?: ProviderEvaluation[];
   /** Faits effectifs, pour les contrôles des scénarios (TLPT mutualisé ou commun). */
   facts?: Facts;
   orderIssues?: EventOrderIssue[];
@@ -96,7 +99,7 @@ export interface StepCompliance {
 }
 
 export interface Alert {
-  kind: 'legup' | 'detection' | 'order' | 'facts' | 'scenario';
+  kind: 'legup' | 'detection' | 'order' | 'facts' | 'scenario' | 'provider';
   severity?: 'error' | 'warning';
   recordId?: number;
   code: string;
@@ -129,6 +132,8 @@ export interface Kpis {
   detections: { total: number; unvalidated: number };
   /** Flags du plan RT : atteints / non atteints / total (rapport RT, annexe V). */
   flags?: { total: number; reached: number; notReached: number; scenarios: number };
+  /** Prestataires évalués : prêts (tous critères conformes ou en dérogation motivée) / total. */
+  providers?: { total: number; ready: number };
   /** Livrables : attendus, remis (ou approuvés), approuvés, avec empreinte. */
   deliverables?: { expected: number; submitted: number; approved: number; fingerprinted: number };
   /** Échéances ouvertes en retard (toutes phases). */
@@ -257,6 +262,10 @@ export function buildDashboard(input: DashboardInput): Dashboard {
     const label = i.recordId === undefined ? '' : (i.code === 'flag_no_date' ? input.flags?.find((f) => f.id === i.recordId)?.label : input.scenarios?.find((s) => s.id === i.recordId)?.label) ?? '';
     alerts.push({ kind: 'scenario', code: i.code, source: i.source, label, ...(i.recordId !== undefined ? { recordId: i.recordId } : {}) });
   }
+  for (const p of input.providers ?? []) {
+    const label = [p.party.organisation, p.party.person].filter(Boolean).join(' — ') || p.party.actor_ref;
+    for (const i of p.issues) alerts.push({ kind: 'provider', recordId: p.party.id, code: i.code, source: i.source, label: i.item ? `${label} · ${i.item}` : label, ...(i.code === 'provider_contracted_not_ready' ? { severity: 'error' as const } : {}) });
+  }
   for (const f of input.factIssues ?? []) alerts.push({ kind: 'facts', code: f.code, source: f.source, severity: f.severity, label: f.facts.join(', ') });
   for (const o of input.orderIssues ?? []) alerts.push({ kind: 'order', code: 'event_order', label: `${o.event}<${o.mustFollow}` });
 
@@ -279,6 +288,7 @@ export function buildDashboard(input: DashboardInput): Dashboard {
     },
     overdueDeadlines: input.deadlines.filter((r) => r.state === 'overdue' && r.display === 'check').length,
   };
+  if (input.providers?.length) kpis.providers = { total: input.providers.length, ready: input.providers.filter((p) => p.ready).length };
   const flags = input.flags ?? [];
   if (flags.length) kpis.flags = { total: flags.length, reached: flags.filter((f) => f.status === 'reached').length, notReached: flags.filter((f) => f.status === 'not_reached').length, scenarios: (input.scenarios ?? []).filter((x) => x.selected).length };
   if (ev.N0) kpis.dayOfTlpt = diffDays(ev.N0, today);

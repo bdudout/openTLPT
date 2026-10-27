@@ -6,6 +6,7 @@
   import Checklists from './Checklists.svelte';
   import Deliverables from './Deliverables.svelte';
   import Registers from './Registers.svelte';
+  import Parties from './Parties.svelte';
   import Dashboard from './Dashboard.svelte';
   import Requirements from './Requirements.svelte';
   import {
@@ -83,6 +84,7 @@
   <button type="button" class="tab" aria-pressed={ui.tab === 'checklists'} onclick={() => (ui.tab = 'checklists')}>{t('tab.checklists')}</button>
   <button type="button" class="tab" aria-pressed={ui.tab === 'deliverables'} onclick={() => (ui.tab = 'deliverables')}>{t('tab.deliverables')}</button>
   <button type="button" class="tab" aria-pressed={ui.tab === 'registers'} onclick={() => (ui.tab = 'registers')}>{t('tab.registers')}</button>
+  <button type="button" class="tab" aria-pressed={ui.tab === 'parties'} onclick={() => (ui.tab = 'parties')}>{t('tab.parties')}</button>
 </nav>
 
 {#if ui.tab === 'dashboard'}
@@ -208,6 +210,8 @@
 <Checklists />
 {:else if ui.tab === 'deliverables'}
 <Deliverables />
+{:else if ui.tab === 'parties'}
+<Parties />
 {:else}
 <Registers />
 {/if}
