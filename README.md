@@ -129,6 +129,7 @@ Détails : [ADR-0003 (chiffrement)](docs/adr/0003-kdf-chiffrement.md) et [modèl
 | [docs/POINTS_DE_CONFORMITE.md](docs/POINTS_DE_CONFORMITE.md) | **Liste complète des points suivis**, par famille, thème et phase (générée) |
 | [docs/referentiel/MATRICE_DORA_RTS.md](docs/referentiel/MATRICE_DORA_RTS.md) | Matrice des obligations avec les délais vérifiés sur le texte officiel, et remarques sur le texte |
 | [docs/referentiel/BONNES_PRATIQUES_TIBER.md](docs/referentiel/BONNES_PRATIQUES_TIBER.md) | Bonnes pratiques TIBER-EU et TIBER-FR, et écarts avec le RTS |
+| [docs/REVUE_PERSONAS.md](docs/REVUE_PERSONAS.md) | Revue par parcours utilisateurs (PMO white team, prestataire red team, banque « significant ») et pistes priorisées |
 | [docs/BESOINS.md](docs/BESOINS.md) | Expression de besoins et décisions de cadrage |
 | [docs/MODELE_DONNEES.md](docs/MODELE_DONNEES.md) | Référentiel JSON, base d'exercice, journal, enveloppe chiffrée |
 | [docs/adr/](docs/adr/README.md) | Décisions d'architecture (UI, SQLite WASM, chiffrement, fichier unique) |
